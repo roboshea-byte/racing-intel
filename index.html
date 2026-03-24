@@ -200,6 +200,40 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-download{padding:8px 16px;background:#fff;border:1.5px solid #ddd;border-radius:8px;color:#333;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px}
 .btn-download:hover{background:#000;color:#fff;border-color:#000}
 
+/* Add Data tab */
+.page-tab.add{border-color:#2e86c1;color:#2e86c1}
+.page-tab.add.active{background:linear-gradient(135deg,#2e86c1,#1b6fa8);color:#fff;border-color:#1b6fa8}
+.add-data-wrap{max-width:800px}
+.add-data-form{background:#fff;border:1px solid #eee;border-radius:12px;padding:24px;margin-bottom:16px}
+.add-data-form h3{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px}
+.add-data-form p{font-size:12px;color:#888;margin-bottom:18px;line-height:1.5}
+.add-data-row{display:flex;gap:12px;margin-bottom:14px;align-items:flex-end;flex-wrap:wrap}
+.add-data-field{display:flex;flex-direction:column;gap:4px}
+.add-data-field label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase}
+.add-data-field select,.add-data-field input{padding:10px 14px;border:1px solid #eee;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;color:#000;transition:border .12s}
+.add-data-field select:focus,.add-data-field input:focus{outline:none;border-color:#000}
+.add-data-field select{min-width:180px;cursor:pointer}
+.add-data-field input[type=date]{min-width:160px}
+.add-data-textarea{width:100%;min-height:280px;padding:16px;border:1px solid #eee;border-radius:10px;font-size:13px;font-family:'JetBrains Mono','SF Mono',monospace;line-height:1.7;color:#000;resize:vertical;transition:border .12s}
+.add-data-textarea:focus{outline:none;border-color:#000}
+.add-data-textarea::placeholder{color:#ccc}
+.add-data-actions{display:flex;gap:10px;margin-top:16px;align-items:center}
+.btn-process{padding:11px 24px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:7px}
+.btn-process:hover{background:#222;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
+.btn-process:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
+.btn-clear-form{padding:11px 24px;background:#fff;border:1.5px solid #ddd;border-radius:8px;color:#555;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-clear-form:hover{background:#f5f5f5;border-color:#bbb}
+.add-data-status{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;margin-left:8px}
+.add-data-status.success{color:#2a9d2a}
+.add-data-status.error{color:#c33}
+.add-data-preview{background:#f8f9ff;border:1.5px solid #e0e4ff;border-radius:10px;padding:18px;margin-top:14px}
+.add-data-preview h4{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#446;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.6px}
+.preview-selection{padding:10px 14px;background:#fff;border:1px solid #eee;border-radius:8px;margin-bottom:8px}
+.preview-selection .ps-race{font-family:'Inter',sans-serif;font-size:11px;color:#888;font-weight:600}
+.preview-selection .ps-horse{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#000;margin:2px 0}
+.preview-selection .ps-details{font-size:11px;color:#666}
+.preview-selection .ps-analysis{font-size:12px;color:#555;margin-top:6px;line-height:1.6;font-style:italic}
+
 /* ─── TABLET (≤1024px) ─── */
 @media(max-width:1024px){
 html{overflow-x:hidden}
@@ -222,6 +256,8 @@ body{overflow-x:hidden}
 .bet-table th,.bet-table td{padding:10px 12px;font-size:12px}
 .filter-group{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .toolbar{flex-wrap:wrap}
+.add-data-row{flex-direction:column}
+.add-data-field select,.add-data-field input{width:100%}
 }
 
 /* ─── MOBILE (≤640px) ─── */
@@ -284,6 +320,11 @@ body{overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
 .empty h3{font-size:14px}
 .empty p{font-size:12px}
 .status-bar{font-size:11px;padding:8px 12px}
+.add-data-form{padding:16px}
+.add-data-row{flex-direction:column;gap:10px}
+.add-data-field select,.add-data-field input{width:100%}
+.add-data-textarea{min-height:200px;font-size:16px}
+.add-data-actions{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -312,6 +353,7 @@ body{overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
     <button class="page-tab" id="tab-selections" onclick="switchTab('selections')">All Selections</button>
     <button class="page-tab" id="tab-summary" onclick="switchTab('summary')">Bet Summary</button>
     <button class="page-tab hot" id="tab-hotlist" onclick="switchTab('hotlist')">Hot List</button>
+    <button class="page-tab add" id="tab-adddata" onclick="switchTab('adddata')">+ Add Data</button>
     <button class="btn-mark-read" id="markAllReadBtn" onclick="markAllRead()">Mark All Read</button>
   </div>
 </div>
@@ -1208,6 +1250,215 @@ function renderHotList() {
   return html;
 }
 
+// ─── RENDER: ADD DATA TAB ───
+function renderAddData() {
+  var authorNames = Object.keys(AUTHOR_MAP).sort(function(a,b){ return a.toLowerCase().localeCompare(b.toLowerCase()); });
+  var today = new Date().toISOString().split("T")[0];
+  var html = '<div class="add-data-wrap">';
+  html += '<div class="add-data-form">';
+  html += '<h3>Add Tip Data Manually</h3>';
+  html += '<p>Paste raw email content or tip data below. The system will extract selections and format them into the dashboard.</p>';
+  html += '<div class="add-data-row">';
+  html += '<div class="add-data-field"><label>Tipster</label><select id="addDataAuthor">';
+  html += '<option value="">Select tipster...</option>';
+  authorNames.forEach(function(name) {
+    html += '<option value="' + name + '">' + name + '</option>';
+  });
+  html += '<option value="__custom__">Other (type name)</option>';
+  html += '</select></div>';
+  html += '<div class="add-data-field" id="customAuthorWrap" style="display:none"><label>Custom Tipster Name</label><input type="text" id="addDataCustomAuthor" placeholder="Enter tipster name"></div>';
+  html += '<div class="add-data-field"><label>Tip Date (for)</label><input type="date" id="addDataTipDate" value="' + today + '"></div>';
+  html += '</div>';
+  html += '<textarea class="add-data-textarea" id="addDataBody" placeholder="Paste the full email or tip content here...\n\nExample:\nNAP: Scaredofnothing - Taunton 3.15 - 9/1 (2pts win)\nNB: Cloud Nine - Kempton 2.30 - 5/1 (1pt e/w)\n\nScaredofnothing has been building up to a big run..."></textarea>';
+  html += '<div class="add-data-actions">';
+  html += '<button class="btn-process" id="btnProcess" onclick="processAddData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Process &amp; Add</button>';
+  html += '<button class="btn-clear-form" onclick="clearAddForm()">Clear</button>';
+  html += '<span class="add-data-status" id="addDataStatus"></span>';
+  html += '</div>';
+  html += '<div id="addDataPreview"></div>';
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function clearAddForm() {
+  var body = document.getElementById("addDataBody");
+  var author = document.getElementById("addDataAuthor");
+  var status = document.getElementById("addDataStatus");
+  var preview = document.getElementById("addDataPreview");
+  if (body) body.value = "";
+  if (author) author.value = "";
+  if (status) status.innerHTML = "";
+  if (preview) preview.innerHTML = "";
+  var customWrap = document.getElementById("customAuthorWrap");
+  if (customWrap) customWrap.style.display = "none";
+}
+
+function processAddData() {
+  var authorSelect = document.getElementById("addDataAuthor");
+  var customInput = document.getElementById("addDataCustomAuthor");
+  var tipDate = document.getElementById("addDataTipDate");
+  var body = document.getElementById("addDataBody");
+  var status = document.getElementById("addDataStatus");
+  var preview = document.getElementById("addDataPreview");
+  var btn = document.getElementById("btnProcess");
+
+  var author = authorSelect.value === "__custom__" ? (customInput ? customInput.value.trim() : "") : authorSelect.value;
+  if (!author) { status.className = "add-data-status error"; status.innerHTML = "Please select a tipster"; return; }
+  if (!body.value.trim()) { status.className = "add-data-status error"; status.innerHTML = "Please paste some tip content"; return; }
+  if (!tipDate.value) { status.className = "add-data-status error"; status.innerHTML = "Please set the tip date"; return; }
+
+  btn.disabled = true;
+  status.className = "add-data-status"; status.innerHTML = "Processing...";
+
+  var rawText = body.value.trim();
+  var selections = parseSelectionsFromText(rawText);
+
+  if (selections.length === 0) {
+    status.className = "add-data-status error";
+    status.innerHTML = "Could not extract any selections. Try including lines like: Horse Name - Venue Time - Odds";
+    btn.disabled = false;
+    return;
+  }
+
+  var articleId = "manual-" + Date.now() + "-" + Math.random().toString(36).substr(2, 6);
+  var now = new Date().toISOString();
+  var article = {
+    id: articleId,
+    originalSubject: author + " Tips - " + tipDate.value,
+    from: author + " (Manual Entry)",
+    author: author,
+    emailDate: now,
+    tipDate: tipDate.value,
+    processedAt: now,
+    originalBody: rawText,
+    selections: selections,
+    doubles: "",
+    antePost: ""
+  };
+
+  // Add to top of ARTICLES
+  ARTICLES.unshift(article);
+
+  // Show preview
+  var ph = '<div class="add-data-preview"><h4>Added ' + selections.length + ' selection' + (selections.length !== 1 ? 's' : '') + ' under ' + author + '</h4>';
+  selections.forEach(function(s) {
+    ph += '<div class="preview-selection">';
+    ph += '<div class="ps-race">' + (s.race || "No race") + '</div>';
+    ph += '<div class="ps-horse">' + s.horse + '</div>';
+    ph += '<div class="ps-details">' + s.odds + (s.stake ? ' / ' + s.stake : '') + (s.category ? ' <strong>' + s.category + '</strong>' : '') + '</div>';
+    if (s.analysis) ph += '<div class="ps-analysis">' + s.analysis + '</div>';
+    ph += '</div>';
+  });
+  ph += '</div>';
+  preview.innerHTML = ph;
+
+  status.className = "add-data-status success";
+  status.innerHTML = "Added successfully. Selections are now live in All Selections and Bet Summary.";
+  btn.disabled = false;
+  body.value = "";
+
+  // Update tab counts
+  updateTabCounts();
+}
+
+function parseSelectionsFromText(text) {
+  var selections = [];
+  var lines = text.split(/\n/);
+  var currentAnalysis = [];
+  var lastSel = null;
+
+  // Common patterns:
+  // NAP: Horse Name - Venue Time - 9/1 (2pts win)
+  // Horse Name - Venue Time - 9/1
+  // NB: Horse Name @ 5/1 Venue Time
+  // Horse Name 3.15 Taunton 9/1 2pts win
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) {
+      if (lastSel && currentAnalysis.length > 0) {
+        lastSel.analysis = currentAnalysis.join(" ").trim();
+        currentAnalysis = [];
+      }
+      continue;
+    }
+
+    // Try to detect a selection line
+    var sel = tryParseSelectionLine(line);
+    if (sel) {
+      // Save any accumulated analysis to previous selection
+      if (lastSel && currentAnalysis.length > 0) {
+        lastSel.analysis = currentAnalysis.join(" ").trim();
+        currentAnalysis = [];
+      }
+      selections.push(sel);
+      lastSel = sel;
+    } else if (lastSel) {
+      // Accumulate as analysis text for last selection
+      if (line.length > 15) { // Skip very short non-selection lines
+        currentAnalysis.push(line);
+      }
+    }
+  }
+  // Final analysis
+  if (lastSel && currentAnalysis.length > 0) {
+    lastSel.analysis = currentAnalysis.join(" ").trim();
+  }
+
+  return selections;
+}
+
+function tryParseSelectionLine(line) {
+  var category = "";
+  var cleaned = line;
+
+  // Extract category (NAP, NB, TREBLE etc)
+  var catMatch = cleaned.match(/^(NAP|NB|NEXT BEST|TREBLE|DOUBLE)[:\s\-]+/i);
+  if (catMatch) {
+    var catRaw = catMatch[1].toUpperCase();
+    if (catRaw === "NEXT BEST") catRaw = "NB";
+    if (catRaw === "NAP" || catRaw === "NB") category = catRaw;
+    cleaned = cleaned.substring(catMatch[0].length).trim();
+  }
+
+  // Pattern 1: Horse - Venue Time - Odds (stake)
+  var m1 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*[-\u2013]\s*([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[-\u2013]\s*(\d+\/\d+|evens?|SP|TBC)(?:\s*[\(\,]\s*(.+?)[\)\,]?)?\s*$/i);
+  if (m1) {
+    return { race: m1[2].trim(), horse: toTitleCase(m1[1].trim()), odds: m1[3], stake: (m1[4] || "").trim(), category: category, analysis: "" };
+  }
+
+  // Pattern 2: Horse @ Odds Venue Time
+  var m2 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*@\s*(\d+\/\d+|evens?|SP|TBC)\s+([\w\s]+?\s+\d{1,2}[.:]\d{2})/i);
+  if (m2) {
+    return { race: m2[3].trim(), horse: toTitleCase(m2[1].trim()), odds: m2[2], stake: "", category: category, analysis: "" };
+  }
+
+  // Pattern 3: Horse Name (Venue Time) Odds
+  var m3 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*[\(\[]\s*([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[\)\]]\s*(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
+  if (m3) {
+    return { race: m3[2].trim(), horse: toTitleCase(m3[1].trim()), odds: m3[3], stake: (m3[4] || "").trim(), category: category, analysis: "" };
+  }
+
+  // Pattern 4: Time Venue Horse Odds
+  var m4 = cleaned.match(/^(\d{1,2}[.:]\d{2})\s+([A-Za-z]+)\s+([A-Za-z][A-Za-z'\s]+?)\s+(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
+  if (m4) {
+    return { race: m4[2].trim() + " " + m4[1].replace(".", ":"), horse: toTitleCase(m4[3].trim()), odds: m4[4], stake: (m4[5] || "").trim(), category: category, analysis: "" };
+  }
+
+  // Pattern 5: Loose - Horse Odds Venue Time (flexible spacing/dashes)
+  var m5 = cleaned.match(/^([A-Za-z][A-Za-z'\s]{2,}?)\s+(\d+\/\d+|evens?)\s+([A-Za-z]+\s+\d{1,2}[.:]\d{2})(?:\s+(.+))?\s*$/i);
+  if (m5) {
+    return { race: m5[3].trim(), horse: toTitleCase(m5[1].trim()), odds: m5[2], stake: (m5[4] || "").trim(), category: category, analysis: "" };
+  }
+
+  return null;
+}
+
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+}
+
 // ─── MAIN RENDER ───
 function render() {
   document.getElementById("lastSynced").innerHTML = '<span class="sync-indicator"></span>synced ' + timeAgo(lastSyncTime) + ' ago';
@@ -1223,8 +1474,21 @@ function render() {
     content = renderBetSummary();
   } else if (activeTab === "hotlist") {
     content = renderHotList();
+  } else if (activeTab === "adddata") {
+    content = renderAddData();
   }
   document.getElementById("mainContent").innerHTML = content;
+
+  // Attach custom author toggle on adddata tab
+  if (activeTab === "adddata") {
+    var authorSel = document.getElementById("addDataAuthor");
+    if (authorSel) {
+      authorSel.addEventListener("change", function() {
+        var cw = document.getElementById("customAuthorWrap");
+        if (cw) cw.style.display = this.value === "__custom__" ? "flex" : "none";
+      });
+    }
+  }
 
   // Attach search listener if on emails tab
   if (activeTab === "emails") {
