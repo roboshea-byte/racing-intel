@@ -28,6 +28,12 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-sync{padding:9px 20px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:7px}
 .btn-sync:hover{background:#222;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
 .btn-sync:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
+.btn-refresh{padding:8px 16px;background:#000;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px}
+.btn-refresh:hover{background:#222;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
+.btn-refresh:active{transform:scale(0.96)}
+.btn-refresh svg{transition:transform .3s ease}
+.btn-refresh.spinning svg{animation:spin .6s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 /* Page tabs */
 .page-tabs{background:#fff;border-bottom:1px solid #eee;padding:10px 0}
@@ -199,6 +205,7 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 html{overflow-x:hidden}
 body{overflow-x:hidden}
 .nav-inner{padding:0 16px;height:52px}
+.btn-refresh{padding:7px 14px;font-size:11px}
 .page-tabs-inner{padding:0 16px;gap:6px;flex-wrap:wrap}
 .page-tab{padding:8px 16px;font-size:12px}
 .btn-mark-read{padding:6px 12px;font-size:10px}
@@ -225,6 +232,8 @@ body{overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
 .logo-text{font-size:14px}
 .logo-badge{display:none}
 .last-synced{display:none}
+.btn-refresh{padding:7px 12px;font-size:11px}
+.refresh-label{display:none}
 .page-tabs{padding:8px 0}
 .page-tabs-inner{padding:0 10px;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
 .page-tab{padding:7px 14px;font-size:11px;flex-shrink:0;white-space:nowrap}
@@ -289,6 +298,10 @@ body{overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
     </a>
     <div class="nav-actions">
       <span class="last-synced" id="lastSynced"></span>
+      <button class="btn-refresh" onclick="hardRefresh()" title="Refresh data">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        <span class="refresh-label">Refresh</span>
+      </button>
     </div>
   </div>
 </nav>
@@ -886,6 +899,11 @@ function getDeduplicatedArticles() {
 }
 
 // ─── TAB SWITCHING ───
+function hardRefresh() {
+  var btn = document.querySelector(".btn-refresh");
+  if (btn) btn.classList.add("spinning");
+  setTimeout(function() { location.reload(true); }, 300);
+}
 function goHome() {
   var today = new Date().toISOString().split("T")[0];
   var dates = getTipDates();
