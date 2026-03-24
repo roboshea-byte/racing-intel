@@ -168,6 +168,74 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-cancel:hover{background:#eee}
 .btn-confirm-delete{background:#c33;color:#fff}
 .btn-confirm-delete:hover{background:#a22}
+
+/* ─── TABLET (≤1024px) ─── */
+@media(max-width:1024px){
+.main-layout{flex-direction:column;padding:14px 16px 40px}
+.date-sidebar{width:100%;min-width:0;display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.date-sidebar h4{display:none}
+.date-item{white-space:nowrap;flex-shrink:0;padding:8px 14px;font-size:11px}
+.date-count{float:none;margin-left:6px}
+.content{flex-direction:column}
+.cards-list{width:100%;min-width:0;max-height:none;flex-shrink:1}
+.reader{max-height:none}
+.cards-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.nav-inner{padding:0 16px;height:52px}
+.page-tabs-inner{padding:0 16px}
+.tipster-filter{padding:10px 12px;gap:8px}
+.bet-table th,.bet-table td{padding:10px 12px;font-size:12px}
+}
+
+/* ─── MOBILE (≤640px) ─── */
+@media(max-width:640px){
+.nav-inner{padding:0 12px;height:48px;gap:8px}
+.logo-text{font-size:14px}
+.logo-badge{display:none}
+.btn-sync{padding:7px 12px;font-size:11px;gap:5px}
+.btn-sync svg{width:12px;height:12px}
+.btn-download{display:none}
+.last-synced{display:none}
+.page-tabs-inner{padding:0 12px;gap:0}
+.page-tab{padding:12px 14px;font-size:12px}
+.main-layout{padding:10px 12px 32px;gap:10px}
+.date-sidebar{gap:4px}
+.date-item{padding:7px 12px;font-size:11px;border-radius:6px}
+.toolbar{gap:6px}
+.search-wrap{min-width:0}
+.search-wrap input{padding:10px 12px 10px 34px;font-size:12px}
+.filter-group{display:none}
+.content{flex-direction:column;gap:10px}
+.cards-list{width:100%;min-width:0;max-height:none;overflow-y:visible}
+.cards-grid{grid-template-columns:1fr;gap:8px}
+.card{padding:14px}
+.card h3{font-size:13px}
+.card-excerpt{font-size:11px;margin-bottom:8px}
+.reader{border-radius:10px;max-height:none}
+.reader-header{padding:16px}
+.reader h2{font-size:16px}
+.reader-meta{gap:8px}
+.view-tabs{margin:0 16px}
+.view-tab{padding:10px 14px;font-size:11px}
+.email-body{padding:16px;font-size:12px}
+.rewrite-body{padding:16px}
+.selection-analysis{font-size:12px;line-height:1.7}
+.copy-bar{padding:10px 16px}
+.all-sel-block{padding:14px 16px}
+.all-sel-horse{font-size:14px}
+.all-sel-analysis{font-size:12px;line-height:1.7}
+.tipster-filter{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px}
+.tipster-filter-label{margin-bottom:2px}
+.tipster-filter-actions{margin-left:0;width:100%}
+.tipster-check{padding:4px 8px}
+.tipster-check label{font-size:11px}
+.bet-table{font-size:11px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.bet-table th,.bet-table td{padding:8px 10px;font-size:11px;white-space:nowrap}
+.delete-dialog{padding:20px;max-width:300px}
+.empty{padding:50px 16px}
+.empty h3{font-size:14px}
+.empty p{font-size:12px}
+.status-bar{font-size:11px;padding:8px 12px}
+}
 </style>
 </head>
 <body>
