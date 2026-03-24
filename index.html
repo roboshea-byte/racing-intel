@@ -298,6 +298,7 @@ if(sessionStorage.getItem('ri-auth')==='1'){document.addEventListener('DOMConten
   <div class="date-sidebar" id="dateSidebar"></div>
   <div class="main-content" id="mainContent"></div>
 </div>
+<div id="mobileReader"></div>
 
 <script>
 // ─── AUTHOR MAP ───
@@ -909,51 +910,59 @@ function renderEmails() {
   }
 
   // Reader
+  var readerHtml = "";
   if (sel) {
     var auth = getAuthor(sel);
-    html += '<div class="reader">';
-    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
-    html += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
-    html += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
-    html += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
+    readerHtml += '<div class="reader">';
+    readerHtml += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
+    readerHtml += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
+    readerHtml += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
+    readerHtml += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
 
-    html += '<div class="view-tabs">';
-    html += '<button class="view-tab' + (view === "original" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'original\')">Original Email</button>';
-    html += '<button class="view-tab' + (view === "rewrite" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'rewrite\')">Racing Intel Rewrite</button>';
-    html += '</div>';
+    readerHtml += '<div class="view-tabs">';
+    readerHtml += '<button class="view-tab' + (view === "original" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'original\')">Original Email</button>';
+    readerHtml += '<button class="view-tab' + (view === "rewrite" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'rewrite\')">Racing Intel Rewrite</button>';
+    readerHtml += '</div>';
 
     if (view === "original") {
-      html += '<div class="copy-bar"><button class="btn-copy" id="copy-og-' + sel.id + '" onclick="event.stopPropagation();copyOriginal(\'' + sel.id + '\')">\u2398 copy</button></div>';
-      html += '<div class="email-body">';
-      (sel.originalBody || "").split("\n").forEach(function(line) { html += line.trim() ? '<p>' + escapeHtml(line) + '</p>' : '<p style="margin-bottom:8px">&nbsp;</p>'; });
-      html += '</div>';
+      readerHtml += '<div class="copy-bar"><button class="btn-copy" id="copy-og-' + sel.id + '" onclick="event.stopPropagation();copyOriginal(\'' + sel.id + '\')">\u2398 copy</button></div>';
+      readerHtml += '<div class="email-body">';
+      (sel.originalBody || "").split("\n").forEach(function(line) { readerHtml += line.trim() ? '<p>' + escapeHtml(line) + '</p>' : '<p style="margin-bottom:8px">&nbsp;</p>'; });
+      readerHtml += '</div>';
     } else {
-      html += '<div class="copy-bar"><button class="btn-copy" id="copy-rw-' + sel.id + '" onclick="event.stopPropagation();copyRewrite(\'' + sel.id + '\')">\u2398 copy</button></div>';
-      html += '<div class="rewrite-body">';
+      readerHtml += '<div class="copy-bar"><button class="btn-copy" id="copy-rw-' + sel.id + '" onclick="event.stopPropagation();copyRewrite(\'' + sel.id + '\')">\u2398 copy</button></div>';
+      readerHtml += '<div class="rewrite-body">';
       if (sel.selections && sel.selections.length) {
         sel.selections.forEach(function(s) {
-          html += '<div class="selection-block">';
-          html += '<div class="selection-header">' + escapeHtml(s.race) + ' ' + escapeHtml(s.horse) + ' - ' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds);
-          if (s.category) html += ' (' + escapeHtml(s.category) + ')';
-          html += '</div>';
-          if (s.analysis) { html += '<div class="selection-analysis">' + escapeHtml(s.analysis) + '</div>'; }
-          else { html += '<div class="no-analysis">No analysis available for this selection</div>'; }
-          html += '</div>';
+          readerHtml += '<div class="selection-block">';
+          readerHtml += '<div class="selection-header">' + escapeHtml(s.race) + ' ' + escapeHtml(s.horse) + ' - ' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds);
+          if (s.category) readerHtml += ' (' + escapeHtml(s.category) + ')';
+          readerHtml += '</div>';
+          if (s.analysis) { readerHtml += '<div class="selection-analysis">' + escapeHtml(s.analysis) + '</div>'; }
+          else { readerHtml += '<div class="no-analysis">No analysis available for this selection</div>'; }
+          readerHtml += '</div>';
         });
       }
-      if (sel.doubles) { html += '<div class="selection-block" style="padding:12px 16px;background:#f8f8f8;border-radius:8px;font-size:13px;font-weight:600;color:#333">' + escapeHtml(sel.doubles) + '</div>'; }
+      if (sel.doubles) { readerHtml += '<div class="selection-block" style="padding:12px 16px;background:#f8f8f8;border-radius:8px;font-size:13px;font-weight:600;color:#333">' + escapeHtml(sel.doubles) + '</div>'; }
       if (sel.antePost) {
-        html += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee">';
-        html += '<div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px">Ante Post</div>';
-        sel.antePost.split("\n").filter(Boolean).forEach(function(line) { html += '<div style="font-size:13px;color:#555;margin-bottom:6px">' + escapeHtml(line) + '</div>'; });
-        html += '</div>';
+        readerHtml += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee">';
+        readerHtml += '<div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px">Ante Post</div>';
+        sel.antePost.split("\n").filter(Boolean).forEach(function(line) { readerHtml += '<div style="font-size:13px;color:#555;margin-bottom:6px">' + escapeHtml(line) + '</div>'; });
+        readerHtml += '</div>';
       }
-      html += '</div>';
+      readerHtml += '</div>';
     }
-    html += '</div>';
+    readerHtml += '</div>';
+  }
+
+  // On desktop (>640px), reader goes inline. On mobile, it goes to mobileReader div.
+  if (window.innerWidth > 640) {
+    html += readerHtml;
   }
 
   html += '</div>';
+  // Store reader HTML for mobile rendering
+  html = { main: html, reader: readerHtml };
   return html;
 }
 
@@ -1026,14 +1035,27 @@ function render() {
   renderDateSidebar();
 
   var content = "";
+  var mobileReaderHtml = "";
   if (activeTab === "emails") {
-    content = renderEmails();
+    var result = renderEmails();
+    content = result.main;
+    mobileReaderHtml = result.reader || "";
   } else if (activeTab === "selections") {
     content = renderAllSelections();
   } else if (activeTab === "summary") {
     content = renderBetSummary();
   }
   document.getElementById("mainContent").innerHTML = content;
+
+  // On mobile, render reader in a separate overlay div outside the layout
+  var mr = document.getElementById("mobileReader");
+  if (mr) {
+    if (window.innerWidth <= 640) {
+      mr.innerHTML = mobileReaderHtml;
+    } else {
+      mr.innerHTML = "";
+    }
+  }
 
   // Attach search listener if on emails tab
   if (activeTab === "emails") {
