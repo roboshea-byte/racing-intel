@@ -1000,30 +1000,19 @@ function copyBetSummary() { var t = buildBetSummaryText(); if(!t) return; naviga
 // ─── RENDER: ALL SELECTIONS TAB ───
 function renderAllSelections() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
-  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No selections</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
-  }
-  if (clashes.length) {
-    clashes.forEach(function(c) {
-      html += '<div class="hot-clash-banner"><div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
-      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
-      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + escapeHtml(c.odds) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
-      html += '<div class="hot-clash-tipsters">'; c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; }); html += '</div></div>';
-    });
   }
   html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySelBtn" onclick="copySelections()">\u2398 Copy</button><button class="btn-download" onclick="downloadSelections()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   var lastRace = "";
   sels.forEach(function(s, i) {
     var raceKey = s.race;
     if (raceKey !== lastRace) { lastRace = raceKey; html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:16px 0 6px">' + escapeHtml(raceKey) + '</div>'; }
-    var clash = isHotClash(s.race, s.horse, clashes);
-    html += '<div class="all-sel-block' + (clash ? ' is-hot-clash' : '') + '" style="animation-delay:' + (i * 0.02) + 's">';
+    html += '<div class="all-sel-block" style="animation-delay:' + (i * 0.02) + 's">';
     html += '<div style="display:flex;justify-content:space-between;align-items:center"><div>';
     html += '<span class="all-sel-horse">' + escapeHtml(s.horse) + '</span>';
-    if (clash) html += '<span style="margin-left:8px;font-size:13px">&#128293;</span>';
     if (s.category) html += '<span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '<span class="tipster-badge">' + escapeHtml(s.tipster) + '</span>';
     html += '</div></div>';
