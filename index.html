@@ -210,6 +210,16 @@ const AUTHOR_MAP = {
   "BetHub": ["BetHub", "bethub"],
   "EVR": ["Everything Racing", "EVR"],
   "Stephen Harris": ["Stephen Harris"],
+  "BetRev": ["BetRev", "tips@betrev.co.uk"],
+  "Robbie Wilders": ["Robbie Wilders"],
+  "BetRate": ["BetRate", "betrate"],
+  "IQ Racing": ["IQ Racing", "IQ Sports", "iqracing"],
+  "BetSeven": ["BetSeven", "betseven"],
+  "Apex Bet": ["Apex Bet", "apexbet"],
+  "Bet Sage": ["Bet Sage", "BetSage"],
+  "Target Racing": ["Target Racing", "targetracing"],
+  "A-Star Tips": ["A-Star", "astar"],
+  "Early Bird": ["Early Bird", "earlybird"],
 };
 
 function getAuthor(article) {
@@ -226,6 +236,63 @@ function getAuthor(article) {
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
+  {
+    id: "19d1f8314a2e5bc8",
+    originalSubject: "Today's Qualifiers [ 24th March ]",
+    from: "BetRate <admin@betrate.co.uk>",
+    author: "BetRate",
+    emailDate: "2026-03-24T11:02:57Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T11:30:00Z",
+    originalBody: "The winners just keep on coming, with Es Perfecto (6/1) and Jackomy (11/4) both winning yesterday.\n\nToday's Qualifiers\n\nTaunton 3.15 - Thistle Be The One (7/2)\n\n(Recommended stakes - win bet (below 6/1), e/w bet (6/1 or bigger)\n\nRemember, although only the selections are posted, there is a lot of work that goes on behind the scenes to build the bets and find genuine value, and it pays dividends long-term. Never judge on a small sample, judge the service over a decent period of time.\n\nBe lucky\nAlex\nBetrate",
+    selections: [
+      {
+        race: "Taunton 3.15",
+        horse: "Thistle Be The One",
+        odds: "7/2",
+        stake: "1 point win",
+        category: "",
+        analysis: ""
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1f7aae1d042d7",
+    originalSubject: "BetSeven - 24th March",
+    from: "BetSeven <info@betseven.co.uk>",
+    author: "BetSeven",
+    emailDate: "2026-03-24T10:53:46Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T11:30:00Z",
+    originalBody: "BETSEVEN\n\nTaunton 3.15 - St Lukes Chelsea - 2 point win at 11/4 (Unibet)\nSt Lukes Chelsea returns to Taunton where he shaped with considerable promise when beaten just three quarters of a length into third over course and distance last time out. It is worth noting that effort came in Class 4 company and this Robert Walford trained five year old drops into a Class 5 contest off a mark only a pound higher. The Territoires gelding has Freddie Gingell in the plate and, while sixteen runs without success reads poorly on paper, the circumstances here look very much in his favour.\n\nChris Howard\nBetSeven",
+    selections: [
+      {
+        race: "Taunton 3.15",
+        horse: "St Lukes Chelsea",
+        odds: "11/4",
+        stake: "2 points win",
+        category: "",
+        analysis: "St Lukes Chelsea returns to the scene of a highly encouraging third over course and distance last time out, beaten just three quarters of a length in what was a significantly stronger Class 4 contest. It is worth noting that he now drops into Class 5 company off a mark only a pound higher than for that effort, which represents a meaningful ease in grade. The Robert Walford trained five year old by Territoires has the services of Freddie Gingell once again, and while a record of sixteen runs without success looks discouraging at first glance, the circumstances here look considerably more favourable than anything he has faced in recent memory."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1f7d25ddf7ba6",
+    originalSubject: "Daily AI Analysis [ 24th March ]",
+    from: "IQ Sports <info@iqracing.net>",
+    author: "IQ Racing",
+    emailDate: "2026-03-24T10:56:26Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T11:30:00Z",
+    originalBody: "Tuesday 24th March\n\nNo Bets today, the model has not highlighted anything particularly strong. Plenty coming up for the rest of the week, with a very strong bet looking likely for tomorrow.\n\nNo Bets Today\n\nIQ Racing",
+    selections: [],
+    doubles: "",
+    antePost: ""
+  },
   {
     id: "19d1f77ad998aba5",
     originalSubject: "BetRev - Tuesday 24th March [Update]",
@@ -516,7 +583,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-24T11:15:00Z";
+var lastSyncTime = "2026-03-24T11:30:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
