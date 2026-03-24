@@ -1444,34 +1444,56 @@ function tryParseSelectionLine(line) {
     cleaned = cleaned.substring(catMatch[0].length).trim();
   }
 
-  // Pattern 1: Horse - Venue Time - Odds (stake)
-  var m1 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*[-\u2013]\s*([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[-\u2013]\s*(\d+\/\d+|evens?|SP|TBC)(?:\s*[\(\,]\s*(.+?)[\)\,]?)?\s*$/i);
-  if (m1) {
-    return { race: m1[2].trim(), horse: toTitleCase(m1[1].trim()), odds: m1[3], stake: (m1[4] || "").trim(), category: category, analysis: "" };
+  // Pattern 1: Venue Time - Horse - Odds/stake (e.g. "Kelso 3.48 - Gaelic Rover - 3 point win at 10/11")
+  var m1a = cleaned.match(/^([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[-\u2013]\s*([A-Za-z][A-Za-z'\s]+?)\s*[-\u2013]\s*(.+)$/i);
+  if (m1a) {
+    var rest = m1a[3].trim();
+    var oddsMatch = rest.match(/(\d+\/\d+|evens?|SP|TBC)/i);
+    var odds = oddsMatch ? oddsMatch[1] : "TBC";
+    var stake = rest.replace(/(\d+\/\d+|evens?|SP|TBC)/i, "").replace(/[\(\)]/g, "").replace(/at\s*/i, "").trim();
+    return { race: m1a[1].trim(), horse: toTitleCase(m1a[2].trim()), odds: odds, stake: stake || "", category: category, analysis: "" };
   }
 
-  // Pattern 2: Horse @ Odds Venue Time
-  var m2 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*@\s*(\d+\/\d+|evens?|SP|TBC)\s+([\w\s]+?\s+\d{1,2}[.:]\d{2})/i);
+  // Pattern 1b: Venue Time - Horse Odds (no second dash, e.g. "Taunton 3.15 - Scaredofnothing 9/1")
+  var m1b = cleaned.match(/^([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[-\u2013]\s*([A-Za-z][A-Za-z'\s]+?)\s+(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
+  if (m1b) {
+    return { race: m1b[1].trim(), horse: toTitleCase(m1b[2].trim()), odds: m1b[3], stake: (m1b[4] || "").trim(), category: category, analysis: "" };
+  }
+
+  // Pattern 2: Horse - Venue Time - Odds (stake)
+  var m2 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*[-\u2013]\s*([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[-\u2013]\s*(\d+\/\d+|evens?|SP|TBC)(?:\s*[\(\,]\s*(.+?)[\)\,]?)?\s*$/i);
   if (m2) {
-    return { race: m2[3].trim(), horse: toTitleCase(m2[1].trim()), odds: m2[2], stake: "", category: category, analysis: "" };
+    return { race: m2[2].trim(), horse: toTitleCase(m2[1].trim()), odds: m2[3], stake: (m2[4] || "").trim(), category: category, analysis: "" };
   }
 
-  // Pattern 3: Horse Name (Venue Time) Odds
-  var m3 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*[\(\[]\s*([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[\)\]]\s*(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
+  // Pattern 3: Horse @ Odds Venue Time
+  var m3 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*@\s*(\d+\/\d+|evens?|SP|TBC)\s+([\w\s]+?\s+\d{1,2}[.:]\d{2})/i);
   if (m3) {
-    return { race: m3[2].trim(), horse: toTitleCase(m3[1].trim()), odds: m3[3], stake: (m3[4] || "").trim(), category: category, analysis: "" };
+    return { race: m3[3].trim(), horse: toTitleCase(m3[1].trim()), odds: m3[2], stake: "", category: category, analysis: "" };
   }
 
-  // Pattern 4: Time Venue Horse Odds
-  var m4 = cleaned.match(/^(\d{1,2}[.:]\d{2})\s+([A-Za-z]+)\s+([A-Za-z][A-Za-z'\s]+?)\s+(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
+  // Pattern 4: Horse Name (Venue Time) Odds
+  var m4 = cleaned.match(/^([A-Za-z][A-Za-z'\s]+?)\s*[\(\[]\s*([A-Za-z]+\s+\d{1,2}[.:]\d{2})\s*[\)\]]\s*(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
   if (m4) {
-    return { race: m4[2].trim() + " " + m4[1].replace(".", ":"), horse: toTitleCase(m4[3].trim()), odds: m4[4], stake: (m4[5] || "").trim(), category: category, analysis: "" };
+    return { race: m4[2].trim(), horse: toTitleCase(m4[1].trim()), odds: m4[3], stake: (m4[4] || "").trim(), category: category, analysis: "" };
   }
 
-  // Pattern 5: Loose - Horse Odds Venue Time (flexible spacing/dashes)
-  var m5 = cleaned.match(/^([A-Za-z][A-Za-z'\s]{2,}?)\s+(\d+\/\d+|evens?)\s+([A-Za-z]+\s+\d{1,2}[.:]\d{2})(?:\s+(.+))?\s*$/i);
+  // Pattern 5: Time Venue Horse Odds
+  var m5 = cleaned.match(/^(\d{1,2}[.:]\d{2})\s+([A-Za-z]+)\s+([A-Za-z][A-Za-z'\s]+?)\s+(\d+\/\d+|evens?|SP|TBC)(?:\s+(.+))?\s*$/i);
   if (m5) {
-    return { race: m5[3].trim(), horse: toTitleCase(m5[1].trim()), odds: m5[2], stake: (m5[4] || "").trim(), category: category, analysis: "" };
+    return { race: m5[2].trim() + " " + m5[1].replace(".", ":"), horse: toTitleCase(m5[3].trim()), odds: m5[4], stake: (m5[5] || "").trim(), category: category, analysis: "" };
+  }
+
+  // Pattern 6: Horse Odds Venue Time
+  var m6 = cleaned.match(/^([A-Za-z][A-Za-z'\s]{2,}?)\s+(\d+\/\d+|evens?)\s+([A-Za-z]+\s+\d{1,2}[.:]\d{2})(?:\s+(.+))?\s*$/i);
+  if (m6) {
+    return { race: m6[3].trim(), horse: toTitleCase(m6[1].trim()), odds: m6[2], stake: (m6[4] || "").trim(), category: category, analysis: "" };
+  }
+
+  // Pattern 7: Loose - just Horse and Odds on a line (e.g. "Gaelic Rover 10/11")
+  var m7 = cleaned.match(/^([A-Za-z][A-Za-z'\s]{2,}?)\s+(\d+\/\d+|evens?)(?:\s+(.+))?\s*$/i);
+  if (m7 && m7[1].trim().split(/\s+/).length <= 5) {
+    return { race: "", horse: toTitleCase(m7[1].trim()), odds: m7[2], stake: (m7[3] || "").trim(), category: category, analysis: "" };
   }
 
   return null;
