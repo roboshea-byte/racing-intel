@@ -30,11 +30,19 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-sync:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
 
 /* Page tabs */
-.page-tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid #eee}
-.page-tabs-inner{max-width:1400px;margin:0 auto;padding:0 28px;display:flex;gap:0}
-.page-tab{padding:14px 24px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;color:#aaa;cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;transition:all .1s}
-.page-tab:hover{color:#666}
-.page-tab.active{color:#000;border-bottom-color:#000}
+.page-tabs{background:#fff;border-bottom:1px solid #eee;padding:10px 0}
+.page-tabs-inner{max-width:1400px;margin:0 auto;padding:0 28px;display:flex;gap:8px;align-items:center}
+.page-tab{padding:9px 20px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;color:#555;cursor:pointer;border:1.5px solid #e0e0e0;background:#fff;border-radius:9px;transition:all .15s}
+.page-tab:hover{background:#f3f3f3;border-color:#ccc}
+.page-tab.active{background:#000;color:#fff;border-color:#000}
+.page-tab.hot{border-color:#f0a050;color:#c55a11}
+.page-tab.hot.active{background:linear-gradient(135deg,#e8650a,#c55a11);color:#fff;border-color:#c55a11}
+.page-tab .tab-count{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;font-size:10px;font-weight:700;border-radius:9px;margin-left:6px;padding:0 5px}
+.page-tab.active .tab-count{background:rgba(255,255,255,0.2);color:#fff}
+.page-tab.hot .tab-count{background:#fff3e6;color:#c55a11}
+.page-tab.hot.active .tab-count{background:rgba(255,255,255,0.25);color:#fff}
+.btn-mark-read{padding:7px 14px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;color:#888;cursor:pointer;border:1px solid #e0e0e0;background:#fff;border-radius:7px;transition:all .12s;margin-left:auto;white-space:nowrap}
+.btn-mark-read:hover{background:#f3f3f3;color:#555}
 
 /* Layout */
 .main-layout{max-width:1400px;margin:0 auto;padding:18px 28px 48px;display:flex;gap:18px}
@@ -203,10 +211,12 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 </nav>
 
 <div class="page-tabs">
-  <div class="page-tabs-inner">
+  <div class="page-tabs-inner" id="pageTabs">
     <button class="page-tab active" id="tab-emails" onclick="switchTab('emails')">Emails</button>
     <button class="page-tab" id="tab-selections" onclick="switchTab('selections')">All Selections</button>
     <button class="page-tab" id="tab-summary" onclick="switchTab('summary')">Bet Summary</button>
+    <button class="page-tab hot" id="tab-hotlist" onclick="switchTab('hotlist')">Hot List</button>
+    <button class="btn-mark-read" id="markAllReadBtn" onclick="markAllRead()">Mark All Read</button>
   </div>
 </div>
 
@@ -254,6 +264,8 @@ var readIds = {};
 try { readIds = JSON.parse(localStorage.getItem('ri-read') || '{}'); } catch(e) {}
 function markRead(id) { readIds[id] = 1; try { localStorage.setItem('ri-read', JSON.stringify(readIds)); } catch(e) {} }
 function isNew(id) { return !readIds[id]; }
+function markAllRead() { ARTICLES.forEach(function(a) { readIds[a.id] = 1; }); try { localStorage.setItem('ri-read', JSON.stringify(readIds)); } catch(e) {} render(); }
+function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.id); }).length; }
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
@@ -1063,10 +1075,54 @@ function renderBetSummary() {
   return html;
 }
 
+// ─── RENDER: HOT LIST TAB ───
+function renderHotList() {
+  var allSels = getSelectionsForDate(selectedDate);
+  var clashes = findHotClashes(allSels);
+  var html = '';
+
+  if (!clashes.length) {
+    html += '<div class="empty"><h3>No Hot Clashes</h3><p>No horses tipped by multiple tipsters for this date.</p></div>';
+    return html;
+  }
+
+  html += '<div style="font-family:Inter,sans-serif;font-size:13px;color:#888;margin-bottom:16px">' + clashes.length + ' horse' + (clashes.length !== 1 ? 's' : '') + ' tipped by multiple tipsters</div>';
+
+  clashes.forEach(function(c, ci) {
+    html += '<div class="hot-clash-banner" style="animation-delay:' + (ci * 0.05) + 's">';
+    html += '<div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> ' + c.tipsters.length + ' Tipsters Agree</div>';
+    html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
+    html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + escapeHtml(c.odds) + '</div>';
+    html += '<div class="hot-clash-tipsters">';
+    c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; });
+    html += '</div>';
+
+    // Show each tipster's analysis for this horse
+    var matchingSels = allSels.filter(function(s) {
+      return (s.race + '|' + s.horse).toLowerCase().replace(/\s+/g,' ').trim() === (c.race + '|' + c.horse).toLowerCase().replace(/\s+/g,' ').trim();
+    });
+    matchingSels.forEach(function(ms) {
+      if (ms.analysis) {
+        html += '<div style="margin-top:12px;padding:12px 16px;background:rgba(255,255,255,0.7);border-radius:8px;border-left:3px solid #c55a11">';
+        html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#c55a11;margin-bottom:4px">' + escapeHtml(ms.tipster) + ' &middot; ' + escapeHtml(ms.stake) + ' at ' + escapeHtml(ms.odds) + '</div>';
+        html += '<div style="font-size:13px;line-height:1.7;color:#333">' + escapeHtml(ms.analysis) + '</div>';
+        html += '</div>';
+      } else {
+        html += '<div style="margin-top:8px;padding:8px 16px;background:rgba(255,255,255,0.5);border-radius:6px">';
+        html += '<span style="font-family:Inter,sans-serif;font-size:11px;font-weight:600;color:#999">' + escapeHtml(ms.tipster) + ' &middot; ' + escapeHtml(ms.stake) + ' at ' + escapeHtml(ms.odds) + '</span>';
+        html += '</div>';
+      }
+    });
+    html += '</div>';
+  });
+  return html;
+}
+
 // ─── MAIN RENDER ───
 function render() {
   document.getElementById("lastSynced").innerHTML = '<span class="sync-indicator"></span>synced ' + timeAgo(lastSyncTime) + ' ago';
   renderDateSidebar();
+  updateTabCounts();
 
   var content = "";
   if (activeTab === "emails") {
@@ -1075,6 +1131,8 @@ function render() {
     content = renderAllSelections();
   } else if (activeTab === "summary") {
     content = renderBetSummary();
+  } else if (activeTab === "hotlist") {
+    content = renderHotList();
   }
   document.getElementById("mainContent").innerHTML = content;
 
@@ -1085,6 +1143,23 @@ function render() {
       si.addEventListener("input", function(e) { searchQuery = e.target.value; render(); });
     }
   }
+}
+
+function updateTabCounts() {
+  // Unread count on Emails tab
+  var unread = getUnreadCount();
+  var emailTab = document.getElementById("tab-emails");
+  if (emailTab) emailTab.innerHTML = 'Emails' + (unread > 0 ? '<span class="tab-count">' + unread + '</span>' : '');
+
+  // Hot clash count
+  var allSels = getSelectionsForDate(selectedDate);
+  var clashes = findHotClashes(allSels);
+  var hotTab = document.getElementById("tab-hotlist");
+  if (hotTab) hotTab.innerHTML = '&#128293; Hot List' + (clashes.length > 0 ? '<span class="tab-count">' + clashes.length + '</span>' : '');
+
+  // Show/hide mark all read button
+  var markBtn = document.getElementById("markAllReadBtn");
+  if (markBtn) markBtn.style.display = unread > 0 ? 'block' : 'none';
 }
 
 function selectCard(id) {
