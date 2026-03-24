@@ -124,8 +124,18 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .last-synced{font-size:11px;color:#bbb;font-family:'Inter',sans-serif}
 .sync-indicator{width:6px;height:6px;border-radius:50%;background:#4b4;display:inline-block;margin-right:4px}
 
+/* Hot Clash */
+.hot-clash-banner{background:linear-gradient(135deg,#fff8f0,#fff3e6);border:1.5px solid #f0a050;border-radius:10px;padding:16px 20px;margin-bottom:14px;animation:fadeUp .3s ease forwards;opacity:0}
+.hot-clash-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:800;color:#c55a11;letter-spacing:-0.2px;margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.hot-clash-fire{font-size:15px}
+.hot-clash-horse{font-family:'Inter',sans-serif;font-size:17px;font-weight:800;color:#000;letter-spacing:-0.3px}
+.hot-clash-details{font-size:12px;color:#888;margin-top:4px}
+.hot-clash-tipsters{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.hot-clash-tipster{padding:3px 9px;background:#c55a11;border-radius:5px;font-size:10px;font-weight:700;color:#fff;font-family:'Inter',sans-serif}
+
 /* All Selections */
 .all-sel-block{background:#fff;border-radius:10px;padding:18px 22px;margin-bottom:10px;border:1px solid #eee;animation:fadeUp .3s ease forwards;opacity:0}
+.all-sel-block.is-hot-clash{border-color:#f0a050;background:linear-gradient(135deg,#fffcf8,#fff8f0)}
 .all-sel-race{font-size:11px;font-weight:600;color:#999;margin-bottom:4px;font-family:'Inter',sans-serif;letter-spacing:0.3px}
 .all-sel-horse{font-size:15px;font-weight:700;color:#000;font-family:'Inter',sans-serif;letter-spacing:-0.2px}
 .all-sel-details{font-size:12px;color:#777;margin-top:3px}
@@ -968,14 +978,54 @@ function renderEmails() {
   return html;
 }
 
+// ─── HOT CLASH DETECTION ───
+function findHotClashes(sels) {
+  var map = {};
+  sels.forEach(function(s) {
+    var key = (s.race + '|' + s.horse).toLowerCase().replace(/\s+/g, ' ').trim();
+    if (!map[key]) map[key] = { race: s.race, horse: s.horse, tipsters: [], odds: s.odds };
+    if (map[key].tipsters.indexOf(s.tipster) === -1) map[key].tipsters.push(s.tipster);
+  });
+  var clashes = [];
+  for (var k in map) {
+    if (map[k].tipsters.length >= 2) clashes.push(map[k]);
+  }
+  clashes.sort(function(a, b) { return b.tipsters.length - a.tipsters.length; });
+  return clashes;
+}
+
+function isHotClash(race, horse, clashes) {
+  var key = (race + '|' + horse).toLowerCase().replace(/\s+/g, ' ').trim();
+  for (var i = 0; i < clashes.length; i++) {
+    var ck = (clashes[i].race + '|' + clashes[i].horse).toLowerCase().replace(/\s+/g, ' ').trim();
+    if (ck === key) return clashes[i];
+  }
+  return null;
+}
+
 // ─── RENDER: ALL SELECTIONS TAB ───
 function renderAllSelections() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No selections</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
+
+  // Hot Clash banners
+  if (clashes.length) {
+    clashes.forEach(function(c) {
+      html += '<div class="hot-clash-banner">';
+      html += '<div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
+      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
+      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + escapeHtml(c.odds) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
+      html += '<div class="hot-clash-tipsters">';
+      c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; });
+      html += '</div></div>';
+    });
+  }
+
   html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySelBtn" onclick="copySelections()">\u2398 Copy</button><button class="btn-download" onclick="downloadSelections()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   var lastRace = "";
   sels.forEach(function(s, i) {
@@ -984,10 +1034,12 @@ function renderAllSelections() {
       lastRace = raceKey;
       html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:16px 0 6px">' + escapeHtml(raceKey) + '</div>';
     }
-    html += '<div class="all-sel-block" style="animation-delay:' + (i * 0.02) + 's">';
+    var clash = isHotClash(s.race, s.horse, clashes);
+    html += '<div class="all-sel-block' + (clash ? ' is-hot-clash' : '') + '" style="animation-delay:' + (i * 0.02) + 's">';
     html += '<div style="display:flex;justify-content:space-between;align-items:center">';
     html += '<div>';
     html += '<span class="all-sel-horse">' + escapeHtml(s.horse) + '</span>';
+    if (clash) html += '<span style="margin-left:8px;font-size:13px">&#128293;</span>';
     if (s.category) html += '<span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '<span class="tipster-badge">' + escapeHtml(s.tipster) + '</span>';
     html += '</div>';
@@ -1004,21 +1056,38 @@ function renderAllSelections() {
 // ─── RENDER: BET SUMMARY TAB ───
 function renderBetSummary() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No bets</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
+
+  // Hot Clash banners
+  if (clashes.length) {
+    clashes.forEach(function(c) {
+      html += '<div class="hot-clash-banner">';
+      html += '<div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
+      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
+      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
+      html += '<div class="hot-clash-tipsters">';
+      c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; });
+      html += '</div></div>';
+    });
+  }
+
   html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySumBtn" onclick="copyBetSummary()">\u2398 Copy</button><button class="btn-download" onclick="downloadBetSummary()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   html += '<table class="bet-table">';
   html += '<thead><tr><th>Time</th><th>Race</th><th>Horse</th><th>Stake</th><th>Odds</th><th>Category</th><th>Tipster</th></tr></thead>';
   html += '<tbody>';
   sels.forEach(function(s) {
-    html += '<tr>';
+    var clash = isHotClash(s.race, s.horse, clashes);
+    html += '<tr' + (clash ? ' style="background:#fff8f0"' : '') + '>';
     var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
     html += '<td style="font-weight:600;white-space:nowrap">' + (tm ? escapeHtml(tm[1]) : '') + '</td>';
     html += '<td>' + escapeHtml(s.race) + '</td>';
     html += '<td style="font-weight:600">' + escapeHtml(s.horse);
+    if (clash) html += ' &#128293;';
     if (s.category) html += ' <span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '</td>';
     html += '<td>' + escapeHtml(s.stake) + '</td>';
