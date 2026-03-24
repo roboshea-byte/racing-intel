@@ -227,6 +227,28 @@ function getAuthor(article) {
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    id: "19d1f77ad998aba5",
+    originalSubject: "BetRev - Tuesday 24th March [Update]",
+    from: "BetRev <tips@betrev.co.uk>",
+    author: "BetRev",
+    emailDate: "2026-03-24T10:50:29Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T11:15:00Z",
+    originalBody: "Daily Digest - Tuesday 24th March 2026:\n\nScaredofnothing is a non-runner now. The BHA website has the reason down as ground, which seems odd to me, as the ground should be just about ideal i'd have thought. He had been backed in from 9/1 to 11/2 so I guess that is probably why, connections didn't get their money on.\n\nNothing else stands out as a bet today so we'll be back tomorrow.\n\nBet Summary:\nSouthwell 3.00 - Scaredofnothing - 1 point e/w (9/1) Bet365 3 places - Non-runner\n\nBe Lucky\nG.J.",
+    selections: [
+      {
+        race: "Southwell 3.00",
+        horse: "Scaredofnothing",
+        odds: "9/1",
+        stake: "1 point e/w - NON RUNNER",
+        category: "",
+        analysis: "Scaredofnothing has been declared a non-runner with the BHA citing ground as the official reason, though it is worth noting that this explanation appears somewhat puzzling given the conditions looked close to ideal for this horse. The market had spoken positively in his favour overnight, with the price contracting from 9/1 to 11/2, which suggests connections were confident before the late decision was taken. The suspicion is that the withdrawal may be connected to the inability to get the desired money on at the right price rather than any genuine concern about the racing surface. One to follow closely on his next start."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
     id: "19d1f11825c4e7b4",
     originalSubject: "Tuesday Selections. (24/03/26)",
     from: "Everything Racing Blog <donotreply@wordpress.com>",
@@ -494,7 +516,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-25T10:39:42Z";
+var lastSyncTime = "2026-03-24T11:15:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
