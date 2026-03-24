@@ -210,10 +210,12 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .card{padding:14px}
 .card h3{font-size:13px}
 .card-excerpt{font-size:11px;margin-bottom:8px}
-.reader{border-radius:10px;max-height:none}
-.reader-header{padding:16px}
+.reader{border-radius:0;max-height:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:150;border:none;overflow-y:auto}
+.reader-header{padding:16px 16px 14px}
 .reader h2{font-size:16px}
 .reader-meta{gap:8px}
+.reader-close{width:36px;height:36px;font-size:16px;background:#f0f0f0}
+.cards-list{width:100%;min-width:0}
 .view-tabs{margin:0 16px}
 .view-tab{padding:10px 14px;font-size:11px}
 .email-body{padding:16px;font-size:12px}
