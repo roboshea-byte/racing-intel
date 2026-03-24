@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Racing Intel</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -1139,6 +1142,29 @@ function setAuthor(a) { filterAuthor = a; render(); }
 
 setInterval(function() { location.reload(); }, 300000);
 render();
+
+// ─── SERVICE WORKER & NOTIFICATIONS ───
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(function(reg) {
+    // Store current article count so SW knows the baseline
+    var count = ARTICLES.length;
+    if (reg.active) {
+      reg.active.postMessage({ type: 'SET_ARTICLE_COUNT', count: count });
+    }
+    navigator.serviceWorker.ready.then(function(r) {
+      r.active.postMessage({ type: 'SET_ARTICLE_COUNT', count: count });
+      // Check for new content every 5 minutes
+      setInterval(function() {
+        r.active.postMessage({ type: 'CHECK_NEW' });
+      }, 300000);
+    });
+  });
+
+  // Request notification permission
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
 </script>
 </body>
 </html>
