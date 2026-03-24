@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Racing Intel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#f7f7f7;font-family:'JetBrains Mono','SF Mono',monospace;color:#000}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:#aaa}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:28px;height:28px;background:#000;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.logo-icon span{color:#fff;font-size:13px;font-weight:700;font-family:'Inter',sans-serif}
+.logo-text{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.4px}
+.logo-badge{font-size:10px;font-weight:500;color:#999;background:#f3f3f3;padding:3px 8px;border-radius:5px;letter-spacing:0.4px}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.btn-sync{padding:9px 20px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:7px}
+.btn-sync:hover{background:#222;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
+.btn-sync:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
+.btn-download{padding:8px 16px;background:#fff;border:1.5px solid #ddd;border-radius:8px;color:#333;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px}
+.btn-download:hover{background:#000;color:#fff;border-color:#000}
+
+/* Page tabs */
+.page-tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid #eee}
+.page-tabs-inner{max-width:1400px;margin:0 auto;padding:0 28px;display:flex;gap:0}
+.page-tab{padding:14px 24px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;color:#aaa;cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;transition:all .1s}
+.page-tab:hover{color:#666}
+.page-tab.active{color:#000;border-bottom-color:#000}
+
+/* Layout */
+.main-layout{max-width:1400px;margin:0 auto;padding:18px 28px 48px;display:flex;gap:18px}
+.date-sidebar{width:180px;min-width:180px;flex-shrink:0}
+.date-sidebar h4{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.date-item{padding:9px 12px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:#777;transition:all .1s;margin-bottom:2px;font-family:'Inter',sans-serif}
+.date-item:hover{background:#eee;color:#333}
+.date-item.active{background:#000;color:#fff}
+.date-count{float:right;font-size:10px;opacity:0.5}
+
+.main-content{flex:1;min-width:0}
+.status-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;font-size:12px;font-weight:500;margin-bottom:16px;animation:fadeUp .3s ease}
+.status-bar.info{background:#f8f9ff;border:1px solid #e0e4ff;color:#446}
+
+/* Toolbar */
+.toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;position:relative;display:flex;align-items:center}
+.search-wrap svg{position:absolute;left:13px;opacity:0.25}
+.search-wrap input{width:100%;padding:11px 14px 11px 36px;background:#fff;border:1px solid #eee;border-radius:9px;color:#000;font-size:13px;font-family:inherit;font-weight:400;transition:all .12s}
+.search-wrap input:focus{outline:none;border-color:#000}
+.search-wrap input::placeholder{color:#c0c0c0;font-weight:400}
+.filter-group{display:flex;gap:3px;background:#fff;border-radius:9px;padding:3px;border:1px solid #eee}
+.filter-btn{padding:7px 12px;border:none;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .1s;background:transparent;color:#aaa;white-space:nowrap}
+.filter-btn:hover{background:#eee}
+.filter-btn.active{background:#000;color:#fff}
+
+/* Content */
+.content{display:flex;gap:14px;align-items:flex-start}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px;flex:1}
+.cards-list{display:flex;flex-direction:column;gap:8px;width:360px;min-width:360px;max-height:calc(100vh - 240px);overflow-y:auto;flex-shrink:0}
+
+/* Date group header */
+.date-header{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:12px 0 6px;grid-column:1/-1}
+
+/* Cards */
+.card{background:#fff;border-radius:10px;padding:18px;cursor:pointer;border:1.5px solid transparent;transition:all .12s ease;animation:fadeUp .3s ease forwards;opacity:0}
+.card:hover{border-color:#000;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.card.selected{border-color:#000;background:#fff}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card-from{font-size:11px;font-weight:600;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%}
+.card-time{font-size:11px;font-weight:500;color:#ccc}
+.card h3{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#111;line-height:1.35;margin-bottom:8px;letter-spacing:-0.2px}
+.card-excerpt{font-size:12px;color:#999;line-height:1.55;margin-bottom:12px;font-weight:300}
+.card-footer{display:flex;justify-content:space-between;align-items:center}
+.card-sels{font-size:11px;color:#bbb}
+
+/* Reader */
+.reader{flex:1;background:#fff;border:1px solid #eee;border-radius:12px;max-height:calc(100vh - 240px);overflow-y:auto;animation:slideRight .25s ease forwards}
+.reader-header{padding:20px 24px;border-bottom:1px solid #f5f5f5}
+.reader-meta{display:flex;gap:12px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.reader-meta .from{font-size:12px;font-weight:500;color:#888}
+.reader-meta .dot{width:3px;height:3px;border-radius:50%;background:#ddd}
+.reader-meta .date{font-size:12px;color:#bbb}
+.reader h2{font-family:'Inter',sans-serif;font-size:20px;font-weight:800;color:#000;line-height:1.3;letter-spacing:-0.3px}
+.reader-close{background:#f5f5f5;border:none;width:32px;height:32px;border-radius:7px;cursor:pointer;font-size:14px;color:#999;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .1s}
+.reader-close:hover{background:#eee;color:#666}
+
+/* View toggle */
+.view-tabs{display:flex;gap:0;margin:0 24px;border-bottom:1px solid #eee}
+.view-tab{padding:12px 20px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;color:#aaa;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .1s}
+.view-tab:hover{color:#666}
+.view-tab.active{color:#000;border-bottom-color:#000}
+
+/* Email body */
+.email-body{padding:22px 24px;font-size:13px;line-height:1.75;color:#333}
+.email-body p{margin-bottom:10px}
+
+/* Rewrite */
+.rewrite-body{padding:22px 24px}
+.selection-block{margin-bottom:28px}
+.selection-header{font-size:13px;font-weight:700;color:#000;margin-bottom:4px}
+.selection-analysis{font-size:13px;line-height:1.8;color:#333;font-weight:400;padding-left:20px;border-left:2px solid #000;margin-left:2px;margin-top:10px}
+.no-analysis{font-size:11px;color:#bbb;font-style:italic;margin-top:6px}
+
+/* Copy bar */
+.copy-bar{display:flex;justify-content:flex-end;padding:12px 24px;border-bottom:1px solid #f5f5f5}
+.btn-copy{padding:6px 12px;background:#f8f8f8;border:1px solid #eee;border-radius:6px;font-size:12px;font-weight:500;color:#888;cursor:pointer;font-family:inherit;transition:all .1s}
+.btn-copy:hover{background:#f0f0f0}
+
+/* Empty */
+.empty{grid-column:1/-1;text-align:center;padding:80px 20px}
+.empty h3{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.empty p{font-size:13px;color:#bbb;max-width:320px;margin:0 auto;line-height:1.5}
+.last-synced{font-size:11px;color:#bbb;font-family:'Inter',sans-serif}
+.sync-indicator{width:6px;height:6px;border-radius:50%;background:#4b4;display:inline-block;margin-right:4px}
+
+/* All Selections */
+.all-sel-block{background:#fff;border-radius:10px;padding:18px 22px;margin-bottom:10px;border:1px solid #eee;animation:fadeUp .3s ease forwards;opacity:0}
+.all-sel-race{font-size:11px;font-weight:600;color:#999;margin-bottom:4px;font-family:'Inter',sans-serif;letter-spacing:0.3px}
+.all-sel-horse{font-size:15px;font-weight:700;color:#000;font-family:'Inter',sans-serif;letter-spacing:-0.2px}
+.all-sel-details{font-size:12px;color:#777;margin-top:3px}
+.all-sel-analysis{font-size:13px;line-height:1.8;color:#333;padding-left:20px;border-left:2px solid #000;margin-left:2px;margin-top:12px}
+.tipster-badge{display:inline-block;padding:3px 8px;background:#f3f3f3;border-radius:5px;font-size:10px;font-weight:600;color:#777;font-family:'Inter',sans-serif;margin-left:8px;vertical-align:middle}
+.category-badge{display:inline-block;padding:3px 8px;background:#000;border-radius:5px;font-size:10px;font-weight:700;color:#fff;font-family:'Inter',sans-serif;margin-left:6px;vertical-align:middle}
+
+/* Bet Summary */
+.bet-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #eee}
+.bet-table th{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:14px 16px;text-align:left;border-bottom:1px solid #eee;background:#fafafa}
+.bet-table td{font-size:13px;padding:12px 16px;border-bottom:1px solid #f5f5f5;color:#333}
+.bet-table tr:last-child td{border-bottom:none}
+.bet-table tr:hover td{background:#fafafa}
+
+/* Tipster filter */
+.tipster-filter{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:12px 16px;background:#fff;border-radius:10px;border:1px solid #eee}
+.tipster-filter-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;margin-right:4px;white-space:nowrap}
+.tipster-check{display:flex;align-items:center;gap:5px;cursor:pointer;padding:5px 10px;border-radius:7px;transition:all .1s;user-select:none}
+.tipster-check:hover{background:#f3f3f3}
+.tipster-check input[type=checkbox]{accent-color:#000;width:14px;height:14px;cursor:pointer}
+.tipster-check label{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:#555;cursor:pointer;white-space:nowrap}
+.tipster-check.checked label{color:#000;font-weight:600}
+.tipster-filter-actions{margin-left:auto;display:flex;gap:6px}
+.tipster-filter-actions button{padding:5px 10px;border:1px solid #eee;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;background:#f8f8f8;color:#777;transition:all .1s}
+.tipster-filter-actions button:hover{background:#eee;color:#333}
+
+/* Delete button */
+.btn-delete{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:#ccc;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .1s;opacity:0}
+.card:hover .btn-delete{opacity:1}
+.btn-delete:hover{background:#fee;color:#c33}
+.card{position:relative}
+
+/* Delete confirm overlay */
+.delete-confirm{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);z-index:200;display:flex;align-items:center;justify-content:center}
+.delete-dialog{background:#fff;border-radius:12px;padding:24px;max-width:360px;width:90%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.15)}
+.delete-dialog h3{font-family:Inter,sans-serif;font-size:15px;font-weight:700;margin-bottom:6px}
+.delete-dialog p{font-size:12px;color:#888;margin-bottom:18px;line-height:1.5}
+.delete-dialog-btns{display:flex;gap:8px;justify-content:center}
+.delete-dialog-btns button{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;border:none;transition:all .1s}
+.btn-cancel{background:#f3f3f3;color:#666}
+.btn-cancel:hover{background:#eee}
+.btn-confirm-delete{background:#c33;color:#fff}
+.btn-confirm-delete:hover{background:#a22}
+</style>
+</head>
+<body>
+
+<div id="auth-gate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#f7f7f7;z-index:99999;display:flex;align-items:center;justify-content:center">
+<div style="text-align:center;font-family:'Inter',sans-serif">
+<div style="width:48px;height:48px;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px"><span style="color:#fff;font-size:20px;font-weight:700">R</span></div>
+<div style="font-size:18px;font-weight:700;letter-spacing:-0.4px;margin-bottom:6px">Racing Intel</div>
+<div style="font-size:13px;color:#999;margin-bottom:24px">Enter password to continue</div>
+<input id="auth-input" type="password" placeholder="Password" style="width:260px;padding:12px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;text-align:center" onkeydown="if(event.key==='Enter')checkAuth()">
+<br><button onclick="checkAuth()" style="margin-top:12px;padding:10px 32px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Enter</button>
+<div id="auth-error" style="color:#c33;font-size:12px;margin-top:12px;display:none">Incorrect password</div>
+</div>
+</div>
+<script>
+async function checkAuth(){
+var p=document.getElementById('auth-input').value;
+var b=new TextEncoder().encode(p);
+var h=await crypto.subtle.digest('SHA-256',b);
+var a=Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');
+if(a==='74d09daffa3dd886701a8dd4bf14d386052eec2cb8983ecf332f5c26986c4566'){
+document.getElementById('auth-gate').style.display='none';
+sessionStorage.setItem('ri-auth','1');
+}else{document.getElementById('auth-error').style.display='block';document.getElementById('auth-input').value=''}
+}
+if(sessionStorage.getItem('ri-auth')==='1'){document.addEventListener('DOMContentLoaded',function(){document.getElementById('auth-gate').style.display='none'})}
+</script>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-icon"><span>R</span></div>
+      <span class="logo-text">Racing Intel</span>
+      <span class="logo-badge">v2</span>
+    </div>
+    <div class="nav-actions">
+      <span class="last-synced" id="lastSynced"></span>
+      <button class="btn-sync" id="syncBtn" onclick="requestSync()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-3.36"/><path d="M20 15a9 9 0 0 1-15.36 3.36"/></svg>
+        Sync Now
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-tabs">
+  <div class="page-tabs-inner">
+    <button class="page-tab active" id="tab-emails" onclick="switchTab('emails')">Emails</button>
+    <button class="page-tab" id="tab-selections" onclick="switchTab('selections')">All Selections</button>
+    <button class="page-tab" id="tab-summary" onclick="switchTab('summary')">Bet Summary</button>
+  </div>
+</div>
+
+<div id="statusArea"></div>
+
+<div class="main-layout">
+  <div class="date-sidebar" id="dateSidebar"></div>
+  <div class="main-content" id="mainContent"></div>
+</div>
+
+<script>
+// ─── AUTHOR MAP ───
+const AUTHOR_MAP = {
+  "Ben": ["Racing Analyst", "Ben from"],
+  "Form Guru": ["Form Guru", "Inside Rail"],
+  "BetHub": ["BetHub", "bethub"],
+  "EVR": ["Everything Racing", "EVR"],
+  "Stephen Harris": ["Stephen Harris"],
+};
+
+function getAuthor(article) {
+  if (article.author) return article.author;
+  var check = (article.from || "") + " " + (article.originalSubject || "");
+  for (var name in AUTHOR_MAP) {
+    var patterns = AUTHOR_MAP[name];
+    for (var i = 0; i < patterns.length; i++) {
+      if (check.toLowerCase().indexOf(patterns[i].toLowerCase()) !== -1) return name;
+    }
+  }
+  return article.from || "Other";
+}
+
+// ─── DATA (updated by scheduled task) ───
+const ARTICLES = [
+  {
+    id: "19d1d7a77524db5c",
+    originalSubject: "Boom Doctor - 24th March",
+    from: "Boom Doctor (via Rob)",
+    author: "Boom Doctor",
+    emailDate: "2026-03-24T01:34:14Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T01:50:00Z",
+    originalBody: "BOOM DOCTORS HORSES FOR TUESDAY'S RACING\n\nGood afternoon all a very solid and profitable return last week unlucky not to bring in more profit than we did but any profit can't be sniffed at.\n\n6.30 Wolves\nShatin Venture\n14/1 - EACH WAY (B365)\n\nClassified Stakes action here and I'm willing to give the selection a chance here back at Wolves and upped to 6f.\n\nHe wasn't beaten far when last running here in a standard cl6 handicap over 5f and although briefly outpaced he appeared to pick up again close home and was also briefly short room, having to settle for 4th.\n\nHe's not the sort to win on the bridle but at this level and trying over the extra furlong he could be a value selection at likely decent opening price.\n\nAs always all selections are advised at 1point each way singles unless otherwise stated so please don't just do a multiple, singles will make you most profit year in year out here, and remember this is longshot betting you only usually need 1 place or 1 win a day for good profits.\n\nGood luck",
+    selections: [
+      {
+        race: "Wolverhampton 6.30",
+        horse: "Shatin Venture",
+        odds: "14/1",
+        stake: "1 point e/w",
+        category: "",
+        analysis: "Shatin Venture shaped with considerable promise when last seen at this venue, finishing fourth in a class six handicap over the minimum trip having been briefly short of room at a critical stage. It is worth noting that he picked up again close home despite being momentarily outpaced, suggesting the step up to six furlongs could unlock further improvement. The switch to classified stakes company removes the burden of a potentially unfavourable handicap mark and at a double figure price he represents each way value for those willing to take a speculative position."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1d4c5c229ddb2",
+    originalSubject: "Joe Napier - 24th March",
+    from: "Joe Napier (via Rob)",
+    author: "Joe Napier",
+    emailDate: "2026-03-24T00:43:52Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-25T00:10:00Z",
+    originalBody: "Taunton Racing Tips (Tuesday 24 March)\n\nTuesday's meeting at Taunton sees Paul Nicholls come to town at the Somerset rack. Across the seven-race card, he has four runners, with one of those among our tips.\n\n3.45 Taunton \u2013 Wicked Thoughts (1pt win \u2013 10/3)\n\nIt is worth forgiving Wicked Thoughts a fractious run at Exeter last time. Increasingly, it looks as though the seven-year-old is a better horse when fresh. Two of his three wins have come after over 100 days off the track. His other victory, in a four-runner Ascot maiden, is an outlier and came in his easiest winning assignment. As such his second run of this season, after only a 43-day break, is forgiven, as he won on return over course and distance in game fashion. Just 2lb higher than for that win, he should be capable of better yet over fences. To boot, his trainer Paul Nicholls has had more winners at Taunton than anywhere else in the last five years.\n\n4.15 Taunton \u2013 Khafre (1pt win \u2013 7/2)\n\nAn impressive win here last month could set Khafre up to win on his handicap debut. The selection won a point-to-point in January 2015 before debuting under rules this season. He ran well in mid-division in two strong maiden and novice events at Cheltenham and Wincanton respectively. Upped to 2m3f at this venue, he then beat two former winners in good style. He was receiving weight in penalties from those rivals, but that performance strongly suggested that he will win multiple races. An opening mark of 118 is not too harsh and Paddy Hanlon takes off a further 5lb.\n\nWolverhampton Racing Tips (Tuesday 24 March)\n\nWolverhampton hosts nine races across their bumper Tuesday card. We have two best bets in the classified contests.\n\n6.30 Wolverhampton \u2013 Top Star (1pt win \u2013 11/1)\n\nHaving slipped to a rating of 50, Top Star is now eligible for this classified race. His last run for Richard Hughes came at this track in September 2024, when a competitive fourth of eight. After being gelded and enduring a 495-day wait on the sidelines, he returned saddled by Dean Ivory at Chelmsford. His two runs at that Essex venue this term have been poor. However, he was second in between at Southwell, showing he still possesses some racing ability. Tapeta likely suits better than Polytrack and he drops into as winnable a race as possible here. The step up to 6f is not seen as a negative.\n\n7.00 Wolverhampton \u2013 Dr Ali (1pt win \u2013 10/3)\n\nAfter failing to win any of his first 17 starts, Dr Ali finally got his head in front at Kempton. That success in January came in a bunched finish, but was likely achieved in a stronger contest than this. In just his second run in a classified race, he was beaten just a neck over course and distance latest. He has learned to race more gamely than he did before and is joint highest-rated here. There is no issue with his draw and he should be heavily involved.\n\nGG Lucky 15 Tips \u2013 Tuesday 24 March\n\n3.45 Taunton \u2013 Wicked Thoughts\n4.15 Taunton \u2013 Khafre\n6.30 Wolverhampton \u2013 Top Star\n7.00 Wolverhampton \u2013 Dr Ali",
+    selections: [
+      {
+        race: "Taunton 3.45",
+        horse: "Wicked Thoughts",
+        odds: "10/3",
+        stake: "1 point win",
+        category: "",
+        analysis: "Wicked Thoughts is a horse whose record suggests he operates at his very best when fresh, with two of his three victories coming after absences exceeding 100 days. It is worth noting that his recent disappointing effort at Exeter can be attributed to a quick 43 day turnaround that clearly did not suit his constitution. He won with genuine determination over course and distance on his seasonal reappearance and is only 2lb higher for that effort here. The booking of Harry Cobden for a trainer who has saddled more winners at Taunton than any other track in the past five years adds further substance to the case. Don't say you weren't warned."
+      },
+      {
+        race: "Taunton 4.15",
+        horse: "Khafre",
+        odds: "7/2",
+        stake: "1 point win",
+        category: "",
+        analysis: "Khafre produced an impressive victory at this venue last month when beating two former winners with real authority, and he looks the type to progress significantly now stepping into handicap company for the first time. It is worth noting that his earlier efforts in maiden and novice events at Cheltenham and Wincanton were run against a much higher standard of opposition than he will encounter off an opening mark of 118 here. The form received a boost from the manner of that course success, and the 5lb claim of Paddy Hanlon further tilts the weight in his favour on what promises to be a significant afternoon."
+      },
+      {
+        race: "Wolverhampton 6.30",
+        horse: "Top Star",
+        odds: "11/1",
+        stake: "1 point win",
+        category: "",
+        analysis: "Top Star has slipped to a rating of 50 which makes him eligible for this classified event, and there are grounds for believing the Tapeta surface at Wolverhampton will prove far more suitable than the Polytrack at Chelmsford where his two most recent efforts have been disappointing. It is worth noting that his sole outing on a different all weather surface at Southwell this term yielded a creditable second, suggesting he retains sufficient ability when conditions are in his favour. Having been gelded and granted a lengthy break of 495 days, the step up to six furlongs holds no fears whatsoever. A winnable opportunity."
+      },
+      {
+        race: "Wolverhampton 7.00",
+        horse: "Dr Ali",
+        odds: "10/3",
+        stake: "1 point win",
+        category: "",
+        analysis: "Dr Ali broke his duck at the 18th attempt when winning at Kempton in January, and the form of that victory received a boost given the competitive nature of the contest in which it was achieved. It is worth noting that he followed up with a neck second over course and distance in just his second classified contest, demonstrating a newfound resolve that was entirely absent in his earlier career. He is joint highest rated in the field and his draw presents no concerns on this occasion. A horse who has learned to race with genuine tenacity and looks primed to strike again at a venue that clearly suits."
+      }
+    ],
+    doubles: "Lucky 15: Wicked Thoughts, Khafre, Top Star, Dr Ali",
+    antePost: ""
+  },
+  {
+    id: "19d1d34d129b8be7",
+    originalSubject: "Robbie Wilders - 24th March",
+    from: "Robbie Wilders (via Rob)",
+    author: "Robbie Wilders",
+    emailDate: "2026-03-24T00:18:08Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T22:45:00Z",
+    originalBody: "Thistle Be The One\n3.15 Taunton\n2pts win\n\nTreasure Planet\n4.15 Taunton\n1pt win\n\nAngry Ant\n4.55 Wolverhampton\n1pt win\n\nThistle Be The One jumps off the page dropped into a 0-100 for the first time in the 2m\u00bdf handicap hurdle (3.15) at Taunton considering he's spent most of his career running against a different class of animal.\n\nThis horse looked set for big things two seasons ago. He beat West Hill Verde and Woodland Park, who are now rated 124 and 125 over hurdles, in a Kempton bumper on his first start under rules before finishing ahead of Califet En Vol and C'Est Ta Chance, novice chasers who are now rated in the 140s, when second in an Ayr bumper on Scottish Grand National day eight weeks later.\n\nSent off a 3-1 chance on his hurdles debut 16 months ago against the classy Miami Magic, who was second in the Grade 1 Formby next time, Thistle Be The One showed the benefit of that reappearance fifth by finishing second in back-to-back novice hurdles at Taunton behind Alexei and French Ship.\n\nAlexei is one of the highest-rated hurdlers in Britain now after finishing fourth in the Champion Hurdle and talented stayer French Ship isn't a million miles off him with a BHA rating of 146.\n\nThe return to Taunton, plus the fitting of a first-time visor and booking of good 5lb claimer Toby McCain-Mitchell, are reasons to expect better from Thistle Be The One on just his fourth run for Ben Clarke after departing Keiran Burke.\n\nThe selection admittedly ran poorly when a remote fourth to Mondo Man at Plumpton a month ago, but it was his first start in a tongue-tie off an 81-day break and Mondo Man has since run out an impressive winner of the Imperial Cup.\n\nThe three other handicap hurdles Thistle Be The One has contested were 0-120s and he's been given a right chance by the handicapper to be eligible to run in a grade this low.\n\nIt is still relatively early days for the seven-year-old, whose jockey has ridden five winners, four seconds and four thirds in 25 rides for Clarke (+\u00a36.08 level-stakes profit).\n\nThe other wager I'll be having at Taunton is Treasure Planet in the 2m3f handicap hurdle (4.15).\n\nTreasure Planet was a decent operator on the Flat for Donnacha O'Brien (Racing Post Ratings of 80 and 79 in two starts for the trainer last spring) and was a cracking second in a hot novice handicap at Newbury last month following an 84-day break.\n\nQueenie St Clair was a remote fifth and last Saturday she won a \u00a3100,000 handicap hurdle at Kelso on Go North Weekend.\n\nTreasure Planet may be Flat-bred, but he gives the impression he'll be suited by this longer trip and it's encouraging that his brother, Isotope, recorded his best hurdles efforts at intermediate distances.\n\nI wouldn't put anyone off sticking Treasure Planet in a related double wager with Sutherland, who was third in that warm Newbury contest and attempts to do his bit for the form in the 2m4\u00bdf handicap hurdle at Southwell (4.30).\n\nWhile Paul Nicholls' form could be better, his recent runners have been showing more than the bare data implies.\n\nThe final wager is Angry Ant in the 1m\u00bdf handicap (4.55) at Wolverhampton.\n\nAngry Ant has been given a reprieve by the handicapper, having plummeted 12lb in the weights since late January, and her latest fifth over course and distance was a promising one.\n\nShe found herself wider than everything rounding the home bend and was caught too far back in a slowly run race. There was definitely more in the tank and Jamie Osborne has won with two of his past four runners. She's drawn better here and this could be the time to catch her.",
+    selections: [
+      {
+        race: "Taunton 3.15",
+        horse: "Thistle Be The One",
+        odds: "TBC",
+        stake: "2 points win",
+        category: "",
+        analysis: "Thistle Be The One drops into a 0-100 handicap for the first time off the back of a career spent in altogether higher company, and this looks a significant opportunity. It is worth noting that the bumper and novice hurdle form reads exceptionally well now, with Alexei finishing fourth in the Champion Hurdle and French Ship carrying a BHA rating of 146 over timber. His recent fourth at Plumpton behind the subsequent Imperial Cup winner Mondo Man is easily forgiven on his first start in a tongue tie after an 81-day absence. The addition of a first time visor and the booking of useful 5lb claimer Toby McCain-Mitchell suggest connections mean business. Don't say you weren't warned."
+      },
+      {
+        race: "Taunton 4.15",
+        horse: "Treasure Planet",
+        odds: "TBC",
+        stake: "1 point win",
+        category: "",
+        analysis: "Treasure Planet shaped with real credit when a fine second in a hot novice handicap at Newbury last month, and that form received a significant boost when Queenie St Clair, who was a remote fifth that day, went on to land a valuable \u00a3100,000 handicap hurdle at Kelso on Go North Weekend. It is worth noting that this horse showed solid ability on the Flat for Donnacha O'Brien and the step up in trip looks sure to suit given that his brother Isotope recorded his best hurdles efforts at intermediate distances. He looks very hard to beat here."
+      },
+      {
+        race: "Wolverhampton 4.55",
+        horse: "Angry Ant",
+        odds: "TBC",
+        stake: "1 point win",
+        category: "",
+        analysis: "Angry Ant arrives here having plummeted a full 12lb in the weights since late January, and her latest fifth over course and distance was considerably better than the bare result would suggest. She found herself wider than the entire field rounding the home bend and was caught hopelessly far back in a slowly run race, yet there was unmistakably more to come. It is worth noting that connections have found her a kinder draw on this occasion and with Jamie Osborne's yard in excellent form, having saddled winners with two of his past four runners, the time looks right to catch this filly on the upgrade."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1d2886cba836c",
+    originalSubject: "BetRev - Tuesday 24th March",
+    from: "BetRev (via Rob)",
+    author: "BetRev",
+    emailDate: "2026-03-24T00:04:46Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T12:00:00Z",
+    originalBody: "Daily Digest - Tuesday 24th March 2026:\n\nAnother nice winner today with Southoftheborder, who got the job done comfortably.\n\nOne early message for Tuesday, I will send an update in the morning.\n\nSouthwell 3.00 - Scaredofnothing\nI had a word for this one on debut but the ground just went against him a bit. He did run very green and as expected found the ground on the heavy side, but encouragingly ran on late in the day. The ground will be much more to his liking tomorrow and I expect him to run a big race with that run under his belt. I wouldn't be surprised to see a little money for him overnight and throughout the day tomorrow, so worth taking the e/w price now.\n\nBet Summary:\n\nSouthwell 3.00 - Scaredofnothing - 1 point e/w (9/1) Bet365 3 places\n\nBe Lucky\n\nG.J.",
+    selections: [
+      {
+        race: "Southwell 3.00",
+        horse: "Scaredofnothing",
+        odds: "9/1",
+        stake: "1 point e/w",
+        category: "",
+        analysis: "Scaredofnothing shaped with considerable promise on his racecourse debut when the testing ground clearly blunted his finishing effort, yet he still showed the right attitude to run on late in the day having raced greenly throughout. It is worth noting that connections had spoken positively about this horse beforehand, and the return to a much more suitable surface at Southwell significantly enhances his chance of building on that initial experience. The market is expected to speak in his favour throughout the day, and at the current each way price with three places on offer, he looks well worth supporting."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1ce5d4cbd58ea",
+    originalSubject: "New Horse Racing Tip - 23rd March",
+    from: "Ben from The Racing Analyst",
+    author: "Ben",
+    emailDate: "2026-03-23T16:26:29Z",
+    tipDate: "2026-03-23",
+    processedAt: "2026-03-23T22:55:00Z",
+    originalBody: "Hello Andy\n\nHere are today's selections.\n\n23rd March 2026\n\nAnother brilliant week done, fingers crossed for the next.\n\nAgain, it will be a week of hardly any tips in the early part, with a busier end to it.\n\nHowever, there is a double from Ditcheat on Monday.\n\n4.05 Kempton WELCOM TO CARTRIES 3/1 1pt win NB\n\n4.57 Wincanton SWINGING SAFARI 5/1 1pt win NAP\n\n0.5pt Win Double\n\nWELCOM TO CARTRIES won for us at Sandown, two starts ago, and I expect him to bounce back from a poor effort last time out, with a return to form here. It's clear, from his form, that he doesn't like soft ground and the return to a quicker surface ought to suit better here. As I explained the day he won, he was always felt to be a horse of graded class and he's still lightly enough raced to be open to loads of improvement. It looks noteworthy that Harry Cobden, who I feel could have had at least two winners on his doorstep today, heads to Kempton instead for this one ride.\n\nThe fact that Harry Cobden is at Kempton, is the only negative I can see for SWINGING SAFARI, who makes his handicap debut off what looks like a very winnable mark. I actually tipped him first time out this season, when falling at the last. He might not have won that day, but the 1st and 2nd he was battling along side, have kept a very good level of form since. He won with ease next time out, at this track, before finishing a well beaten 3rd at Kempton in another maiden. Sent off the 10/3 2nd fav that day, the result looked disappointing, but the subsequent form suggests that he had an impossible task racing off level weights with Baron Noir, who is now rated 146 after a close 4th in the Supreme two weeks ago. The 2nd has placed grade 2 form too. He was poor on soft ground at Fakenham last time out, but that wouldn't be a track that many horses take to and I suspect that going left handed just isn't for him. Back right handed, and 2 from 2 at the track, he makes his handicap debut here with the addition of the first time tongue tie. Nicholls has an 18% strike rate with his handicap hurdle debutants (\u00a3127 level stakes profit) and a 23% strike rate with his horses wearing a tongue tie first time too. The yards horses are in good form and Freddie Gingell, who has a 20% strike rate when riding for the yard, is booked. Of the rest, AMBION VIEW is the only horse I can see giving him anything to think about, but I think he wants further.\n\nAnte Post Already Advised\n28th March \u2013 Lincoln Handicap \u2013 ETERNAL FORCE 10/1 1pt win\n11th April \u2013 Grand National \u2013 CAPTAIN CODY 25/1 1pt win",
+    selections: [
+      {
+        race: "Kempton 4.05",
+        horse: "Welcom To Cartries",
+        odds: "3/1",
+        stake: "1 point win",
+        category: "NB",
+        analysis: "Welcom To Cartries was a winner at Sandown two starts ago, and his subsequent defeat came on a soft surface which clearly did not suit, making the return to a quicker surface here significant. It is worth noting that he was always considered a horse of graded class by connections, and he remains lightly raced enough to be open to considerable improvement. The booking of Harry Cobden is particularly telling, having bypassed at least two winning rides closer to home to partner this one at Kempton, which suggests strong stable confidence in a horse whose form figures on a sound surface mark him out as short list material."
+      },
+      {
+        race: "Wincanton 4.57",
+        horse: "Swinging Safari",
+        odds: "5/1",
+        stake: "1 point win",
+        category: "NAP",
+        analysis: "Swinging Safari makes his handicap debut here off what looks a very exploitable mark, having run with real credit in maidens where the subsequent form has worked out exceptionally well. The form received a boost when Baron Noir, who beat him into third at Kempton racing off level weights, finished a close fourth in the Supreme Novices' Hurdle and is now rated 146, while the runner up that day boasts placed Grade 2 form. Back right handed and with a record of two wins from two at the track, the addition of a first time tongue tie adds further intrigue. Nicholls holds an 18% strike rate with handicap hurdle debutants and 23% with first time tongue ties. Don't say you weren't warned."
+      }
+    ],
+    doubles: "0.5 point Win Double: Welcom To Cartries & Swinging Safari",
+    antePost: "28th March \u2013 Lincoln Handicap \u2013 Eternal Force 10/1 1pt win\n11th April \u2013 Grand National \u2013 Captain Cody 25/1 1pt win"
+  },
+  {
+    id: "19d1b84eecce78d8",
+    originalSubject: "New Horse Racing Tip - 24th March (No Tips)",
+    from: "Ben from The Racing Analyst",
+    author: "Ben",
+    emailDate: "2026-03-23T16:26:29Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-23T16:26:29Z",
+    originalBody: "Hello Andy\n\nHere are today's selections.\n\n24th March 2026\n\nAs soon as the two horses in front of WELCOM TO CARTRIES fell, he had no chance. He was left in the lead and doesn't want to be there, they subsequently crawled and his race was over immediately.\n\nTHERE WILL BE NO TIPS FOR THE NEXT TWO DAYS...\n\nIf you want a bet on Tuesday, then KARTON PLEIN has a decent chance in the 4.30 AT SOUTHWELL, but we are miles ahead for the month, and year, and backing a 9/2 fav in a wide open race at that level, makes very little appeal to me.\n\nOne to run for another good day. Good luck\n\nAnte Post Already Advised\n28th March \u2013 Lincoln Handicap \u2013 ETERNAL FORCE 10/1 1pt win\n11th April \u2013 Grand National \u2013 CAPTAIN CODY 25/1 1pt win",
+    selections: [
+      { race: "Southwell 4.30", horse: "Karton Plein", odds: "9/2", stake: "Watching brief", category: "", analysis: "" }
+    ],
+    doubles: "",
+    antePost: "28th March \u2013 Lincoln Handicap \u2013 Eternal Force 10/1 1pt win\n11th April \u2013 Grand National \u2013 Captain Cody 25/1 1pt win"
+  },
+  {
+    id: "19d1b094d13b664a",
+    originalSubject: "Form Guru - 23rd March (Amendment)",
+    from: "The Inside Rail",
+    author: "Form Guru",
+    emailDate: "2026-03-23T14:11:27Z",
+    tipDate: "2026-03-23",
+    processedAt: "2026-03-23T22:56:00Z",
+    originalBody: "2.45 - Wincanton - Jullour De Grissay. 1 pt e/w. Available at 14/1. (Generally available, BOG)\n\n3.30 - Kempton - Denemethy. 1.5 pts win. Available at 9/1.\n\n4.40 - Kempton - High Fibre. 2.5 pts win. Available at 15/4. (Paddy Power, BOG)\n\n4.57 - Wincanton - Celtic Art. 1.25 pts e/w. Available at 11/1. (Betvictor, BOG)\n\n5.32 - Wincanton - Future Times. 0.75 pts e/w. Available at 16/1.",
+    selections: [
+      { race: "Wincanton 2.45", horse: "Jullour De Grissay", odds: "14/1", stake: "1 point e/w", category: "", analysis: "" },
+      { race: "Kempton 3.30", horse: "Denemethy", odds: "9/1", stake: "1.5 points win", category: "", analysis: "" },
+      { race: "Kempton 4.40", horse: "High Fibre", odds: "15/4", stake: "2.5 points win", category: "", analysis: "" },
+      { race: "Wincanton 4.57", horse: "Celtic Art", odds: "11/1", stake: "1.25 points e/w", category: "", analysis: "" },
+      { race: "Wincanton 5.32", horse: "Future Times", odds: "16/1", stake: "0.75 points e/w", category: "", analysis: "" }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1b40dfbd75d71",
+    originalSubject: "GM - 23rd March",
+    from: "BetHub",
+    author: "BetHub",
+    emailDate: "2026-03-23T15:12:08Z",
+    tipDate: "2026-03-23",
+    processedAt: "2026-03-23T22:57:00Z",
+    originalBody: "Last Nights Review\nMonmore & Central Park\n\nFirst things first the max bet landed with the minimum of fuss. Scooby the Lady followed the fast starting Cinderella Tell round and took it up at the third bend to win in the fastest of the three semis. The treble bombed only Scooby winning the other two selections were second.\n\nAnte Post\nWe have all our selections through in to next week. Proper Heiress did it right in his semi leading up Headford Dane to win comfortably and join Scooby the Lady in the Final. Over at Monmore Underground Gold overcame his trap four draw showing good early to clear the bend and go onto victory.\n\nI did mean to send a no bets yesterday but I forgot. Towcester is a watching brief until the new traps bed in as we are getting faster split times and end times as a result. Which doesn't make it easy for form purposes. Sheffield had three opens but nothing appealed at a price for a bet.\n\nTonight\nNottingham has a handful of opens but in truth it's very poor fare.\n\nDecided to put one up at Yarmouth in an A2 graded race. I think it's a winnable race for Alfie's Lad if he puts his best foot forward this evening. He should get a good tow into the race from his kennel mate Rockmount Nellie on her first four bend race since the start of January, before proving to strong coming home.\n\nTonight's Bet\nYarmouth 8.31 Alfie's Lad 2 points win @ 2/1 BF Sports Power & Skybet.",
+    selections: [
+      {
+        race: "Yarmouth 8.31",
+        horse: "Alfie's Lad",
+        odds: "2/1",
+        stake: "2 points win",
+        category: "",
+        analysis: "Alfie's Lad contests an A2 graded race at Yarmouth this evening where the pace dynamics look strongly in his favour. It is worth noting that his kennel mate Rockmount Nellie, returning to four bend racing for the first time since early January, should provide the ideal tow into the contest from the inside, allowing him to settle into a rhythm before asserting his superiority in the closing stages. The quality of opposition on offer tonight looks modest by his standards, and connections appear confident that he need only reproduce his best form to dispose of this field with something in hand."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d1afc67dfd7782",
+    originalSubject: "Form Guru - 23rd March",
+    from: "The Inside Rail",
+    author: "Form Guru",
+    emailDate: "2026-03-23T13:57:22Z",
+    tipDate: "2026-03-23",
+    processedAt: "2026-03-23T22:58:00Z",
+    originalBody: "Today's Selections:\n\n2.45 - Wincanton - Jullour De Grissay. 1 pt e/w. Available at 14/1. (Generally available, BOG)\n\n3.30 - Kempton - Denemethy. 1.5 pts win. Available at 9/1.\n\n4.40 - Kempton - High Fibre. 2.5 pts win. Available at 15/4. (Paddy Power, BOG)\n\n4.57 - Wincanton. 1.25 pts e/w. Available at 11/1. (Betvictor, BOG)\n\n5.32 - Wincanton - Future Times. 0.75 pts e/w. Available at 16/1.",
+    selections: [
+      { race: "Wincanton 2.45", horse: "Jullour De Grissay", odds: "14/1", stake: "1 point e/w", category: "", analysis: "" },
+      { race: "Kempton 3.30", horse: "Denemethy", odds: "9/1", stake: "1.5 points win", category: "", analysis: "" },
+      { race: "Kempton 4.40", horse: "High Fibre", odds: "15/4", stake: "2.5 points win", category: "", analysis: "" },
+      { race: "Wincanton 4.57", horse: "Unknown", odds: "11/1", stake: "1.25 points e/w", category: "", analysis: "" },
+      { race: "Wincanton 5.32", horse: "Future Times", odds: "16/1", stake: "0.75 points e/w", category: "", analysis: "" }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+];
+
+// ─── STATE ───
+var selectedId = null;
+var activeView = {};
+var searchQuery = "";
+var filterAuthor = "All";
+var activeTab = "emails";
+var selectedDate = (function() {
+  var today = new Date().toISOString().split("T")[0];
+  var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
+  return hasToday ? today : "all";
+})();
+var lastSyncTime = "2026-03-25T01:50:00Z";
+var selectedTipsters = null; // null = all selected (initialized on first render)
+
+function getAllTipsters() {
+  var seen = {};
+  var list = [];
+  ARTICLES.forEach(function(a) {
+    var au = getAuthor(a);
+    if (!seen[au]) { seen[au] = true; list.push(au); }
+  });
+  return list.sort();
+}
+
+function initTipsters() {
+  if (selectedTipsters !== null) return;
+  selectedTipsters = {};
+  getAllTipsters().forEach(function(t) { selectedTipsters[t] = true; });
+}
+
+function toggleTipster(name) {
+  initTipsters();
+  selectedTipsters[name] = !selectedTipsters[name];
+  render();
+}
+
+function setAllTipsters(val) {
+  initTipsters();
+  getAllTipsters().forEach(function(t) { selectedTipsters[t] = val; });
+  render();
+}
+
+function isTipsterSelected(name) {
+  initTipsters();
+  return selectedTipsters[name] !== false;
+}
+
+function renderTipsterFilter() {
+  initTipsters();
+  var tipsters = getAllTipsters();
+  var allChecked = tipsters.every(function(t) { return selectedTipsters[t]; });
+  var html = '<div class="tipster-filter">';
+  html += '<span class="tipster-filter-label">Tipsters</span>';
+  tipsters.forEach(function(t) {
+    var checked = selectedTipsters[t];
+    html += '<div class="tipster-check' + (checked ? ' checked' : '') + '" onclick="toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
+    html += '<input type="checkbox"' + (checked ? ' checked' : '') + ' onclick="event.stopPropagation();toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
+    html += '<label>' + escapeHtml(t) + '</label></div>';
+  });
+  html += '<div class="tipster-filter-actions">';
+  html += '<button onclick="setAllTipsters(true)">' + (allChecked ? '&#10003; All' : 'Select All') + '</button>';
+  html += '<button onclick="setAllTipsters(false)">Clear</button>';
+  html += '</div></div>';
+  return html;
+}
+
+// ─── HELPERS ───
+function timeAgo(d) { if(!d)return""; var m=Math.floor((Date.now()-new Date(d).getTime())/60000); if(m<1)return"now"; if(m<60)return m+"m"; var h=Math.floor(m/60); if(h<24)return h+"h"; return Math.floor(h/24)+"d"; }
+function formatDate(d) { if(!d)return""; return new Date(d).toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
+function dateLabel(d) { if(!d)return""; return new Date(d).toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}); }
+function shortDateLabel(d) { if(!d)return""; var parts = d.split("-"); var dt = new Date(d + "T12:00:00"); return dt.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"}); }
+function escapeHtml(t) { if(!t) return ""; var d=document.createElement("div"); d.textContent=t; return d.innerHTML; }
+
+// Extract time from race string for sorting, e.g. "Kempton 4.05" -> 405
+function raceTime(raceStr) {
+  var m = (raceStr || "").match(/(\d{1,2})[\.:]+(\d{2})/);
+  if (m) return parseInt(m[1]) * 100 + parseInt(m[2]);
+  return 9999;
+}
+
+// Get all unique tipDates (count = number of emails, not selections)
+function getTipDates() {
+  var dates = {};
+  var deduped = getDeduplicatedArticles();
+  deduped.forEach(function(a) {
+    if (a.tipDate) {
+      if (!dates[a.tipDate]) dates[a.tipDate] = 0;
+      dates[a.tipDate] += 1;
+    }
+  });
+  return Object.keys(dates).sort().reverse().map(function(d) { return { date: d, count: dates[d] }; });
+}
+
+// Get all selections for a date, sorted by race time
+function getSelectionsForDate(tipDate) {
+  var sels = [];
+  ARTICLES.forEach(function(a) {
+    if (tipDate !== "all" && a.tipDate !== tipDate) return;
+    var auth = getAuthor(a);
+    if (a.selections) {
+      a.selections.forEach(function(s) {
+        sels.push({
+          race: s.race,
+          horse: s.horse,
+          odds: s.odds,
+          stake: s.stake,
+          category: s.category,
+          analysis: s.analysis,
+          tipster: auth,
+          tipDate: a.tipDate
+        });
+      });
+    }
+  });
+  sels.sort(function(a, b) { return raceTime(a.race) - raceTime(b.race); });
+  return sels;
+}
+
+// ─── SYNC ───
+function requestSync() {
+  var btn = document.getElementById("syncBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<span>syncing<span style="animation:blink 1s step-end infinite">_</span></span>';
+  document.getElementById("statusArea").innerHTML = '<div style="max-width:1400px;margin:12px auto 0;padding:0 28px"><div class="status-bar info"><span style="width:6px;height:6px;border-radius:50%;background:#66f;flex-shrink:0"></span>Sync requested. Open Cowork and say <strong>"sync"</strong> to pull new emails, or wait for the next scheduled sync.</div></div>';
+  setTimeout(function() { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-3.36"/><path d="M20 15a9 9 0 0 1-15.36 3.36"/></svg>Sync Now'; }, 3000);
+}
+
+// ─── DOWNLOAD ───
+function downloadFile(filename, text) {
+  var el = document.createElement("a");
+  el.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  el.setAttribute("download", filename);
+  el.style.display = "none";
+  document.body.appendChild(el);
+  el.click();
+  document.body.removeChild(el);
+}
+
+function downloadSelections() {
+  var dateStr = selectedDate === "all" ? "all-dates" : selectedDate;
+  var text = buildSelectionsText();
+  if (!text) return;
+  downloadFile("selections-" + dateStr + ".txt", text);
+}
+
+function downloadBetSummary() {
+  var dateStr = selectedDate === "all" ? "all-dates" : selectedDate;
+  var text = buildBetSummaryText();
+  if (!text) return;
+  downloadFile("bet-summary-" + dateStr + ".txt", text);
+}
+
+function padRight(str, len) {
+  str = str || "";
+  while (str.length < len) str += " ";
+  return str;
+}
+
+function buildSelectionsText() {
+  var dateDisplay = selectedDate === "all" ? "All Dates" : dateLabel(selectedDate);
+  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  if (!sels.length) return "";
+  var text = "ALL SELECTIONS — " + dateDisplay + "\n";
+  text += "=".repeat(50) + "\n\n";
+  var lastRace = "";
+  sels.forEach(function(s) {
+    if (s.race !== lastRace) {
+      lastRace = s.race;
+      text += "\n" + s.race.toUpperCase() + "\n" + "-".repeat(30) + "\n";
+    }
+    text += s.horse;
+    if (s.category) text += " (" + s.category + ")";
+    text += " — " + s.stake + " at " + s.odds;
+    text += " [" + s.tipster + "]\n";
+    if (s.analysis) text += "  " + s.analysis + "\n";
+  });
+  return text.trim();
+}
+
+function buildBetSummaryText() {
+  var dateDisplay = selectedDate === "all" ? "All Dates" : dateLabel(selectedDate);
+  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  if (!sels.length) return "";
+  var text = "BET SUMMARY — " + dateDisplay + "\n";
+  text += "=".repeat(50) + "\n\n";
+  text += padRight("Time", 8) + padRight("Race", 22) + padRight("Horse", 24) + padRight("Stake", 16) + padRight("Odds", 8) + padRight("Cat", 6) + "Tipster\n";
+  text += "-".repeat(90) + "\n";
+  sels.forEach(function(s) {
+    var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
+    text += padRight(tm ? tm[1] : "", 8);
+    text += padRight(s.race || "", 22);
+    text += padRight(s.horse || "", 24);
+    text += padRight(s.stake || "", 16);
+    text += padRight(s.odds || "", 8);
+    text += padRight(s.category || "-", 6);
+    text += s.tipster + "\n";
+  });
+  text += "-".repeat(90) + "\n";
+  text += sels.length + " selections total\n";
+  return text.trim();
+}
+
+function copySelections() {
+  var text = buildSelectionsText();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    var b = document.getElementById("copySelBtn");
+    if (b) { b.textContent = "\u2713 Copied"; setTimeout(function() { b.innerHTML = '\u2398 Copy'; }, 2000); }
+  });
+}
+
+function copyBetSummary() {
+  var text = buildBetSummaryText();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    var b = document.getElementById("copySumBtn");
+    if (b) { b.textContent = "\u2713 Copied"; setTimeout(function() { b.innerHTML = '\u2398 Copy'; }, 2000); }
+  });
+}
+
+// ─── COPY ───
+function copyRewrite(id) {
+  var a = ARTICLES.find(function(x) { return x.id === id; }); if(!a||!a.selections) return;
+  var t = ""; a.selections.forEach(function(s) { t += s.race+" "+s.horse+" - "+s.stake+" at "+s.odds; if(s.category)t+=" ("+s.category+")"; t+="\n"; if(s.analysis)t+="\n"+s.analysis+"\n"; t+="\n"; });
+  if(a.doubles) t+=a.doubles+"\n\n"; if(a.antePost) t+="Ante Post\n"+a.antePost+"\n";
+  navigator.clipboard.writeText(t.trim()).then(function(){ var b=document.getElementById("copy-rw-"+id); if(b){b.textContent="\u2713 copied";setTimeout(function(){b.textContent="\u2398 copy"},2000)} });
+}
+function copyOriginal(id) {
+  var a = ARTICLES.find(function(x) { return x.id === id; }); if(!a)return;
+  navigator.clipboard.writeText(a.originalBody).then(function(){ var b=document.getElementById("copy-og-"+id); if(b){b.textContent="\u2713 copied";setTimeout(function(){b.textContent="\u2398 copy"},2000)} });
+}
+
+// ─── DELETE ───
+var pendingDeleteId = null;
+
+function confirmDelete(id) {
+  pendingDeleteId = id;
+  var a = ARTICLES.find(function(x) { return x.id === id; });
+  var overlay = document.createElement("div");
+  overlay.className = "delete-confirm";
+  overlay.id = "deleteOverlay";
+  overlay.innerHTML = '<div class="delete-dialog"><h3>Remove this email?</h3><p>' + escapeHtml(a ? a.originalSubject : '') + '</p><div class="delete-dialog-btns"><button class="btn-cancel" onclick="cancelDelete()">Cancel</button><button class="btn-confirm-delete" onclick="executeDelete()">Delete</button></div></div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener("click", function(e) { if (e.target === overlay) cancelDelete(); });
+}
+
+function cancelDelete() {
+  pendingDeleteId = null;
+  var el = document.getElementById("deleteOverlay");
+  if (el) el.remove();
+}
+
+function executeDelete() {
+  if (!pendingDeleteId) return;
+  var idx = ARTICLES.findIndex(function(a) { return a.id === pendingDeleteId; });
+  if (idx !== -1) ARTICLES.splice(idx, 1);
+  if (selectedId === pendingDeleteId) selectedId = null;
+  pendingDeleteId = null;
+  var el = document.getElementById("deleteOverlay");
+  if (el) el.remove();
+  render();
+}
+
+// ─── DUPLICATE DETECTION ───
+// Deduplicates articles by matching subject+tipDate, keeping the first occurrence
+function getDeduplicatedArticles() {
+  var seen = {};
+  return ARTICLES.filter(function(a) {
+    // Normalise: strip "Amendment", "Fw:", leading/trailing spaces, lowercase
+    var subj = (a.originalSubject || "").toLowerCase().replace(/\(amendment\)/g, "").replace(/^fw:\s*/i, "").replace(/^fwd:\s*/i, "").trim();
+    var key = subj + "|" + (a.tipDate || "");
+    if (seen[key]) return false;
+    seen[key] = true;
+    return true;
+  });
+}
+
+// ─── TAB SWITCHING ───
+function switchTab(tab) {
+  activeTab = tab;
+  selectedId = null;
+  document.querySelectorAll(".page-tab").forEach(function(t) { t.classList.remove("active"); });
+  document.getElementById("tab-" + tab).classList.add("active");
+  render();
+}
+
+// ─── DATE SIDEBAR ───
+function renderDateSidebar() {
+  var dates = getTipDates();
+  var html = '<h4>Tip Dates</h4>';
+  html += '<div class="date-item' + (selectedDate === "all" ? " active" : "") + '" onclick="selectDate(\'all\')">All Dates</div>';
+  dates.forEach(function(d) {
+    html += '<div class="date-item' + (selectedDate === d.date ? " active" : "") + '" onclick="selectDate(\'' + d.date + '\')">' + shortDateLabel(d.date) + '<span class="date-count">' + d.count + '</span></div>';
+  });
+  document.getElementById("dateSidebar").innerHTML = html;
+}
+
+function selectDate(d) {
+  selectedDate = d;
+  selectedId = null;
+  render();
+}
+
+// ─── RENDER: EMAILS TAB ───
+function renderEmails() {
+  var authors = ["All"];
+  var seen = {};
+  var deduped2 = getDeduplicatedArticles();
+  deduped2.forEach(function(a) { var au = getAuthor(a); if (!seen[au]) { seen[au] = true; authors.push(au); } });
+
+  var deduped = getDeduplicatedArticles();
+  var filtered = deduped.filter(function(a) {
+    var q = searchQuery.toLowerCase();
+    var ms = !q || [a.originalSubject, a.from, a.originalBody].some(function(f) { return (f||"").toLowerCase().indexOf(q) !== -1; });
+    if (!ms) return false;
+    if (filterAuthor !== "All" && getAuthor(a) !== filterAuthor) return false;
+    if (selectedDate !== "all" && a.tipDate !== selectedDate) return false;
+    return true;
+  }).sort(function(a, b) { return new Date(b.emailDate) - new Date(a.emailDate); });
+
+  var sel = selectedId ? ARTICLES.find(function(a) { return a.id === selectedId; }) : null;
+  var view = sel ? (activeView[sel.id] || "original") : null;
+
+  // Toolbar
+  var tb = '<div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="searchInput" placeholder="search..." value="' + escapeHtml(searchQuery) + '"></div>';
+  tb += '<div class="filter-group">';
+  authors.forEach(function(a) { tb += '<button class="filter-btn' + (filterAuthor === a ? ' active' : '') + '" onclick="setAuthor(\'' + escapeHtml(a) + '\')">' + escapeHtml(a) + '</button>'; });
+  tb += '</div>';
+
+  var html = '<div class="toolbar">' + tb + '</div>';
+  html += '<div class="content">';
+
+  if (!filtered.length) {
+    html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '"><div class="empty"><h3>' + (ARTICLES.length === 0 ? 'Nothing here yet' : 'No results') + '</h3><p>' + (ARTICLES.length === 0 ? 'Hit Sync to pull emails.' : 'Try different search terms or author.') + '</p></div></div>';
+  } else {
+    html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '">';
+    filtered.forEach(function(a, i) {
+      var sc = a.selections ? a.selections.length : 0;
+      var auth = getAuthor(a);
+      html += '<div class="card' + (selectedId === a.id ? ' selected' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="selectCard(\'' + a.id + '\')">';
+      html += '<button class="btn-delete" onclick="event.stopPropagation();confirmDelete(\'' + a.id + '\')" title="Remove">&#10005;</button>';
+      html += '<div class="card-header"><span class="card-from">' + escapeHtml(auth) + '</span><span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
+      html += '<h3>' + escapeHtml(a.originalSubject) + '</h3>';
+      html += '<p class="card-excerpt">' + escapeHtml((a.originalBody || "").substring(0, sel ? 90 : 150)) + '...</p>';
+      html += '<div class="card-footer"><span class="card-sels">' + sc + ' sel' + (sc !== 1 ? 's' : '') + '</span></div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Reader
+  if (sel) {
+    var auth = getAuthor(sel);
+    html += '<div class="reader">';
+    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
+    html += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
+    html += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
+    html += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
+
+    html += '<div class="view-tabs">';
+    html += '<button class="view-tab' + (view === "original" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'original\')">Original Email</button>';
+    html += '<button class="view-tab' + (view === "rewrite" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'rewrite\')">Racing Intel Rewrite</button>';
+    html += '</div>';
+
+    if (view === "original") {
+      html += '<div class="copy-bar"><button class="btn-copy" id="copy-og-' + sel.id + '" onclick="event.stopPropagation();copyOriginal(\'' + sel.id + '\')">\u2398 copy</button></div>';
+      html += '<div class="email-body">';
+      (sel.originalBody || "").split("\n").forEach(function(line) { html += line.trim() ? '<p>' + escapeHtml(line) + '</p>' : '<p style="margin-bottom:8px">&nbsp;</p>'; });
+      html += '</div>';
+    } else {
+      html += '<div class="copy-bar"><button class="btn-copy" id="copy-rw-' + sel.id + '" onclick="event.stopPropagation();copyRewrite(\'' + sel.id + '\')">\u2398 copy</button></div>';
+      html += '<div class="rewrite-body">';
+      if (sel.selections && sel.selections.length) {
+        sel.selections.forEach(function(s) {
+          html += '<div class="selection-block">';
+          html += '<div class="selection-header">' + escapeHtml(s.race) + ' ' + escapeHtml(s.horse) + ' - ' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds);
+          if (s.category) html += ' (' + escapeHtml(s.category) + ')';
+          html += '</div>';
+          if (s.analysis) { html += '<div class="selection-analysis">' + escapeHtml(s.analysis) + '</div>'; }
+          else { html += '<div class="no-analysis">No analysis available for this selection</div>'; }
+          html += '</div>';
+        });
+      }
+      if (sel.doubles) { html += '<div class="selection-block" style="padding:12px 16px;background:#f8f8f8;border-radius:8px;font-size:13px;font-weight:600;color:#333">' + escapeHtml(sel.doubles) + '</div>'; }
+      if (sel.antePost) {
+        html += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee">';
+        html += '<div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px">Ante Post</div>';
+        sel.antePost.split("\n").filter(Boolean).forEach(function(line) { html += '<div style="font-size:13px;color:#555;margin-bottom:6px">' + escapeHtml(line) + '</div>'; });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// ─── RENDER: ALL SELECTIONS TAB ───
+function renderAllSelections() {
+  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  var html = renderTipsterFilter();
+  if (!sels.length) {
+    html += '<div class="empty"><h3>No selections</h3><p>No tips found for the selected tipsters.</p></div>';
+    return html;
+  }
+  html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySelBtn" onclick="copySelections()">\u2398 Copy</button><button class="btn-download" onclick="downloadSelections()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
+  var lastRace = "";
+  sels.forEach(function(s, i) {
+    var raceKey = s.race;
+    if (raceKey !== lastRace) {
+      lastRace = raceKey;
+      html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:16px 0 6px">' + escapeHtml(raceKey) + '</div>';
+    }
+    html += '<div class="all-sel-block" style="animation-delay:' + (i * 0.02) + 's">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center">';
+    html += '<div>';
+    html += '<span class="all-sel-horse">' + escapeHtml(s.horse) + '</span>';
+    if (s.category) html += '<span class="category-badge">' + escapeHtml(s.category) + '</span>';
+    html += '<span class="tipster-badge">' + escapeHtml(s.tipster) + '</span>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="all-sel-details">' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds) + '</div>';
+    if (s.analysis) {
+      html += '<div class="all-sel-analysis">' + escapeHtml(s.analysis) + '</div>';
+    }
+    html += '</div>';
+  });
+  return html;
+}
+
+// ─── RENDER: BET SUMMARY TAB ───
+function renderBetSummary() {
+  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  var html = renderTipsterFilter();
+  if (!sels.length) {
+    html += '<div class="empty"><h3>No bets</h3><p>No tips found for the selected tipsters.</p></div>';
+    return html;
+  }
+  html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySumBtn" onclick="copyBetSummary()">\u2398 Copy</button><button class="btn-download" onclick="downloadBetSummary()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
+  html += '<table class="bet-table">';
+  html += '<thead><tr><th>Time</th><th>Race</th><th>Horse</th><th>Stake</th><th>Odds</th><th>Category</th><th>Tipster</th></tr></thead>';
+  html += '<tbody>';
+  sels.forEach(function(s) {
+    html += '<tr>';
+    var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
+    html += '<td style="font-weight:600;white-space:nowrap">' + (tm ? escapeHtml(tm[1]) : '') + '</td>';
+    html += '<td>' + escapeHtml(s.race) + '</td>';
+    html += '<td style="font-weight:600">' + escapeHtml(s.horse);
+    if (s.category) html += ' <span class="category-badge">' + escapeHtml(s.category) + '</span>';
+    html += '</td>';
+    html += '<td>' + escapeHtml(s.stake) + '</td>';
+    html += '<td style="font-weight:600">' + escapeHtml(s.odds) + '</td>';
+    html += '<td>' + escapeHtml(s.category || '-') + '</td>';
+    html += '<td><span class="tipster-badge">' + escapeHtml(s.tipster) + '</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+// ─── MAIN RENDER ───
+function render() {
+  document.getElementById("lastSynced").innerHTML = '<span class="sync-indicator"></span>synced ' + timeAgo(lastSyncTime) + ' ago';
+  renderDateSidebar();
+
+  var content = "";
+  if (activeTab === "emails") {
+    content = renderEmails();
+  } else if (activeTab === "selections") {
+    content = renderAllSelections();
+  } else if (activeTab === "summary") {
+    content = renderBetSummary();
+  }
+  document.getElementById("mainContent").innerHTML = content;
+
+  // Attach search listener if on emails tab
+  if (activeTab === "emails") {
+    var si = document.getElementById("searchInput");
+    if (si) {
+      si.addEventListener("input", function(e) { searchQuery = e.target.value; render(); });
+    }
+  }
+}
+
+function selectCard(id) { selectedId = selectedId === id ? null : id; if(id && !activeView[id]) activeView[id] = "original"; render(); }
+function setView(id, v) { activeView[id] = v; render(); }
+function setAuthor(a) { filterAuthor = a; render(); }
+
+setInterval(function() { location.reload(); }, 300000);
+render();
+</script>
+</body>
+</html>
