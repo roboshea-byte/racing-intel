@@ -166,23 +166,38 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-cancel:hover{background:#eee}
 .btn-confirm-delete{background:#c33;color:#fff}
 .btn-confirm-delete:hover{background:#a22}
+
+/* New badge */
+.new-badge{position:absolute;top:0;right:0;background:#e33;color:#fff;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.5px;padding:4px 8px;border-radius:0 10px 0 8px;text-transform:uppercase}
+
+/* Full-width reader */
+.content.reader-open .cards-list{display:none}
+.content.reader-open .reader{flex:1}
+
+/* Hot Clash */
+.hot-clash-banner{background:linear-gradient(135deg,#fff8f0,#fff3e6);border:1.5px solid #f0a050;border-radius:10px;padding:16px 20px;margin-bottom:14px;animation:fadeUp .3s ease forwards;opacity:0}
+.hot-clash-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:800;color:#c55a11;letter-spacing:-0.2px;margin-bottom:2px;display:flex;align-items:center;gap:8px}
+.hot-clash-fire{font-size:15px}
+.hot-clash-horse{font-family:'Inter',sans-serif;font-size:17px;font-weight:800;color:#000;letter-spacing:-0.3px}
+.hot-clash-details{font-size:12px;color:#888;margin-top:4px}
+.hot-clash-tipsters{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.hot-clash-tipster{padding:3px 9px;background:#c55a11;border-radius:5px;font-size:10px;font-weight:700;color:#fff;font-family:'Inter',sans-serif}
+.all-sel-block.is-hot-clash{border-color:#f0a050;background:linear-gradient(135deg,#fffcf8,#fff8f0)}
+.btn-download{padding:8px 16px;background:#fff;border:1.5px solid #ddd;border-radius:8px;color:#333;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px}
+.btn-download:hover{background:#000;color:#fff;border-color:#000}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <div class="logo">
+    <a class="logo" href="#" onclick="goHome();return false" style="text-decoration:none;color:inherit">
       <div class="logo-icon"><span>R</span></div>
       <span class="logo-text">Racing Intel</span>
       <span class="logo-badge">v2</span>
-    </div>
+    </a>
     <div class="nav-actions">
       <span class="last-synced" id="lastSynced"></span>
-      <button class="btn-sync" id="syncBtn" onclick="requestSync()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-3.36"/><path d="M20 15a9 9 0 0 1-15.36 3.36"/></svg>
-        Sync Now
-      </button>
     </div>
   </div>
 </nav>
@@ -233,6 +248,12 @@ function getAuthor(article) {
   }
   return article.from || "Other";
 }
+
+// ─── READ TRACKING ───
+var readIds = {};
+try { readIds = JSON.parse(localStorage.getItem('ri-read') || '{}'); } catch(e) {}
+function markRead(id) { readIds[id] = 1; try { localStorage.setItem('ri-read', JSON.stringify(readIds)); } catch(e) {} }
+function isNew(id) { return !readIds[id]; }
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
@@ -690,15 +711,6 @@ function getSelectionsForDate(tipDate) {
   return sels;
 }
 
-// ─── SYNC ───
-function requestSync() {
-  var btn = document.getElementById("syncBtn");
-  btn.disabled = true;
-  btn.innerHTML = '<span>syncing<span style="animation:blink 1s step-end infinite">_</span></span>';
-  document.getElementById("statusArea").innerHTML = '<div style="max-width:1400px;margin:12px auto 0;padding:0 28px"><div class="status-bar info"><span style="width:6px;height:6px;border-radius:50%;background:#66f;flex-shrink:0"></span>Sync requested. Open Cowork and say <strong>"sync"</strong> to pull new emails, or wait for the next scheduled sync.</div></div>';
-  setTimeout(function() { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-3.36"/><path d="M20 15a9 9 0 0 1-15.36 3.36"/></svg>Sync Now'; }, 3000);
-}
-
 // ─── COPY ───
 function copyRewrite(id) {
   var a = ARTICLES.find(function(x) { return x.id === id; }); if(!a||!a.selections) return;
@@ -757,6 +769,15 @@ function getDeduplicatedArticles() {
 }
 
 // ─── TAB SWITCHING ───
+function goHome() {
+  var today = new Date().toISOString().split("T")[0];
+  var dates = getTipDates();
+  var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
+  selectedDate = hasToday ? today : (dates.length ? dates[0].date : "all");
+  filterAuthor = "All";
+  selectedId = null;
+  switchTab("emails");
+}
 function switchTab(tab) {
   activeTab = tab;
   selectedId = null;
@@ -786,8 +807,11 @@ function selectDate(d) {
 function renderEmails() {
   var authors = ["All"];
   var seen = {};
+  var authorList = [];
   var deduped2 = getDeduplicatedArticles();
-  deduped2.forEach(function(a) { var au = getAuthor(a); if (!seen[au]) { seen[au] = true; authors.push(au); } });
+  deduped2.forEach(function(a) { var au = getAuthor(a); if (!seen[au]) { seen[au] = true; authorList.push(au); } });
+  authorList.sort(function(a, b) { return a.toLowerCase().localeCompare(b.toLowerCase()); });
+  authors = authors.concat(authorList);
 
   var deduped = getDeduplicatedArticles();
   var filtered = deduped.filter(function(a) {
@@ -809,16 +833,17 @@ function renderEmails() {
   tb += '</div>';
 
   var html = '<div class="toolbar">' + tb + '</div>';
-  html += '<div class="content">';
+  html += '<div class="content' + (sel ? ' reader-open' : '') + '">';
 
   if (!filtered.length) {
-    html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '"><div class="empty"><h3>' + (ARTICLES.length === 0 ? 'Nothing here yet' : 'No results') + '</h3><p>' + (ARTICLES.length === 0 ? 'Hit Sync to pull emails.' : 'Try different search terms or author.') + '</p></div></div>';
+    html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '"><div class="empty"><h3>' + (ARTICLES.length === 0 ? 'Nothing here yet' : 'No results') + '</h3><p>' + (ARTICLES.length === 0 ? 'Waiting for the next scheduled sync.' : 'Try different search terms or author.') + '</p></div></div>';
   } else {
     html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '">';
     filtered.forEach(function(a, i) {
       var sc = a.selections ? a.selections.length : 0;
       var auth = getAuthor(a);
       html += '<div class="card' + (selectedId === a.id ? ' selected' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="selectCard(\'' + a.id + '\')">';
+      if (isNew(a.id)) html += '<span class="new-badge">New</span>';
       html += '<button class="btn-delete" onclick="event.stopPropagation();confirmDelete(\'' + a.id + '\')" title="Remove">&#10005;</button>';
       html += '<div class="card-header"><span class="card-from">' + escapeHtml(auth) + '</span><span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
       html += '<h3>' + escapeHtml(a.originalSubject) + '</h3>';
@@ -833,7 +858,7 @@ function renderEmails() {
   if (sel) {
     var auth = getAuthor(sel);
     html += '<div class="reader">';
-    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
+    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px"><button onclick="selectCard(null)" style="background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0 0 10px;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Back to emails</button>';
     html += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
     html += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
     html += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
@@ -878,33 +903,98 @@ function renderEmails() {
   return html;
 }
 
+// ─── HOT CLASH DETECTION ───
+function findHotClashes(sels) {
+  var map = {};
+  sels.forEach(function(s) {
+    var key = (s.race + '|' + s.horse).toLowerCase().replace(/\s+/g, ' ').trim();
+    if (!map[key]) map[key] = { race: s.race, horse: s.horse, tipsters: [], odds: s.odds };
+    if (map[key].tipsters.indexOf(s.tipster) === -1) map[key].tipsters.push(s.tipster);
+  });
+  var clashes = [];
+  for (var k in map) { if (map[k].tipsters.length >= 2) clashes.push(map[k]); }
+  clashes.sort(function(a, b) { return b.tipsters.length - a.tipsters.length; });
+  return clashes;
+}
+function isHotClash(race, horse, clashes) {
+  var key = (race + '|' + horse).toLowerCase().replace(/\s+/g, ' ').trim();
+  for (var i = 0; i < clashes.length; i++) {
+    var ck = (clashes[i].race + '|' + clashes[i].horse).toLowerCase().replace(/\s+/g, ' ').trim();
+    if (ck === key) return clashes[i];
+  }
+  return null;
+}
+
+// ─── DOWNLOAD / COPY HELPERS ───
+function downloadFile(filename, text) {
+  var el = document.createElement("a");
+  el.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  el.setAttribute("download", filename);
+  el.style.display = "none";
+  document.body.appendChild(el); el.click(); document.body.removeChild(el);
+}
+function padRight(str, len) { str = str || ""; while (str.length < len) str += " "; return str; }
+function buildSelectionsText() {
+  var dateDisplay = selectedDate === "all" ? "All Dates" : dateLabel(selectedDate);
+  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  if (!sels.length) return "";
+  var text = "ALL SELECTIONS — " + dateDisplay + "\n" + "=".repeat(50) + "\n\n";
+  var lastRace = "";
+  sels.forEach(function(s) {
+    if (s.race !== lastRace) { lastRace = s.race; text += "\n" + s.race.toUpperCase() + "\n" + "-".repeat(30) + "\n"; }
+    text += s.horse; if (s.category) text += " (" + s.category + ")";
+    text += " — " + s.stake + " at " + s.odds + " [" + s.tipster + "]\n";
+    if (s.analysis) text += "  " + s.analysis + "\n";
+  });
+  return text.trim();
+}
+function buildBetSummaryText() {
+  var dateDisplay = selectedDate === "all" ? "All Dates" : dateLabel(selectedDate);
+  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  if (!sels.length) return "";
+  var text = "BET SUMMARY — " + dateDisplay + "\n" + "=".repeat(50) + "\n\n";
+  text += padRight("Time", 8) + padRight("Race", 22) + padRight("Horse", 24) + padRight("Stake", 16) + padRight("Odds", 8) + padRight("Cat", 6) + "Tipster\n" + "-".repeat(90) + "\n";
+  sels.forEach(function(s) { var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/); text += padRight(tm ? tm[1] : "", 8) + padRight(s.race || "", 22) + padRight(s.horse || "", 24) + padRight(s.stake || "", 16) + padRight(s.odds || "", 8) + padRight(s.category || "-", 6) + s.tipster + "\n"; });
+  text += "-".repeat(90) + "\n" + sels.length + " selections total\n";
+  return text.trim();
+}
+function downloadSelections() { var t = buildSelectionsText(); if(t) downloadFile("selections-" + (selectedDate === "all" ? "all-dates" : selectedDate) + ".txt", t); }
+function downloadBetSummary() { var t = buildBetSummaryText(); if(t) downloadFile("bet-summary-" + (selectedDate === "all" ? "all-dates" : selectedDate) + ".txt", t); }
+function copySelections() { var t = buildSelectionsText(); if(!t) return; navigator.clipboard.writeText(t).then(function() { var b = document.getElementById("copySelBtn"); if(b){b.textContent="\u2713 Copied";setTimeout(function(){b.innerHTML='\u2398 Copy'},2000)} }); }
+function copyBetSummary() { var t = buildBetSummaryText(); if(!t) return; navigator.clipboard.writeText(t).then(function() { var b = document.getElementById("copySumBtn"); if(b){b.textContent="\u2713 Copied";setTimeout(function(){b.innerHTML='\u2398 Copy'},2000)} }); }
+
 // ─── RENDER: ALL SELECTIONS TAB ───
 function renderAllSelections() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No selections</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
+  if (clashes.length) {
+    clashes.forEach(function(c) {
+      html += '<div class="hot-clash-banner"><div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
+      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
+      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + escapeHtml(c.odds) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
+      html += '<div class="hot-clash-tipsters">'; c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; }); html += '</div></div>';
+    });
+  }
+  html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySelBtn" onclick="copySelections()">\u2398 Copy</button><button class="btn-download" onclick="downloadSelections()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   var lastRace = "";
   sels.forEach(function(s, i) {
     var raceKey = s.race;
-    if (raceKey !== lastRace) {
-      lastRace = raceKey;
-      html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:16px 0 6px">' + escapeHtml(raceKey) + '</div>';
-    }
-    html += '<div class="all-sel-block" style="animation-delay:' + (i * 0.02) + 's">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:center">';
-    html += '<div>';
+    if (raceKey !== lastRace) { lastRace = raceKey; html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:16px 0 6px">' + escapeHtml(raceKey) + '</div>'; }
+    var clash = isHotClash(s.race, s.horse, clashes);
+    html += '<div class="all-sel-block' + (clash ? ' is-hot-clash' : '') + '" style="animation-delay:' + (i * 0.02) + 's">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center"><div>';
     html += '<span class="all-sel-horse">' + escapeHtml(s.horse) + '</span>';
+    if (clash) html += '<span style="margin-left:8px;font-size:13px">&#128293;</span>';
     if (s.category) html += '<span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '<span class="tipster-badge">' + escapeHtml(s.tipster) + '</span>';
-    html += '</div>';
-    html += '</div>';
+    html += '</div></div>';
     html += '<div class="all-sel-details">' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds) + '</div>';
-    if (s.analysis) {
-      html += '<div class="all-sel-analysis">' + escapeHtml(s.analysis) + '</div>';
-    }
+    if (s.analysis) { html += '<div class="all-sel-analysis">' + escapeHtml(s.analysis) + '</div>'; }
     html += '</div>';
   });
   return html;
@@ -913,20 +1003,32 @@ function renderAllSelections() {
 // ─── RENDER: BET SUMMARY TAB ───
 function renderBetSummary() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
+  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No bets</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
+  if (clashes.length) {
+    clashes.forEach(function(c) {
+      html += '<div class="hot-clash-banner"><div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
+      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
+      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
+      html += '<div class="hot-clash-tipsters">'; c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; }); html += '</div></div>';
+    });
+  }
+  html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySumBtn" onclick="copyBetSummary()">\u2398 Copy</button><button class="btn-download" onclick="downloadBetSummary()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   html += '<table class="bet-table">';
   html += '<thead><tr><th>Time</th><th>Race</th><th>Horse</th><th>Stake</th><th>Odds</th><th>Category</th><th>Tipster</th></tr></thead>';
   html += '<tbody>';
   sels.forEach(function(s) {
-    html += '<tr>';
+    var clash = isHotClash(s.race, s.horse, clashes);
+    html += '<tr' + (clash ? ' style="background:#fff8f0"' : '') + '>';
     var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
     html += '<td style="font-weight:600;white-space:nowrap">' + (tm ? escapeHtml(tm[1]) : '') + '</td>';
     html += '<td>' + escapeHtml(s.race) + '</td>';
     html += '<td style="font-weight:600">' + escapeHtml(s.horse);
+    if (clash) html += ' &#128293;';
     if (s.category) html += ' <span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '</td>';
     html += '<td>' + escapeHtml(s.stake) + '</td>';
@@ -963,7 +1065,12 @@ function render() {
   }
 }
 
-function selectCard(id) { selectedId = selectedId === id ? null : id; if(id && !activeView[id]) activeView[id] = "original"; render(); }
+function selectCard(id) {
+  selectedId = selectedId === id ? null : id;
+  if(id) { markRead(id); if(!activeView[id]) activeView[id] = "original"; }
+  render();
+  if(selectedId) { var r = document.querySelector('.reader'); if(r) r.scrollTop = 0; }
+}
 function setView(id, v) { activeView[id] = v; render(); }
 function setAuthor(a) { filterAuthor = a; render(); }
 
