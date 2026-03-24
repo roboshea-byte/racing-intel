@@ -170,6 +170,9 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-confirm-delete{background:#c33;color:#fff}
 .btn-confirm-delete:hover{background:#a22}
 
+/* New badge */
+.new-badge{position:absolute;top:0;right:0;background:#e33;color:#fff;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.5px;padding:4px 8px;border-radius:0 10px 0 8px;text-transform:uppercase}
+
 /* ─── TABLET (≤1024px) ─── */
 @media(max-width:1024px){
 .main-layout{flex-direction:column;padding:14px 16px 40px}
@@ -321,6 +324,12 @@ function getAuthor(article) {
   }
   return article.from || "Other";
 }
+
+// ─── READ TRACKING ───
+var readIds = {};
+try { readIds = JSON.parse(localStorage.getItem('ri-read') || '{}'); } catch(e) {}
+function markRead(id) { readIds[id] = 1; try { localStorage.setItem('ri-read', JSON.stringify(readIds)); } catch(e) {} }
+function isNew(id) { return !readIds[id]; }
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
@@ -899,6 +908,7 @@ function renderEmails() {
       var sc = a.selections ? a.selections.length : 0;
       var auth = getAuthor(a);
       html += '<div class="card' + (selectedId === a.id ? ' selected' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="selectCard(\'' + a.id + '\')">';
+      if (isNew(a.id)) html += '<span class="new-badge">New</span>';
       html += '<button class="btn-delete" onclick="event.stopPropagation();confirmDelete(\'' + a.id + '\')" title="Remove">&#10005;</button>';
       html += '<div class="card-header"><span class="card-from">' + escapeHtml(auth) + '</span><span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
       html += '<h3>' + escapeHtml(a.originalSubject) + '</h3>';
@@ -1047,7 +1057,7 @@ function render() {
 
 function selectCard(id) {
   selectedId = selectedId === id ? null : id;
-  if(id && !activeView[id]) activeView[id] = "original";
+  if(id) { markRead(id); if(!activeView[id]) activeView[id] = "original"; }
   render();
   // On mobile, scroll reader into view if opened
   if(selectedId) {
