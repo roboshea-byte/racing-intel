@@ -403,6 +403,9 @@ const AUTHOR_MAP = {
   "Zenith Betting": ["Zenith Betting", "Zenith"],
   "GM": ["Greyhound Maestro", "GM", "greyhoundmaestro"],
   "Pricewise": ["Pricewise", "Tom Segal", "pricewise"],
+  "Andrew Mount": ["Andrew Mount", "andrewmount"],
+  "Rodway": ["Rodway", "Graeme Rodway", "rodway"],
+  "Harry Wilson": ["Harry Wilson", "harrywilson"],
 };
 
 function getAuthor(article) {
@@ -427,6 +430,56 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
+  {
+    id: "19d211e521cb7eb6",
+    originalSubject: "Andrew Mount - 25th March",
+    from: "Andrew Mount (via Rob)",
+    author: "Andrew Mount",
+    emailDate: "2026-03-24T18:32:04Z",
+    tipDate: "2026-03-25",
+    processedAt: new Date().toISOString(),
+    originalBody: "3.41 Hexham - Planned Paradise (1pt win - 2/1 bet365)\n\nTop weights are usually worth opposing in 4m handicap chases at Hexham with the score in the past ten years standing at 0-22 (expected winners = 2.69). We have four runners on 12 stone in this marathon contest and I'm taking them on with Planned Paradise, who appreciated the drop to Class 4 level when scoring comfortably at Bangor last time. The faster ground won't be an issue, he earned a sectional times upgrade for his latest win and Christian Williams' long travellers usually do well in handicap chases during the second half of the season.\n\n7.00 Kempton - Blues and Royals (1pt win - 9/1 bet365)\n\nMichael Bell's Blues And Royals looks a likely improver on the back of a gelding operation and is worth chancing on his handicap debut. His trainer is 25 from 86 (29.1% strike-rate) with newly gelded runners on their handicap debuts for a profit of +47.38 to a 1 level stake at SP. The score at Kempton only is four from seven. It looks significant that he prepped over a shorter trip here last time out, finishing an outpaced 18-1 third in a 7f maiden.",
+    selections: [
+      { race: "Hexham 3.41", horse: "Planned Paradise", odds: "2/1", stake: "1 point win", category: "", analysis: "Planned Paradise looks well placed to follow up a comfortable Class 4 success at Bangor in this marathon contest. It is worth noting that top weights have a woeful record in four mile handicap chases at Hexham, failing to score in 22 attempts over the past decade. Christian Williams' long travellers from their Welsh base have posted a remarkable 24% strike rate in handicap chases during the January to April window, yielding a healthy level stake profit. The faster ground will not inconvenience this progressive type who earned a sectional times upgrade for his latest victory." },
+      { race: "Kempton 7.00", horse: "Blues And Royals", odds: "9/1", stake: "1 point win", category: "", analysis: "Blues And Royals represents excellent value on his handicap debut following a gelding operation for Michael Bell. It is worth noting that Bell's record with newly gelded runners on their handicap debuts stands at an impressive 29% strike rate from 86 runners, with the figures at Kempton specifically reading four winners from seven. He showed enough when third in a 7f maiden here last time and the step up to a mile on his handicap bow looks a positive move. Don't say you weren't warned." }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d211a1569f380e",
+    originalSubject: "Rodway - 25th March",
+    from: "Graeme Rodway (via Rob)",
+    author: "Rodway",
+    emailDate: "2026-03-24T18:27:25Z",
+    tipDate: "2026-03-25",
+    processedAt: new Date().toISOString(),
+    originalBody: "Graeme Rodway, Deputy betting editor. Glory And Honour, 4.41 Hexham. All eyes might be on Constitution Hill at Kempton, but I'm far more interested in the jumps action at Hexham where there are three good bets to be had. The best of them may be Glory And Honour, who returns to fences after a 173-day break in the 2m4f handicap chase. The ten-year-old was successful on the Flat at Pontefract in 2024 after an 85-day hiatus on the last occasion he returned from a break of longer than 50 days, so he goes well fresh. Glory And Honour also likes this course, having recorded form figures reading 213 at Hexham, and he is back to the same mark as when last successful here in June last year. He has shown little form following that last success but only two of those runs were over fences and he is a better chaser than hurdler or Flat performer.",
+    selections: [
+      { race: "Hexham 4.41", horse: "Glory And Honour", odds: "TBC", stake: "1 point win", category: "", analysis: "Glory And Honour makes considerable appeal on his return to fences after a 173 day absence in this 2m4f handicap chase. It is worth noting that he produced a fine Flat performance at Pontefract after an 85 day break, confirming his well being when returning from absences. His course form figures of 213 at Hexham are particularly encouraging and he returns to the same mark from which he last scored here in June. A better chaser than hurdler, he looked short of pace over an inadequate two miles last time and the step back up in distance will suit ideally." }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
+    id: "19d211d52bb48f09",
+    originalSubject: "Antepost - Harry Wilson: Saturday 28th March",
+    from: "Harry Wilson (via Rob)",
+    author: "Harry Wilson",
+    emailDate: "2026-03-24T18:30:59Z",
+    tipDate: "2026-03-28",
+    processedAt: new Date().toISOString(),
+    originalBody: "Harry Wilson, Betting expert. Opening day of the British Flat turf season selections for Saturday 28th March.\n\nTreble Tee - 3.00 Doncaster - 1pt e/w at 14/1 (Coral)\nGlittering Surf - 3.15 Kempton - 1pt e/w at 14/1 (bet365)\nShout - 3.35 Doncaster - 1pt e/w at 12/1 (bet365)\nAnno Domini - 3.35 Doncaster - 1pt e/w at 16/1 (bet365)",
+    isAntepost: true,
+    selections: [
+      { race: "Doncaster 3.00", horse: "Treble Tee", odds: "14/1", stake: "1 point e/w", category: "", analysis: "Treble Tee made a considerable impression when scoring with authority over course and distance last September, running faster than Group 2 Champagne Stakes winner Puerto Rico on the clock. It is worth noting that his two defeats since can be excused, with keenness over an extra furlong costing him in the Cambridgeshire and softer ground against him on his latest outing. This four year old retains significant untapped potential and returns with proven course form firmly on his side." },
+      { race: "Kempton 3.15", horse: "Glittering Surf", odds: "14/1", stake: "1 point e/w", category: "", analysis: "Glittering Surf showed smart form on the all weather surface, coming from last to first in a conditions event at Kempton with the time comparing favourably against a Listed event won by the then 111 rated Soprano. It is worth noting that the form has worked out particularly well, with the third winning at Listed level and the runner up finishing second in similar company. This big framed filly is precisely the type to flourish as a four year old and Owen Burrows is likely to have her primed for this assignment." },
+      { race: "Doncaster 3.35", horse: "Shout", odds: "12/1", stake: "1 point e/w", category: "", analysis: "Shout produced Racing Post Ratings in excess of 100 on both occasions he was campaigned over a mile last season, winning with authority at Ascot on soft ground before a creditable fourth in the Balmoral. It is worth noting that he goes well fresh with form figures of 12 after breaks exceeding 51 days. A previous course winner who handles any ground, he is unexposed at the trip and could have significantly more to offer this campaign." },
+      { race: "Doncaster 3.35", horse: "Anno Domini", odds: "16/1", stake: "1 point e/w", category: "", analysis: "Anno Domini bids to become the third four year old trained by Charlie Appleby to land the Lincoln in the last decade. It is worth noting that he shaped encouragingly at Meydan on his return from a gelding operation, doing well to finish sixth from a poor draw having raced on the outer throughout. His smart juvenile form included a fifth in the Group 1 Futurity over course and distance and the Dubai winter campaign should have him primed for this target." }
+    ],
+    doubles: "",
+    antePost: "William Hill Lincoln, Doncaster, March 28"
+  },
   {
     id: "19d211abd87ca723",
     originalSubject: "Antepost - Pricewise: 2,000 Guineas",
@@ -1251,6 +1304,7 @@ function getDeduplicatedArticles() {
 function hardRefresh() {
   var btn = document.querySelector(".btn-refresh");
   if (btn) btn.classList.add("spinning");
+  try { sessionStorage.setItem("ri-go-home", "1"); } catch(e) {}
   setTimeout(function() { location.reload(true); }, 300);
 }
 function goHome() {
@@ -1940,6 +1994,20 @@ function setView(id, v) { activeView[id] = v; render(); }
 function setAuthor(a) { filterAuthor = a; selectedId = null; render(); }
 
 setInterval(function() { location.reload(); }, 300000);
+try {
+  if (sessionStorage.getItem("ri-go-home")) {
+    sessionStorage.removeItem("ri-go-home");
+    var today = new Date().toISOString().split("T")[0];
+    var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
+    var dates = getTipDates();
+    selectedDate = hasToday ? today : (dates.length ? dates[0].date : "all");
+    filterAuthor = "All";
+    selectedId = null;
+    activeTab = "emails";
+    document.querySelectorAll(".page-tab").forEach(function(t) { t.classList.remove("active"); });
+    var et = document.getElementById("tab-emails"); if (et) et.classList.add("active");
+  }
+} catch(e) {}
 render();
 </script>
 </body>
