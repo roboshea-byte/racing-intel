@@ -8,7 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:#f7f7f7;font-family:'JetBrains Mono','SF Mono',monospace;color:#000}
+html{overflow-x:hidden}
+body{min-height:100vh;background:#f7f7f7;font-family:'JetBrains Mono','SF Mono',monospace;color:#000;overflow-x:hidden}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
@@ -195,38 +196,38 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-sync svg{width:12px;height:12px}
 .btn-download{display:none}
 .last-synced{display:none}
-.page-tabs-inner{padding:0 12px;gap:0}
-.page-tab{padding:12px 14px;font-size:12px}
-.main-layout{padding:10px 12px 32px;gap:10px}
+.page-tabs-inner{padding:0 8px;gap:0}
+.page-tab{padding:12px 10px;font-size:12px}
+.main-layout{padding:10px 10px 32px;gap:10px;max-width:100vw}
 .date-sidebar{gap:4px}
 .date-item{padding:7px 12px;font-size:11px;border-radius:6px}
 .toolbar{gap:6px;flex-wrap:wrap}
 .search-wrap{min-width:0;width:100%;flex:none}
-.search-wrap input{padding:10px 12px 10px 34px;font-size:12px}
+.search-wrap input{padding:10px 12px 10px 34px;font-size:16px}
 .filter-group{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;gap:2px;padding:2px}
 .filter-btn{white-space:nowrap;flex-shrink:0;padding:6px 10px;font-size:10px}
 .content{flex-direction:column;gap:10px}
 .cards-list{width:100%;min-width:0;max-height:none;overflow-y:visible}
 .cards-grid{grid-template-columns:1fr;gap:8px}
-.card{padding:14px}
+.card{padding:14px;animation:none;opacity:1;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.05)}
+.card:active{background:#f5f5f5}
 .card h3{font-size:13px}
 .card-excerpt{font-size:11px;margin-bottom:8px}
-.reader{border-radius:0;max-height:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:150;border:none;overflow-y:auto;background:#fff}
+.reader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:#fff;border:none;border-radius:0;max-height:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .reader-header{padding:16px 16px 14px}
 .reader h2{font-size:16px}
 .reader-meta{gap:8px}
-.reader-close{width:36px;height:36px;font-size:16px;background:#f0f0f0}
-.cards-list{width:100%;min-width:0}
+.reader-close{width:40px;height:40px;font-size:18px;background:#f0f0f0}
 .view-tabs{margin:0 16px}
-.view-tab{padding:10px 14px;font-size:11px}
-.email-body{padding:16px;font-size:12px}
+.view-tab{padding:10px 14px;font-size:11px;touch-action:manipulation}
+.email-body{padding:16px;font-size:13px;line-height:1.7}
 .rewrite-body{padding:16px}
 .selection-analysis{font-size:12px;line-height:1.7}
 .copy-bar{padding:10px 16px}
-.all-sel-block{padding:14px 16px}
+.all-sel-block{padding:14px 16px;animation:none;opacity:1}
 .all-sel-horse{font-size:14px}
 .all-sel-analysis{font-size:12px;line-height:1.7}
-.tipster-filter{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px}
+.tipster-filter{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px;max-width:100vw;overflow-x:hidden}
 .tipster-filter-label{margin-bottom:2px}
 .tipster-filter-actions{margin-left:0;width:100%}
 .tipster-check{padding:4px 8px}
@@ -298,7 +299,6 @@ if(sessionStorage.getItem('ri-auth')==='1'){document.addEventListener('DOMConten
   <div class="date-sidebar" id="dateSidebar"></div>
   <div class="main-content" id="mainContent"></div>
 </div>
-<div id="mobileReader"></div>
 
 <script>
 // ─── AUTHOR MAP ───
@@ -910,59 +910,51 @@ function renderEmails() {
   }
 
   // Reader
-  var readerHtml = "";
   if (sel) {
     var auth = getAuthor(sel);
-    readerHtml += '<div class="reader">';
-    readerHtml += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
-    readerHtml += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
-    readerHtml += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
-    readerHtml += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
+    html += '<div class="reader">';
+    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
+    html += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
+    html += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
+    html += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
 
-    readerHtml += '<div class="view-tabs">';
-    readerHtml += '<button class="view-tab' + (view === "original" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'original\')">Original Email</button>';
-    readerHtml += '<button class="view-tab' + (view === "rewrite" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'rewrite\')">Racing Intel Rewrite</button>';
-    readerHtml += '</div>';
+    html += '<div class="view-tabs">';
+    html += '<button class="view-tab' + (view === "original" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'original\')">Original Email</button>';
+    html += '<button class="view-tab' + (view === "rewrite" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'rewrite\')">Racing Intel Rewrite</button>';
+    html += '</div>';
 
     if (view === "original") {
-      readerHtml += '<div class="copy-bar"><button class="btn-copy" id="copy-og-' + sel.id + '" onclick="event.stopPropagation();copyOriginal(\'' + sel.id + '\')">\u2398 copy</button></div>';
-      readerHtml += '<div class="email-body">';
-      (sel.originalBody || "").split("\n").forEach(function(line) { readerHtml += line.trim() ? '<p>' + escapeHtml(line) + '</p>' : '<p style="margin-bottom:8px">&nbsp;</p>'; });
-      readerHtml += '</div>';
+      html += '<div class="copy-bar"><button class="btn-copy" id="copy-og-' + sel.id + '" onclick="event.stopPropagation();copyOriginal(\'' + sel.id + '\')">\u2398 copy</button></div>';
+      html += '<div class="email-body">';
+      (sel.originalBody || "").split("\n").forEach(function(line) { html += line.trim() ? '<p>' + escapeHtml(line) + '</p>' : '<p style="margin-bottom:8px">&nbsp;</p>'; });
+      html += '</div>';
     } else {
-      readerHtml += '<div class="copy-bar"><button class="btn-copy" id="copy-rw-' + sel.id + '" onclick="event.stopPropagation();copyRewrite(\'' + sel.id + '\')">\u2398 copy</button></div>';
-      readerHtml += '<div class="rewrite-body">';
+      html += '<div class="copy-bar"><button class="btn-copy" id="copy-rw-' + sel.id + '" onclick="event.stopPropagation();copyRewrite(\'' + sel.id + '\')">\u2398 copy</button></div>';
+      html += '<div class="rewrite-body">';
       if (sel.selections && sel.selections.length) {
         sel.selections.forEach(function(s) {
-          readerHtml += '<div class="selection-block">';
-          readerHtml += '<div class="selection-header">' + escapeHtml(s.race) + ' ' + escapeHtml(s.horse) + ' - ' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds);
-          if (s.category) readerHtml += ' (' + escapeHtml(s.category) + ')';
-          readerHtml += '</div>';
-          if (s.analysis) { readerHtml += '<div class="selection-analysis">' + escapeHtml(s.analysis) + '</div>'; }
-          else { readerHtml += '<div class="no-analysis">No analysis available for this selection</div>'; }
-          readerHtml += '</div>';
+          html += '<div class="selection-block">';
+          html += '<div class="selection-header">' + escapeHtml(s.race) + ' ' + escapeHtml(s.horse) + ' - ' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds);
+          if (s.category) html += ' (' + escapeHtml(s.category) + ')';
+          html += '</div>';
+          if (s.analysis) { html += '<div class="selection-analysis">' + escapeHtml(s.analysis) + '</div>'; }
+          else { html += '<div class="no-analysis">No analysis available for this selection</div>'; }
+          html += '</div>';
         });
       }
-      if (sel.doubles) { readerHtml += '<div class="selection-block" style="padding:12px 16px;background:#f8f8f8;border-radius:8px;font-size:13px;font-weight:600;color:#333">' + escapeHtml(sel.doubles) + '</div>'; }
+      if (sel.doubles) { html += '<div class="selection-block" style="padding:12px 16px;background:#f8f8f8;border-radius:8px;font-size:13px;font-weight:600;color:#333">' + escapeHtml(sel.doubles) + '</div>'; }
       if (sel.antePost) {
-        readerHtml += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee">';
-        readerHtml += '<div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px">Ante Post</div>';
-        sel.antePost.split("\n").filter(Boolean).forEach(function(line) { readerHtml += '<div style="font-size:13px;color:#555;margin-bottom:6px">' + escapeHtml(line) + '</div>'; });
-        readerHtml += '</div>';
+        html += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #eee">';
+        html += '<div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:10px">Ante Post</div>';
+        sel.antePost.split("\n").filter(Boolean).forEach(function(line) { html += '<div style="font-size:13px;color:#555;margin-bottom:6px">' + escapeHtml(line) + '</div>'; });
+        html += '</div>';
       }
-      readerHtml += '</div>';
+      html += '</div>';
     }
-    readerHtml += '</div>';
-  }
-
-  // On desktop (>640px), reader goes inline. On mobile, it goes to mobileReader div.
-  if (window.innerWidth > 640) {
-    html += readerHtml;
+    html += '</div>';
   }
 
   html += '</div>';
-  // Store reader HTML for mobile rendering
-  html = { main: html, reader: readerHtml };
   return html;
 }
 
@@ -1035,27 +1027,14 @@ function render() {
   renderDateSidebar();
 
   var content = "";
-  var mobileReaderHtml = "";
   if (activeTab === "emails") {
-    var result = renderEmails();
-    content = result.main;
-    mobileReaderHtml = result.reader || "";
+    content = renderEmails();
   } else if (activeTab === "selections") {
     content = renderAllSelections();
   } else if (activeTab === "summary") {
     content = renderBetSummary();
   }
   document.getElementById("mainContent").innerHTML = content;
-
-  // On mobile, render reader in a separate overlay div outside the layout
-  var mr = document.getElementById("mobileReader");
-  if (mr) {
-    if (window.innerWidth <= 640) {
-      mr.innerHTML = mobileReaderHtml;
-    } else {
-      mr.innerHTML = "";
-    }
-  }
 
   // Attach search listener if on emails tab
   if (activeTab === "emails") {
