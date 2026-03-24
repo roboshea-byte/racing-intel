@@ -286,7 +286,7 @@ if(sessionStorage.getItem('ri-auth')==='1'){document.addEventListener('DOMConten
 
 <nav>
   <div class="nav-inner">
-    <a class="logo" href="#" onclick="document.querySelectorAll('.page-tab')[0].click();return false" style="text-decoration:none;color:inherit">
+    <a class="logo" href="#" onclick="goHome();return false" style="text-decoration:none;color:inherit">
       <div class="logo-icon"><span>R</span></div>
       <span class="logo-text">Racing Intel</span>
       <span class="logo-badge">v2</span>
@@ -859,6 +859,12 @@ function getDeduplicatedArticles() {
 }
 
 // ─── TAB SWITCHING ───
+function goHome() {
+  var today = new Date().toISOString().split("T")[0];
+  var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
+  selectedDate = hasToday ? today : "all";
+  switchTab("emails");
+}
 function switchTab(tab) {
   activeTab = tab;
   selectedId = null;
