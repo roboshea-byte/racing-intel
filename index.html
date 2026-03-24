@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Racing Intel</title>
-<link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden}
-body{min-height:100vh;background:#f7f7f7;font-family:'JetBrains Mono','SF Mono',monospace;color:#000;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
+body{min-height:100vh;background:#f7f7f7;font-family:'JetBrains Mono','SF Mono',monospace;color:#000}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
@@ -21,7 +17,7 @@ body{min-height:100vh;background:#f7f7f7;font-family:'JetBrains Mono','SF Mono',
 @keyframes slideRight{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top)}
+nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:100}
 .nav-inner{max-width:1400px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;height:60px}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-icon{width:28px;height:28px;background:#000;border-radius:6px;display:flex;align-items:center;justify-content:center}
@@ -32,8 +28,6 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-sync{padding:9px 20px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:7px}
 .btn-sync:hover{background:#222;box-shadow:0 3px 10px rgba(0,0,0,0.12)}
 .btn-sync:disabled{background:#f5f5f5;color:#aaa;cursor:not-allowed}
-.btn-download{padding:8px 16px;background:#fff;border:1.5px solid #ddd;border-radius:8px;color:#333;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px}
-.btn-download:hover{background:#000;color:#fff;border-color:#000}
 
 /* Page tabs */
 .page-tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid #eee}
@@ -71,14 +65,12 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .content{display:flex;gap:14px;align-items:flex-start}
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px;flex:1}
 .cards-list{display:flex;flex-direction:column;gap:8px;width:360px;min-width:360px;max-height:calc(100vh - 240px);overflow-y:auto;flex-shrink:0}
-.content.reader-open .cards-list{display:none}
-.content.reader-open .reader{flex:1}
 
 /* Date group header */
 .date-header{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:12px 0 6px;grid-column:1/-1}
 
 /* Cards */
-.card{background:#fff;border-radius:10px;padding:18px;cursor:pointer;border:1.5px solid transparent;transition:all .12s ease;animation:fadeUp .3s ease forwards;opacity:0;-webkit-tap-highlight-color:rgba(0,0,0,0.05)}
+.card{background:#fff;border-radius:10px;padding:18px;cursor:pointer;border:1.5px solid transparent;transition:all .12s ease;animation:fadeUp .3s ease forwards;opacity:0}
 .card:hover{border-color:#000;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
 .card.selected{border-color:#000;background:#fff}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -129,18 +121,8 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .last-synced{font-size:11px;color:#bbb;font-family:'Inter',sans-serif}
 .sync-indicator{width:6px;height:6px;border-radius:50%;background:#4b4;display:inline-block;margin-right:4px}
 
-/* Hot Clash */
-.hot-clash-banner{background:linear-gradient(135deg,#fff8f0,#fff3e6);border:1.5px solid #f0a050;border-radius:10px;padding:16px 20px;margin-bottom:14px;animation:fadeUp .3s ease forwards;opacity:0}
-.hot-clash-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:800;color:#c55a11;letter-spacing:-0.2px;margin-bottom:2px;display:flex;align-items:center;gap:8px}
-.hot-clash-fire{font-size:15px}
-.hot-clash-horse{font-family:'Inter',sans-serif;font-size:17px;font-weight:800;color:#000;letter-spacing:-0.3px}
-.hot-clash-details{font-size:12px;color:#888;margin-top:4px}
-.hot-clash-tipsters{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
-.hot-clash-tipster{padding:3px 9px;background:#c55a11;border-radius:5px;font-size:10px;font-weight:700;color:#fff;font-family:'Inter',sans-serif}
-
 /* All Selections */
 .all-sel-block{background:#fff;border-radius:10px;padding:18px 22px;margin-bottom:10px;border:1px solid #eee;animation:fadeUp .3s ease forwards;opacity:0}
-.all-sel-block.is-hot-clash{border-color:#f0a050;background:linear-gradient(135deg,#fffcf8,#fff8f0)}
 .all-sel-race{font-size:11px;font-weight:600;color:#999;margin-bottom:4px;font-family:'Inter',sans-serif;letter-spacing:0.3px}
 .all-sel-horse{font-size:15px;font-weight:700;color:#000;font-family:'Inter',sans-serif;letter-spacing:-0.2px}
 .all-sel-details{font-size:12px;color:#777;margin-top:3px}
@@ -184,120 +166,22 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .btn-cancel:hover{background:#eee}
 .btn-confirm-delete{background:#c33;color:#fff}
 .btn-confirm-delete:hover{background:#a22}
-
-/* New badge */
-.new-badge{position:absolute;top:0;right:0;background:#e33;color:#fff;font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.5px;padding:4px 8px;border-radius:0 10px 0 8px;text-transform:uppercase}
-
-/* ─── TABLET (≤1024px) ─── */
-@media(max-width:1024px){
-.main-layout{flex-direction:column;padding:14px 16px 40px}
-.date-sidebar{width:100%;min-width:0;display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-.date-sidebar h4{display:none}
-.date-item{white-space:nowrap;flex-shrink:0;padding:8px 14px;font-size:11px}
-.date-count{float:none;margin-left:6px}
-.content{flex-direction:column}
-.cards-list{width:100%;min-width:0;max-height:none;flex-shrink:1}
-.reader{max-height:none}
-.cards-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-.nav-inner{padding:0 16px;height:52px}
-.page-tabs-inner{padding:0 16px}
-.tipster-filter{padding:10px 12px;gap:8px}
-.bet-table th,.bet-table td{padding:10px 12px;font-size:12px}
-}
-
-/* ─── MOBILE (≤640px) ─── */
-@media(max-width:640px){
-.nav-inner{padding:0 12px;height:48px;gap:8px}
-.logo-text{font-size:14px}
-.logo-badge{display:none}
-.btn-sync{padding:7px 12px;font-size:11px;gap:5px}
-.btn-sync svg{width:12px;height:12px}
-.btn-download{display:none}
-.last-synced{display:none}
-.page-tabs-inner{padding:0 8px;gap:0}
-.page-tab{padding:12px 10px;font-size:12px}
-.main-layout{padding:10px 10px 32px;gap:10px;max-width:100vw}
-.date-sidebar{gap:4px}
-.date-item{padding:7px 12px;font-size:11px;border-radius:6px}
-.toolbar{gap:6px;flex-wrap:wrap}
-.search-wrap{min-width:0;width:100%;flex:none}
-.search-wrap input{padding:10px 12px 10px 34px;font-size:16px}
-.filter-group{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;gap:2px;padding:2px}
-.filter-btn{white-space:nowrap;flex-shrink:0;padding:6px 10px;font-size:10px}
-.content{flex-direction:column;gap:10px}
-.cards-list{width:100%;min-width:0;max-height:none;overflow-y:visible}
-.cards-grid{grid-template-columns:1fr;gap:8px}
-.card{padding:14px;animation:none;opacity:1;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.05)}
-.card:active{background:#f5f5f5}
-.card h3{font-size:13px}
-.card-excerpt{font-size:11px;margin-bottom:8px}
-.reader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:#fff;border:none;border-radius:0;max-height:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.reader-header{padding:16px 16px 14px}
-.reader h2{font-size:16px}
-.reader-meta{gap:8px}
-.reader-close{width:40px;height:40px;font-size:18px;background:#f0f0f0}
-.view-tabs{margin:0 16px}
-.view-tab{padding:10px 14px;font-size:11px;touch-action:manipulation}
-.email-body{padding:16px;font-size:13px;line-height:1.7}
-.rewrite-body{padding:16px}
-.selection-analysis{font-size:12px;line-height:1.7}
-.copy-bar{padding:10px 16px}
-.all-sel-block{padding:14px 16px;animation:none;opacity:1}
-.all-sel-horse{font-size:14px}
-.all-sel-analysis{font-size:12px;line-height:1.7}
-.tipster-filter{flex-direction:column;align-items:flex-start;gap:6px;padding:10px 12px;max-width:100vw;overflow-x:hidden}
-.tipster-filter-label{margin-bottom:2px}
-.tipster-filter-actions{margin-left:0;width:100%}
-.tipster-check{padding:4px 8px}
-.tipster-check label{font-size:11px}
-.bet-table{font-size:11px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.bet-table th,.bet-table td{padding:8px 10px;font-size:11px;white-space:nowrap}
-.delete-dialog{padding:20px;max-width:300px}
-.empty{padding:50px 16px}
-.empty h3{font-size:14px}
-.empty p{font-size:12px}
-.status-bar{font-size:11px;padding:8px 12px}
-}
 </style>
 </head>
 <body>
 
-<div id="auth-gate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#f7f7f7;z-index:99999;display:flex;align-items:center;justify-content:center">
-<div style="text-align:center;font-family:'Inter',sans-serif">
-<div style="width:48px;height:48px;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px"><span style="color:#fff;font-size:20px;font-weight:700">R</span></div>
-<div style="font-size:18px;font-weight:700;letter-spacing:-0.4px;margin-bottom:6px">Racing Intel</div>
-<div style="font-size:13px;color:#999;margin-bottom:24px">Enter password to continue</div>
-<input id="auth-input" type="password" placeholder="Password" style="width:260px;padding:12px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;text-align:center" onkeydown="if(event.key==='Enter')checkAuth()">
-<br><button onclick="checkAuth()" style="margin-top:12px;padding:10px 32px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Enter</button>
-<div id="auth-error" style="color:#c33;font-size:12px;margin-top:12px;display:none">Incorrect password</div>
-</div>
-</div>
-<script>
-async function checkAuth(){
-var p=document.getElementById('auth-input').value;
-var b=new TextEncoder().encode(p);
-var h=await crypto.subtle.digest('SHA-256',b);
-var a=Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');
-if(a==='74d09daffa3dd886701a8dd4bf14d386052eec2cb8983ecf332f5c26986c4566'){
-document.getElementById('auth-gate').style.display='none';
-sessionStorage.setItem('ri-auth','1');
-}else{document.getElementById('auth-error').style.display='block';document.getElementById('auth-input').value=''}
-}
-if(sessionStorage.getItem('ri-auth')==='1'){document.addEventListener('DOMContentLoaded',function(){document.getElementById('auth-gate').style.display='none'})}
-</script>
-
 <nav>
   <div class="nav-inner">
-    <a class="logo" href="#" onclick="goHome();return false" style="text-decoration:none;color:inherit">
+    <div class="logo">
       <div class="logo-icon"><span>R</span></div>
       <span class="logo-text">Racing Intel</span>
       <span class="logo-badge">v2</span>
-    </a>
+    </div>
     <div class="nav-actions">
       <span class="last-synced" id="lastSynced"></span>
-      <button class="btn-sync" id="notifBtn" onclick="enableNotifs()" style="display:none;background:#e33">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        Alerts
+      <button class="btn-sync" id="syncBtn" onclick="requestSync()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-3.36"/><path d="M20 15a9 9 0 0 1-15.36 3.36"/></svg>
+        Sync Now
       </button>
     </div>
   </div>
@@ -340,14 +224,30 @@ function getAuthor(article) {
   return article.from || "Other";
 }
 
-// ─── READ TRACKING ───
-var readIds = {};
-try { readIds = JSON.parse(localStorage.getItem('ri-read') || '{}'); } catch(e) {}
-function markRead(id) { readIds[id] = 1; try { localStorage.setItem('ri-read', JSON.stringify(readIds)); } catch(e) {} }
-function isNew(id) { return !readIds[id]; }
-
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
+  {
+    id: "19d1f11825c4e7b4",
+    originalSubject: "Tuesday Selections. (24/03/26)",
+    from: "Everything Racing Blog <donotreply@wordpress.com>",
+    author: "EVR",
+    emailDate: "2026-03-24T08:58:54Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-25T10:39:42Z",
+    originalBody: "Tuesday 24th March 2026\n\nI head over to Taunton for one selection on Tuesday, and this comes within the 3.15, which is a Class 5 handicap hurdle that\u2019s set to be ridden over two miles and half of a furlong. Robert Walford could hold the key here with the five-year-old ST LUKES CHELSEA, who\u2019s the mount of Freddie Gingell. This gelding by Territoires will be looking to end his unwanted record of sixteen runs without success; however, this could be the time to catch him. He was only beaten by three-quarters of a length when third of ten over course and distance last time out, and that run came within Class 4 company. He\u2019s only a pound higher here, and he should give a bold account.\n\nSt Lukes Chelsea - (9/4) - (1pt) (Win)\n\n3.15 Taunton.",
+    selections: [
+      {
+        race: "Taunton 3.15",
+        horse: "St Lukes Chelsea",
+        odds: "9/4",
+        stake: "1 point win",
+        category: "",
+        analysis: "St Lukes Chelsea returns to Taunton where he shaped with considerable promise when beaten just three quarters of a length into third over course and distance last time out. It is worth noting that effort came in Class 4 company and this Robert Walford trained five year old drops into a Class 5 contest off a mark only a pound higher. The Territoires gelding has Freddie Gingell in the plate and, while sixteen runs without success reads poorly on paper, the circumstances here look very much in his favour."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
   {
     id: "19d1d7a77524db5c",
     originalSubject: "Boom Doctor - 24th March",
@@ -355,8 +255,8 @@ const ARTICLES = [
     author: "Boom Doctor",
     emailDate: "2026-03-24T01:34:14Z",
     tipDate: "2026-03-24",
-    processedAt: "2026-03-24T01:50:00Z",
-    originalBody: "BOOM DOCTORS HORSES FOR TUESDAY'S RACING\n\nGood afternoon all a very solid and profitable return last week unlucky not to bring in more profit than we did but any profit can't be sniffed at.\n\n6.30 Wolves\nShatin Venture\n14/1 - EACH WAY (B365)\n\nClassified Stakes action here and I'm willing to give the selection a chance here back at Wolves and upped to 6f.\n\nHe wasn't beaten far when last running here in a standard cl6 handicap over 5f and although briefly outpaced he appeared to pick up again close home and was also briefly short room, having to settle for 4th.\n\nHe's not the sort to win on the bridle but at this level and trying over the extra furlong he could be a value selection at likely decent opening price.\n\nAs always all selections are advised at 1point each way singles unless otherwise stated so please don't just do a multiple, singles will make you most profit year in year out here, and remember this is longshot betting you only usually need 1 place or 1 win a day for good profits.\n\nGood luck",
+    processedAt: "2026-03-25T00:40:00Z",
+    originalBody: "BOOM DOCTORS HORSES FOR TUESDAY'S RACING\n\nGood afternoon all a very solid and profitable return last week unlucky not to bring in more profit than we did but any profit can't be sniffed at.\n\n6.30 Wolves\nShatin Venture\n14/1 - EACH WAY (B365)\n- EACH WAY (SKYBET) 4 Places Paid\n\nClassified Stakes action here and I'm willing to give the selection a chance here back at Wolves and upped to 6f.\n\nHe wasn't beaten far when last running here in a standard cl6 handicap over 5f and although briefly outpaced he appeared to pick up again close home and was also briefly short room, having to settle for 4th.\n\nHe's not the sort to win on the bridle but at this level and trying over the extra furlong he could be a value selection at likely decent opening price.\n\nAs always all selections are advised at 1point each way singles unless otherwise stated so please don't just do a multiple, singles will make you most profit year in year out here, and remember this is longshot betting you only usually need 1 place or 1 win a day for good profits\n\nGood luck",
     selections: [
       {
         race: "Wolverhampton 6.30",
@@ -364,7 +264,7 @@ const ARTICLES = [
         odds: "14/1",
         stake: "1 point e/w",
         category: "",
-        analysis: "Shatin Venture shaped with considerable promise when last seen at this venue, finishing fourth in a class six handicap over the minimum trip having been briefly short of room at a critical stage. It is worth noting that he picked up again close home despite being momentarily outpaced, suggesting the step up to six furlongs could unlock further improvement. The switch to classified stakes company removes the burden of a potentially unfavourable handicap mark and at a double figure price he represents each way value for those willing to take a speculative position."
+        analysis: "Shatin Venture returns to Wolverhampton for this classified event having finished a staying on fourth over the minimum trip here last time, when briefly short of room at a crucial stage and never quite able to land a blow despite picking up again in the closing stages. It is worth noting that the step up to six furlongs looks a significant positive for a horse who appeared to be crying out for further that day. He will never be one to win on the bridle but at this level he represents considerable each way value and the price could prove generous."
       }
     ],
     doubles: "",
@@ -594,7 +494,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-25T01:50:00Z";
+var lastSyncTime = "2026-03-25T10:39:42Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
@@ -710,99 +610,6 @@ function requestSync() {
   setTimeout(function() { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15.36-3.36"/><path d="M20 15a9 9 0 0 1-15.36 3.36"/></svg>Sync Now'; }, 3000);
 }
 
-// ─── DOWNLOAD ───
-function downloadFile(filename, text) {
-  var el = document.createElement("a");
-  el.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
-  el.setAttribute("download", filename);
-  el.style.display = "none";
-  document.body.appendChild(el);
-  el.click();
-  document.body.removeChild(el);
-}
-
-function downloadSelections() {
-  var dateStr = selectedDate === "all" ? "all-dates" : selectedDate;
-  var text = buildSelectionsText();
-  if (!text) return;
-  downloadFile("selections-" + dateStr + ".txt", text);
-}
-
-function downloadBetSummary() {
-  var dateStr = selectedDate === "all" ? "all-dates" : selectedDate;
-  var text = buildBetSummaryText();
-  if (!text) return;
-  downloadFile("bet-summary-" + dateStr + ".txt", text);
-}
-
-function padRight(str, len) {
-  str = str || "";
-  while (str.length < len) str += " ";
-  return str;
-}
-
-function buildSelectionsText() {
-  var dateDisplay = selectedDate === "all" ? "All Dates" : dateLabel(selectedDate);
-  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
-  if (!sels.length) return "";
-  var text = "ALL SELECTIONS — " + dateDisplay + "\n";
-  text += "=".repeat(50) + "\n\n";
-  var lastRace = "";
-  sels.forEach(function(s) {
-    if (s.race !== lastRace) {
-      lastRace = s.race;
-      text += "\n" + s.race.toUpperCase() + "\n" + "-".repeat(30) + "\n";
-    }
-    text += s.horse;
-    if (s.category) text += " (" + s.category + ")";
-    text += " — " + s.stake + " at " + s.odds;
-    text += " [" + s.tipster + "]\n";
-    if (s.analysis) text += "  " + s.analysis + "\n";
-  });
-  return text.trim();
-}
-
-function buildBetSummaryText() {
-  var dateDisplay = selectedDate === "all" ? "All Dates" : dateLabel(selectedDate);
-  var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
-  if (!sels.length) return "";
-  var text = "BET SUMMARY — " + dateDisplay + "\n";
-  text += "=".repeat(50) + "\n\n";
-  text += padRight("Time", 8) + padRight("Race", 22) + padRight("Horse", 24) + padRight("Stake", 16) + padRight("Odds", 8) + padRight("Cat", 6) + "Tipster\n";
-  text += "-".repeat(90) + "\n";
-  sels.forEach(function(s) {
-    var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
-    text += padRight(tm ? tm[1] : "", 8);
-    text += padRight(s.race || "", 22);
-    text += padRight(s.horse || "", 24);
-    text += padRight(s.stake || "", 16);
-    text += padRight(s.odds || "", 8);
-    text += padRight(s.category || "-", 6);
-    text += s.tipster + "\n";
-  });
-  text += "-".repeat(90) + "\n";
-  text += sels.length + " selections total\n";
-  return text.trim();
-}
-
-function copySelections() {
-  var text = buildSelectionsText();
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(function() {
-    var b = document.getElementById("copySelBtn");
-    if (b) { b.textContent = "\u2713 Copied"; setTimeout(function() { b.innerHTML = '\u2398 Copy'; }, 2000); }
-  });
-}
-
-function copyBetSummary() {
-  var text = buildBetSummaryText();
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(function() {
-    var b = document.getElementById("copySumBtn");
-    if (b) { b.textContent = "\u2713 Copied"; setTimeout(function() { b.innerHTML = '\u2398 Copy'; }, 2000); }
-  });
-}
-
 // ─── COPY ───
 function copyRewrite(id) {
   var a = ARTICLES.find(function(x) { return x.id === id; }); if(!a||!a.selections) return;
@@ -861,12 +668,6 @@ function getDeduplicatedArticles() {
 }
 
 // ─── TAB SWITCHING ───
-function goHome() {
-  var today = new Date().toISOString().split("T")[0];
-  var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
-  selectedDate = hasToday ? today : "all";
-  switchTab("emails");
-}
 function switchTab(tab) {
   activeTab = tab;
   selectedId = null;
@@ -919,7 +720,7 @@ function renderEmails() {
   tb += '</div>';
 
   var html = '<div class="toolbar">' + tb + '</div>';
-  html += '<div class="content' + (sel ? ' reader-open' : '') + '">';
+  html += '<div class="content">';
 
   if (!filtered.length) {
     html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '"><div class="empty"><h3>' + (ARTICLES.length === 0 ? 'Nothing here yet' : 'No results') + '</h3><p>' + (ARTICLES.length === 0 ? 'Hit Sync to pull emails.' : 'Try different search terms or author.') + '</p></div></div>';
@@ -929,7 +730,6 @@ function renderEmails() {
       var sc = a.selections ? a.selections.length : 0;
       var auth = getAuthor(a);
       html += '<div class="card' + (selectedId === a.id ? ' selected' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="selectCard(\'' + a.id + '\')">';
-      if (isNew(a.id)) html += '<span class="new-badge">New</span>';
       html += '<button class="btn-delete" onclick="event.stopPropagation();confirmDelete(\'' + a.id + '\')" title="Remove">&#10005;</button>';
       html += '<div class="card-header"><span class="card-from">' + escapeHtml(auth) + '</span><span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
       html += '<h3>' + escapeHtml(a.originalSubject) + '</h3>';
@@ -944,7 +744,7 @@ function renderEmails() {
   if (sel) {
     var auth = getAuthor(sel);
     html += '<div class="reader">';
-    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px"><button onclick="selectCard(null)" style="background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0 0 10px;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Back to emails</button>';
+    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px">';
     html += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
     html += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
     html += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
@@ -989,55 +789,14 @@ function renderEmails() {
   return html;
 }
 
-// ─── HOT CLASH DETECTION ───
-function findHotClashes(sels) {
-  var map = {};
-  sels.forEach(function(s) {
-    var key = (s.race + '|' + s.horse).toLowerCase().replace(/\s+/g, ' ').trim();
-    if (!map[key]) map[key] = { race: s.race, horse: s.horse, tipsters: [], odds: s.odds };
-    if (map[key].tipsters.indexOf(s.tipster) === -1) map[key].tipsters.push(s.tipster);
-  });
-  var clashes = [];
-  for (var k in map) {
-    if (map[k].tipsters.length >= 2) clashes.push(map[k]);
-  }
-  clashes.sort(function(a, b) { return b.tipsters.length - a.tipsters.length; });
-  return clashes;
-}
-
-function isHotClash(race, horse, clashes) {
-  var key = (race + '|' + horse).toLowerCase().replace(/\s+/g, ' ').trim();
-  for (var i = 0; i < clashes.length; i++) {
-    var ck = (clashes[i].race + '|' + clashes[i].horse).toLowerCase().replace(/\s+/g, ' ').trim();
-    if (ck === key) return clashes[i];
-  }
-  return null;
-}
-
 // ─── RENDER: ALL SELECTIONS TAB ───
 function renderAllSelections() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
-  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No selections</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
-
-  // Hot Clash banners
-  if (clashes.length) {
-    clashes.forEach(function(c) {
-      html += '<div class="hot-clash-banner">';
-      html += '<div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
-      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
-      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + escapeHtml(c.odds) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
-      html += '<div class="hot-clash-tipsters">';
-      c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; });
-      html += '</div></div>';
-    });
-  }
-
-  html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySelBtn" onclick="copySelections()">\u2398 Copy</button><button class="btn-download" onclick="downloadSelections()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   var lastRace = "";
   sels.forEach(function(s, i) {
     var raceKey = s.race;
@@ -1045,12 +804,10 @@ function renderAllSelections() {
       lastRace = raceKey;
       html += '<div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:#999;letter-spacing:0.8px;text-transform:uppercase;padding:16px 0 6px">' + escapeHtml(raceKey) + '</div>';
     }
-    var clash = isHotClash(s.race, s.horse, clashes);
-    html += '<div class="all-sel-block' + (clash ? ' is-hot-clash' : '') + '" style="animation-delay:' + (i * 0.02) + 's">';
+    html += '<div class="all-sel-block" style="animation-delay:' + (i * 0.02) + 's">';
     html += '<div style="display:flex;justify-content:space-between;align-items:center">';
     html += '<div>';
     html += '<span class="all-sel-horse">' + escapeHtml(s.horse) + '</span>';
-    if (clash) html += '<span style="margin-left:8px;font-size:13px">&#128293;</span>';
     if (s.category) html += '<span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '<span class="tipster-badge">' + escapeHtml(s.tipster) + '</span>';
     html += '</div>';
@@ -1067,38 +824,20 @@ function renderAllSelections() {
 // ─── RENDER: BET SUMMARY TAB ───
 function renderBetSummary() {
   var sels = getSelectionsForDate(selectedDate).filter(function(s) { return isTipsterSelected(s.tipster); });
-  var clashes = findHotClashes(sels);
   var html = renderTipsterFilter();
   if (!sels.length) {
     html += '<div class="empty"><h3>No bets</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
-
-  // Hot Clash banners
-  if (clashes.length) {
-    clashes.forEach(function(c) {
-      html += '<div class="hot-clash-banner">';
-      html += '<div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
-      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
-      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
-      html += '<div class="hot-clash-tipsters">';
-      c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; });
-      html += '</div></div>';
-    });
-  }
-
-  html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySumBtn" onclick="copyBetSummary()">\u2398 Copy</button><button class="btn-download" onclick="downloadBetSummary()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   html += '<table class="bet-table">';
   html += '<thead><tr><th>Time</th><th>Race</th><th>Horse</th><th>Stake</th><th>Odds</th><th>Category</th><th>Tipster</th></tr></thead>';
   html += '<tbody>';
   sels.forEach(function(s) {
-    var clash = isHotClash(s.race, s.horse, clashes);
-    html += '<tr' + (clash ? ' style="background:#fff8f0"' : '') + '>';
+    html += '<tr>';
     var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
     html += '<td style="font-weight:600;white-space:nowrap">' + (tm ? escapeHtml(tm[1]) : '') + '</td>';
     html += '<td>' + escapeHtml(s.race) + '</td>';
     html += '<td style="font-weight:600">' + escapeHtml(s.horse);
-    if (clash) html += ' &#128293;';
     if (s.category) html += ' <span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '</td>';
     html += '<td>' + escapeHtml(s.stake) + '</td>';
@@ -1135,57 +874,12 @@ function render() {
   }
 }
 
-function selectCard(id) {
-  selectedId = selectedId === id ? null : id;
-  if(id) { markRead(id); if(!activeView[id]) activeView[id] = "original"; }
-  render();
-  // On mobile, scroll reader into view if opened
-  if(selectedId) {
-    var r = document.querySelector('.reader');
-    if(r) r.scrollTop = 0;
-  }
-}
+function selectCard(id) { selectedId = selectedId === id ? null : id; if(id && !activeView[id]) activeView[id] = "original"; render(); }
 function setView(id, v) { activeView[id] = v; render(); }
 function setAuthor(a) { filterAuthor = a; render(); }
 
 setInterval(function() { location.reload(); }, 300000);
 render();
-
-// ─── SERVICE WORKER & NOTIFICATIONS ───
-function enableNotifs() {
-  if ('Notification' in window) {
-    Notification.requestPermission().then(function(p) {
-      if (p === 'granted') {
-        document.getElementById('notifBtn').style.display = 'none';
-        // Send a test notification to confirm it works
-        if (navigator.serviceWorker.controller) {
-          new Notification('Racing Intel', { body: 'Notifications enabled — you\'ll be alerted when new tips arrive.' });
-        }
-      }
-    });
-  }
-}
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(function(reg) {
-    var count = ARTICLES.length;
-    if (reg.active) {
-      reg.active.postMessage({ type: 'SET_ARTICLE_COUNT', count: count });
-    }
-    navigator.serviceWorker.ready.then(function(r) {
-      r.active.postMessage({ type: 'SET_ARTICLE_COUNT', count: count });
-      setInterval(function() {
-        r.active.postMessage({ type: 'CHECK_NEW' });
-      }, 300000);
-    });
-  });
-
-  // Show the Alerts button if permission not yet granted
-  if ('Notification' in window && Notification.permission !== 'granted') {
-    var nb = document.getElementById('notifBtn');
-    if (nb) nb.style.display = 'flex';
-  }
-}
 </script>
 </body>
 </html>
