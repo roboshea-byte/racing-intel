@@ -1129,7 +1129,13 @@ function render() {
   if (activeTab === "emails") {
     var si = document.getElementById("searchInput");
     if (si) {
-      si.addEventListener("input", function(e) { searchQuery = e.target.value; render(); });
+      si.addEventListener("input", function(e) {
+        searchQuery = e.target.value;
+        var cursorPos = e.target.selectionStart;
+        render();
+        var newSi = document.getElementById("searchInput");
+        if (newSi) { newSi.focus(); newSi.setSelectionRange(cursorPos, cursorPos); }
+      });
     }
   }
 }
