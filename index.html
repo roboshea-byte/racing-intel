@@ -258,6 +258,28 @@ function isNew(id) { return !readIds[id]; }
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    id: "19d1f8ba64aecabe",
+    originalSubject: "Apex Bet - 24th March",
+    from: "BetHub <tips@bethub.pro>",
+    author: "Apex Bet",
+    emailDate: "2026-03-24T11:12:18Z",
+    tipDate: "2026-03-24",
+    processedAt: "2026-03-24T11:45:00Z",
+    originalBody: "APEX BET\n\nWOLVERHAMPTON 4.55 \u2013 ANGRY ANT (11/1) 888SPORT 3 PLACES\nAngry Ant is much better than the bare result suggested last time and has dropped to a very workable mark. She had no luck from a wide position in a slowly run race but shaped with a fair bit of promise. Better drawn here and in good order, she looks a solid each way play.\n0.75 point e/w.\n\nWill\nApex Bet",
+    selections: [
+      {
+        race: "Wolverhampton 4.55",
+        horse: "Angry Ant",
+        odds: "11/1",
+        stake: "0.75 point e/w",
+        category: "",
+        analysis: "Angry Ant is considerably better than the bare result suggested on her most recent start, having endured a torrid passage from a wide draw in what was a slowly run affair that placed her at a significant disadvantage throughout. It is worth noting that she has dropped to a very workable mark as a consequence, and connections have secured a far kinder draw on this occasion. The form received a boost from the manner in which she shaped despite those unfavourable circumstances, and with Jamie Osborne's yard in fine fettle she looks a solid each way proposition at a double figure price."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
     id: "19d1f8314a2e5bc8",
     originalSubject: "Today's Qualifiers [ 24th March ]",
     from: "BetRate <admin@betrate.co.uk>",
@@ -1072,7 +1094,7 @@ function selectCard(id) {
   if(selectedId) { var r = document.querySelector('.reader'); if(r) r.scrollTop = 0; }
 }
 function setView(id, v) { activeView[id] = v; render(); }
-function setAuthor(a) { filterAuthor = a; render(); }
+function setAuthor(a) { filterAuthor = a; selectedId = null; render(); }
 
 setInterval(function() { location.reload(); }, 300000);
 render();
