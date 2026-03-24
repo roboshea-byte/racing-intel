@@ -431,6 +431,36 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    id: "19d221cc8735f58f",
+    originalSubject: "Zenith Betting - 25th March",
+    from: "The Inside Rail <info@theinsiderail.co.uk>",
+    author: "Zenith Betting",
+    emailDate: "2026-03-24T23:10:04Z",
+    tipDate: "2026-03-25",
+    processedAt: "2026-03-24T23:20:13Z",
+    originalBody: "ZENITH BETTING\r\n\r\nHexham 3.41 - Planned Paradise - 2 point win at 3/1 (General)\r\nPlanned Paradise looks the right play in a race where top weights have a poor recent record in these extreme distance handicaps. He arrives in strong form after a comfortable win at Bangor, where the drop in class suited and he travelled with real authority - That effort suggested there is more to come. The quicker ground should be no issue and Christian Williams\u2019 runners often thrive in staying handicap chases at this time of year.\r\n\r\nKempton 6.00 - Boujee Gold - 0.5 point e/w at 20/1 (Paddy, Skybet - 3 places)\r\nBoujee Gold is better than she has shown on recent starts and there are valid excuses for those below par efforts, including rides that have not suited her run style. She now drops to a much more workable mark and the return to a mile should be a positive. She has the ability to outrun her price if things fall right and is worth a small play despite being pretty weak in the market throughout the afternoon.",
+    selections: [
+      {
+        race: "Hexham 3.41",
+        horse: "Planned Paradise",
+        odds: "3/1",
+        stake: "2 points win",
+        category: "",
+        analysis: "Planned Paradise shapes as the right horse in this marathon handicap chase, given that top weights have a notably poor record in these extreme distance events at Hexham. It is worth noting that he arrives here on the back of a comfortable victory at Bangor where the drop in class proved a positive and he travelled with real authority throughout. That effort suggested there is more improvement to come. The quicker ground should present no issues and Christian Williams has a fine record with staying chasers at this time of year."
+      },
+      {
+        race: "Kempton 6.00",
+        horse: "Boujee Gold",
+        odds: "20/1",
+        stake: "0.5 point e/w",
+        category: "",
+        analysis: "Boujee Gold is considerably better than her recent form figures would suggest, with valid excuses for those below par efforts not least rides that simply failed to suit her preferred run style. It is worth noting that she now drops to a much more workable mark and the return to a mile looks a positive. The form received a boost when you consider the ability she has shown at her best and she has the talent to outrun her price significantly if things fall right on the night."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+  {
     id: "19d2203f497fc8d2",
     originalSubject: "Today's Qualifiers [ 25th March ]",
     from: "BetRate <admin@betrate.co.uk>",
@@ -1156,7 +1186,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-24T22:55:11Z";
+var lastSyncTime = "2026-03-24T23:20:13Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
