@@ -2136,31 +2136,23 @@ function renderBetSummary() {
     html += '<div class="empty"><h3>No bets</h3><p>No tips found for the selected tipsters.</p></div>';
     return html;
   }
-  if (clashes.length) {
-    clashes.forEach(function(c) {
-      html += '<div class="hot-clash-banner"><div class="hot-clash-title"><span class="hot-clash-fire">&#128293;</span> Hot Clash</div>';
-      html += '<div class="hot-clash-horse">' + escapeHtml(c.horse) + '</div>';
-      html += '<div class="hot-clash-details">' + escapeHtml(c.race) + ' &middot; ' + c.tipsters.length + ' tipsters agree</div>';
-      html += '<div class="hot-clash-tipsters">'; c.tipsters.forEach(function(t) { html += '<span class="hot-clash-tipster">' + escapeHtml(t) + '</span>'; }); html += '</div></div>';
-    });
-  }
   html += '<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn-download" id="copySumBtn" onclick="copyBetSummary()">\u2398 Copy</button><button class="btn-download" onclick="downloadBetSummary()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download .txt</button></div>';
   html += '<table class="bet-table">';
-  html += '<thead><tr><th>Time</th><th>Race</th><th>Horse</th><th>Stake</th><th>Odds</th><th>Category</th><th>Tipster</th></tr></thead>';
+  html += '<thead><tr><th>Time</th><th>Venue</th><th>Selection</th><th>Stake</th><th>Odds</th><th>Tipster</th></tr></thead>';
   html += '<tbody>';
   sels.forEach(function(s) {
     var clash = isHotClash(s.race, s.horse, clashes);
     html += '<tr' + (clash ? ' style="background:#fff8f0"' : '') + '>';
     var tm = (s.race || "").match(/(\d{1,2}[\.:]\d{2})/);
+    var venue = (s.race || "").replace(/\s*\d{1,2}[\.:]\d{2}\s*/, ' ').trim();
     html += '<td style="font-weight:600;white-space:nowrap">' + (tm ? escapeHtml(tm[1]) : '') + '</td>';
-    html += '<td>' + escapeHtml(s.race) + '</td>';
+    html += '<td>' + escapeHtml(venue) + '</td>';
     html += '<td style="font-weight:600">' + escapeHtml(s.horse);
     if (clash) html += ' &#128293;';
     if (s.category) html += ' <span class="category-badge">' + escapeHtml(s.category) + '</span>';
     html += '</td>';
     html += '<td>' + escapeHtml(s.stake) + '</td>';
     html += '<td style="font-weight:600">' + escapeHtml(s.odds) + '</td>';
-    html += '<td>' + escapeHtml(s.category || '-') + '</td>';
     html += '<td><span class="tipster-badge">' + escapeHtml(s.tipster) + '</span></td>';
     html += '</tr>';
   });
