@@ -121,7 +121,7 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .card:hover{border-color:#000;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
 .card.selected{border-color:#000;background:#fff}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.card-from{font-size:11px;font-weight:600;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%}
+.card-from{font-size:10px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%;padding:3px 10px;border-radius:5px;font-family:'Inter',sans-serif}
 .card-time{font-size:11px;font-weight:500;color:#ccc}
 .card h3{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#111;line-height:1.35;margin-bottom:8px;letter-spacing:-0.2px}
 .card-excerpt{font-size:12px;color:#999;line-height:1.55;margin-bottom:12px;font-weight:300}
@@ -486,6 +486,31 @@ function getStandAloneTipsters() {
   var grouped = {};
   for (var g in TIPSTER_GROUPS) { TIPSTER_GROUPS[g].forEach(function(t) { grouped[t] = true; }); }
   return getAllTipsters().filter(function(t) { return !grouped[t]; });
+}
+
+// Colour palette for tipster pills — keyed by META_GROUPS name
+const GROUP_COLOURS = {
+  "My Tipsters":      { bg: "#16a34a", text: "#fff" },
+  "Premium Tipsters": { bg: "#dc2626", text: "#fff" },
+  "Online Tipsters":  { bg: "#2563eb", text: "#fff" }
+};
+const DEFAULT_COLOUR = { bg: "#6b7280", text: "#fff" }; // grey for ungrouped
+
+function getTipsterColour(name) {
+  for (var g in META_GROUPS) {
+    if (META_GROUPS[g].indexOf(name) !== -1) return GROUP_COLOURS[g] || DEFAULT_COLOUR;
+  }
+  return DEFAULT_COLOUR;
+}
+
+function tipsterPill(name) {
+  var c = getTipsterColour(name);
+  return '<span class="tipster-badge" style="background:' + c.bg + ';color:' + c.text + '">' + escapeHtml(name) + '</span>';
+}
+
+function tipsterPillFrom(name) {
+  var c = getTipsterColour(name);
+  return '<span class="card-from" style="background:' + c.bg + ';color:' + c.text + '">' + escapeHtml(name) + '</span>';
 }
 
 // ─── READ TRACKING ───
@@ -1986,7 +2011,7 @@ function renderEmails() {
       html += '<div class="card' + (selectedId === a.id ? ' selected' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="selectCard(\'' + a.id + '\')">';
       if (isNew(a.id)) html += '<span class="new-badge">New</span>';
       html += '<button class="btn-delete" onclick="event.stopPropagation();confirmDelete(\'' + a.id + '\')" title="Remove">&#10005;</button>';
-      html += '<div class="card-header"><span class="card-from">' + escapeHtml(auth) + '</span><span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
+      html += '<div class="card-header">' + tipsterPillFrom(auth) + '<span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
       html += '<h3>' + escapeHtml(a.originalSubject) + '</h3>';
       html += '<p class="card-excerpt">' + escapeHtml((a.originalBody || "").substring(0, sel ? 90 : 150)) + '...</p>';
       html += '<div class="card-footer"><span class="card-sels">' + sc + ' sel' + (sc !== 1 ? 's' : '') + '</span></div>';
@@ -2121,7 +2146,7 @@ function renderAllSelections() {
     html += '<div style="display:flex;justify-content:space-between;align-items:center"><div>';
     html += '<span class="all-sel-horse">' + escapeHtml(s.horse) + '</span>';
     if (s.category) html += '<span class="category-badge">' + escapeHtml(s.category) + '</span>';
-    html += '<span class="tipster-badge">' + escapeHtml(s.tipster) + '</span>';
+    html += tipsterPill(s.tipster);
     html += '</div></div>';
     html += '<div class="all-sel-details">' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds) + '</div>';
     if (s.analysis) { html += '<div class="all-sel-analysis">' + escapeHtml(s.analysis) + '</div>'; }
@@ -2156,7 +2181,7 @@ function renderBetSummary() {
     html += '</td>';
     html += '<td>' + escapeHtml(s.stake) + '</td>';
     html += '<td style="font-weight:600">' + escapeHtml(s.odds) + '</td>';
-    html += '<td><span class="tipster-badge">' + escapeHtml(s.tipster) + '</span></td>';
+    html += '<td>' + tipsterPill(s.tipster) + '</td>';
     html += '</tr>';
   });
   html += '</tbody></table>';
