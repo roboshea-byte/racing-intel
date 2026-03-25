@@ -455,6 +455,24 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    id: "19d261631be86063",
+    originalSubject: "New Horse Racing Tip",
+    from: "Ben from The Racing Analyst",
+    author: "Ben",
+    emailDate: "2026-03-25T17:41:16Z",
+    tipDate: "2026-03-26",
+    processedAt: "2026-03-25T21:05:45Z",
+    originalBody: "26TH MARCH 2026\n\nIt's been a very quiet week due to the standard of racing. In truth, it isn't a great deal better on Thursday, but there are a couple of open races worth chancing.\n\n4.20 CHEPSTOW - LAURIER DES OBEAUX 5/1 1PT WIN\nWe've not seen a great deal from Laurier Des Obeaux up to now, but I suspect that he's merely been running for experience and we're possibly about to see a bit more of what this horse is about on handicap debut. He's been running ok, without ever looking like threatening, but he's done enough to suggest that the mark he's been given here might be a little lenient. Two starts ago, we possibly saw his best run in terms of form. Beaten 16 lengths into 5th that day at Newbury, the form has worked out well with the 1st, 3rd and 4th all winning since, the 4th is now rated 116 while the winner 135. He was pitched into a deep novice hurdle last time out, again at Newbury, with the 2nd horse rated 132 and the winner highly regarded. That run came after 2 months off, so should have put him spot on for this and this handicap mark of 105, on the bare form, is certainly a winnable one. The booking of Tom Cannon, who has a 21% strike rate for the yard this year and is only here for this ride, looks a noteworthy one too. The yard are in good form.\n\n4.30 WARWICK - GET UP MUSH 7/2 1PT WIN NAP\nA bit gutted that the price has shortened so much, but I can understand why, he looks like he's been trained for this. In honesty, on what he's done so far this season, there's nothing to recommend about him. However, he clearly came into this season after setback because he's missed the previous 15 months, having previously looked very progressive. This year has been dreadful, but there's reason to ignore it. He was well entitled to need the first run, the middle two came on soft ground which he clearly doesn't like and the last came going right handed (he's never run well that way round). Today he's back on a left handed track, he's back on good ground and he's well suited by Warwick's flat track too, having won here on his only previous visit. Rated 110, he's 8lb below his last winning mark and, if I'm right about the race being a target, he should be hard to beat for a Skelton yard that are weeks away, hopefully, from that maiden champion trainer title.\n\n7.30 CHELMSFORD - CLOVER TIME 10/3 1PT WIN\nI don't like backing horses with a row of 2s and 3s next to their name, especially when they've never won a race. However, Clover Time might just fall in here. He's the only horse in this race that hasn't just made the running, but has raced handy too and, granted a soft lead, he might not be caught around this front runners track. He's had a layoff since his last run, to freshen up, and is here running under Rab Havlin, for Rab's only ride on the card. He's gone well fresh, stall 1 is perfect and he's found himself in a race full of horses who also don't like winning. If he can't win this, he won't win any.\n\n0.25PT WIN TRIXIE\n\nANTE POST ALREADY ADVISED\n28TH MARCH - LINCOLN HANDICAP - ETERNAL FORCE 10/1 1PT WIN\n11TH APRIL - GRAND NATIONAL - CAPTAIN CODY 25/1 1PT WIN\n\nEnjoy and good luck!\nBen at The Racing Analyst",
+    selections: [
+      { race: "Chepstow 4.20", horse: "Laurier Des Obeaux", odds: "5/1", stake: "1 point win", category: "", analysis: "Laurier Des Obeaux makes considerable appeal on handicap debut off what could prove a lenient mark of 105. It is worth noting that two starts ago at Newbury, when beaten 16 lengths into fifth, the form has worked out handsomely with the first, third and fourth all winning subsequently. The booking of Tom Cannon, who carries a 21% strike rate for the yard and travels solely for this ride, is a particularly telling move. The yard are in fine fettle and this fellow could be well ahead of his mark. Don't say you weren't warned." },
+      { race: "Warwick 4.30", horse: "Get Up Mush", odds: "7/2", stake: "1 point win", category: "NAP", analysis: "Get Up Mush looks to have been laid out for this assignment and the market has cottoned on accordingly. It is worth noting that his dismal campaign can be explained away entirely, with the return run coming after 15 months off, the middle two outings on testing ground that clearly does not suit, and his most recent effort going right handed where he has never performed. Back on a left handed track, on good ground, at a venue where he won on his only previous visit, conditions are ideal. Rated 8lb below his last winning mark for a Skelton yard eyeing that champion trainer title, he should prove very hard to beat." },
+      { race: "Chelmsford 7.30", horse: "Clover Time", odds: "10/3", stake: "1 point win", category: "", analysis: "Clover Time represents a sporting interest in what is a race full of habitual non-winners. It is worth noting that he is the only runner in the field who has shown both the ability and the tactical speed to race prominently, and granted a soft lead around this front runners track he could prove very difficult to peg back. The form received a boost from a freshening break since his last outing and the booking of Rab Havlin, who rides only this horse on the card, is a quietly significant move. Stall one is ideal for his racing style and this looks a gilt edged opportunity." }
+    ],
+    doubles: "0.25pt win Trixie (Laurier Des Obeaux, Get Up Mush, Clover Time)",
+    antePost: "Lincoln Handicap (28th March) - Eternal Force 10/1 1pt win | Grand National (11th April) - Captain Cody 25/1 1pt win"
+  },
+
+  {
     id: "19d2505e4aa8d3ab",
     originalSubject: "Form Guru - 25th March",
     from: "The Inside Rail",
@@ -1406,7 +1424,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-25T20:43:49Z";
+var lastSyncTime = "2026-03-25T21:05:45Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
