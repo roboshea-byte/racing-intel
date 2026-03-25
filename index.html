@@ -1573,11 +1573,17 @@ var activeView = {};
 var searchQuery = "";
 var filterAuthor = "All";
 var activeTab = "emails";
-var selectedDate = (function() {
+function getDefaultDate() {
   var today = new Date().toISOString().split("T")[0];
+  var tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+  var hasTomorrow = ARTICLES.some(function(a) { return a.tipDate === tomorrow; });
+  if (hasTomorrow) return tomorrow;
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
-  return hasToday ? today : "all";
-})();
+  if (hasToday) return today;
+  var dates = getTipDates();
+  return dates.length ? dates[0].date : "all";
+}
+var selectedDate = getDefaultDate();
 var lastSyncTime = "2026-03-25T22:45:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
@@ -1916,10 +1922,7 @@ function hardRefresh() {
   setTimeout(function() { location.reload(true); }, 300);
 }
 function goHome() {
-  var today = new Date().toISOString().split("T")[0];
-  var dates = getTipDates();
-  var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
-  selectedDate = hasToday ? today : (dates.length ? dates[0].date : "all");
+  selectedDate = getDefaultDate();
   filterAuthor = "All";
   selectedId = null;
   switchTab("emails");
@@ -2651,10 +2654,7 @@ setInterval(function() { location.reload(); }, 300000);
 try {
   if (sessionStorage.getItem("ri-go-home")) {
     sessionStorage.removeItem("ri-go-home");
-    var today = new Date().toISOString().split("T")[0];
-    var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
-    var dates = getTipDates();
-    selectedDate = hasToday ? today : (dates.length ? dates[0].date : "all");
+    selectedDate = getDefaultDate();
     filterAuthor = "All";
     selectedId = null;
     activeTab = "emails";
