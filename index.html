@@ -91,7 +91,7 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 
 /* Toolbar */
 .toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
-.search-wrap{flex:1;min-width:200px;position:relative;display:flex;align-items:center}
+.search-wrap{width:200px;min-width:140px;position:relative;display:flex;align-items:center;flex-shrink:1}
 .search-wrap svg{position:absolute;left:13px;opacity:0.25}
 .search-wrap input{width:100%;padding:11px 14px 11px 36px;background:#fff;border:1px solid #eee;border-radius:9px;color:#000;font-size:13px;font-family:inherit;font-weight:400;transition:all .12s}
 .search-wrap input:focus{outline:none;border-color:#000}
@@ -207,6 +207,11 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .tipster-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#f3f3f3;border-radius:6px;font-size:11px;font-weight:600;color:#333;font-family:'Inter',sans-serif}
 .tipster-tag .tag-x{cursor:pointer;color:#999;font-size:10px;margin-left:2px}
 .tipster-tag .tag-x:hover{color:#c33}
+
+/* Group filter pills */
+.group-pill{padding:6px 12px;background:#fff;border:1.5px solid #e0e0e0;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;color:#555;transition:all .12s;white-space:nowrap;user-select:none;flex-shrink:0}
+.group-pill:hover{border-color:#bbb;background:#fafafa}
+.group-pill.active{background:#000;color:#fff;border-color:#000}
 
 /* Delete button */
 .btn-delete{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:#ccc;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .1s;opacity:0}
@@ -363,6 +368,7 @@ body{overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
 .add-data-field select,.add-data-field input{width:100%}
 .add-data-textarea{min-height:200px;font-size:16px}
 .add-data-actions{flex-wrap:wrap}
+.group-pill{padding:5px 9px;font-size:10px}
 }
 </style>
 </head>
@@ -433,6 +439,10 @@ const AUTHOR_MAP = {
   "Boom Doctor": ["Boom Doctor", "Boom"],
   "Paul Kealy": ["Paul Kealy", "PPR", "ppr72mail"],
   "Declan Phelan": ["Declan Phelan", "declanphelan"],
+  "David Jennings": ["David Jennings", "davidjennings"],
+  "Joe Napier": ["Joe Napier", "joenapier"],
+  "Matthew Sutcliffe": ["Matthew Sutcliffe", "matthewsutcliffe"],
+  "Sporting Life": ["Sporting Life", "sportinglife"],
 };
 
 function getAuthor(article) {
@@ -445,6 +455,37 @@ function getAuthor(article) {
     }
   }
   return article.from || "Other";
+}
+
+// ─── TIPSTER GROUPS ───
+// To add a tipster: add them to AUTHOR_MAP above, then add to the relevant group(s) below
+const TIPSTER_GROUPS = {
+  "TIR": ["Form Guru", "Zenith Betting", "GM", "BetHub", "Bet Sage", "Target Racing", "Apex Bet", "A-Star Tips", "Early Bird"],
+  "Racing Post": ["David Jennings", "Pricewise", "Harry Wilson", "Paul Kealy", "Joe Napier", "Robbie Wilders", "Rodway"]
+};
+
+const META_GROUPS = {
+  "My Tipsters": ["Form Guru", "Zenith Betting", "GM", "Bet Sage", "Target Racing", "Apex Bet", "A-Star Tips", "Early Bird", "BetRev", "BetRate", "IQ Racing"],
+  "Premium Tipsters": ["Snowy", "From The Stables", "Declan Phelan", "Stephen Harris", "Ben", "Boom Doctor"],
+  "Online Tipsters": ["Andrew Mount", "Matthew Sutcliffe", "Sporting Life", "EVR", "David Jennings", "Pricewise", "Harry Wilson", "Paul Kealy", "Joe Napier", "Robbie Wilders", "Rodway"]
+};
+
+// Pills shown in the filter bar — edit this list to add/remove quick-filter buttons
+const PILL_FILTERS = [
+  { label: "All", key: "all" },
+  { label: "My Tipsters", key: "My Tipsters", type: "meta" },
+  { label: "Premium", key: "Premium Tipsters", type: "meta" },
+  { label: "Online", key: "Online Tipsters", type: "meta" },
+  { label: "TIR", key: "TIR", type: "group" },
+  { label: "BetHub", key: "BetHub", type: "single" },
+  { label: "Racing Post", key: "Racing Post", type: "group" }
+];
+
+// Tipsters not in any TIPSTER_GROUPS entry are "Stand Alone"
+function getStandAloneTipsters() {
+  var grouped = {};
+  for (var g in TIPSTER_GROUPS) { TIPSTER_GROUPS[g].forEach(function(t) { grouped[t] = true; }); }
+  return getAllTipsters().filter(function(t) { return !grouped[t]; });
 }
 
 // ─── READ TRACKING ───
@@ -1539,6 +1580,7 @@ var selectedDate = (function() {
 })();
 var lastSyncTime = "2026-03-25T22:45:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
+var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
 function getAllTipsters() {
   var seen = {};
@@ -1547,6 +1589,10 @@ function getAllTipsters() {
     var au = getAuthor(a);
     if (!seen[au]) { seen[au] = true; list.push(au); }
   });
+  var allGrouped = [];
+  for (var g in TIPSTER_GROUPS) { allGrouped = allGrouped.concat(TIPSTER_GROUPS[g]); }
+  for (var m in META_GROUPS) { allGrouped = allGrouped.concat(META_GROUPS[m]); }
+  allGrouped.forEach(function(t) { if (!seen[t]) { seen[t] = true; list.push(t); } });
   return list.sort();
 }
 
@@ -1559,12 +1605,14 @@ function initTipsters() {
 function toggleTipster(name) {
   initTipsters();
   selectedTipsters[name] = !selectedTipsters[name];
+  activeGroupFilter = detectActiveGroup();
   render();
 }
 
 function setAllTipsters(val) {
   initTipsters();
   getAllTipsters().forEach(function(t) { selectedTipsters[t] = val; });
+  activeGroupFilter = val ? "all" : "none";
   render();
 }
 
@@ -1573,34 +1621,94 @@ function isTipsterSelected(name) {
   return selectedTipsters[name] !== false;
 }
 
-function renderTipsterFilter() {
+function selectFilterGroup(groupKey) {
+  initTipsters();
+  getAllTipsters().forEach(function(t) { selectedTipsters[t] = false; });
+  if (groupKey === "all") {
+    getAllTipsters().forEach(function(t) { selectedTipsters[t] = true; });
+  } else if (META_GROUPS[groupKey]) {
+    META_GROUPS[groupKey].forEach(function(t) { selectedTipsters[t] = true; });
+  } else if (TIPSTER_GROUPS[groupKey]) {
+    TIPSTER_GROUPS[groupKey].forEach(function(t) { selectedTipsters[t] = true; });
+  } else {
+    selectedTipsters[groupKey] = true;
+  }
+  activeGroupFilter = groupKey;
+  render();
+}
+
+function detectActiveGroup() {
+  initTipsters();
+  var tipsters = getAllTipsters();
+  var selected = tipsters.filter(function(t) { return selectedTipsters[t]; });
+  if (selected.length === tipsters.length) return "all";
+  if (selected.length === 0) return "none";
+  for (var m in META_GROUPS) {
+    var mg = META_GROUPS[m];
+    if (selected.length === mg.length && mg.every(function(t) { return selectedTipsters[t]; }) && selected.every(function(t) { return mg.indexOf(t) !== -1; })) return m;
+  }
+  for (var g in TIPSTER_GROUPS) {
+    var gg = TIPSTER_GROUPS[g];
+    if (selected.length === gg.length && gg.every(function(t) { return selectedTipsters[t]; }) && selected.every(function(t) { return gg.indexOf(t) !== -1; })) return g;
+  }
+  return "custom";
+}
+
+function renderGroupPills() {
+  var html = '';
+  PILL_FILTERS.forEach(function(pf) {
+    var safeKey = escapeHtml(pf.key).replace(/'/g, "\\'");
+    html += '<span class="group-pill' + (activeGroupFilter === pf.key ? ' active' : '') + '" onclick="selectFilterGroup(\'' + safeKey + '\')">' + escapeHtml(pf.label) + '</span>';
+  });
+  return html;
+}
+
+function renderTipsterDropdown() {
   initTipsters();
   var tipsters = getAllTipsters();
   var total = tipsters.length;
   var checked = tipsters.filter(function(t) { return selectedTipsters[t]; });
   var allChecked = checked.length === total;
   var countLabel = allChecked ? 'All' : checked.length + '/' + total;
-  var html = '<div class="tipster-filter">';
-  html += '<div class="tipster-dd-wrap" id="tipsterDDWrap">';
-  html += '<button class="tipster-dd-btn" onclick="toggleTipsterDD(event)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>Filter Tipsters <span class="tipster-dd-count">' + countLabel + '</span></button>';
+
+  var html = '<div class="tipster-dd-wrap" id="tipsterDDWrap">';
+  html += '<button class="tipster-dd-btn" onclick="toggleTipsterDD(event)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>Tipsters <span class="tipster-dd-count">' + countLabel + '</span></button>';
   html += '<div class="tipster-dd-panel" id="tipsterDDPanel">';
-  tipsters.forEach(function(t) {
-    var isChecked = selectedTipsters[t];
-    html += '<div class="tipster-dd-item' + (isChecked ? ' checked' : '') + '" onclick="toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
-    html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' onclick="event.stopPropagation();toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
-    html += escapeHtml(t) + '</div>';
-  });
-  html += '<div class="tipster-dd-actions">';
+  html += '<div class="tipster-dd-actions" style="border-top:none;margin-top:0;border-bottom:1px solid #eee;padding-bottom:8px">';
   html += '<button onclick="setAllTipsters(true)">All</button>';
   html += '<button onclick="setAllTipsters(false)">None</button>';
-  html += '</div></div></div>';
-  if (!allChecked && checked.length > 0) {
-    html += '<div class="tipster-tags">';
-    checked.forEach(function(t) {
-      html += '<span class="tipster-tag">' + escapeHtml(t) + ' <span class="tag-x" onclick="toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">&times;</span></span>';
+  html += '</div>';
+
+  for (var gk in TIPSTER_GROUPS) {
+    html += '<div style="padding:8px 14px 2px;font-size:10px;font-weight:700;color:#999;letter-spacing:0.6px;text-transform:uppercase;cursor:pointer;user-select:none" onclick="selectFilterGroup(\'' + escapeHtml(gk).replace(/'/g, "\\'") + '\')">' + escapeHtml(gk) + '</div>';
+    TIPSTER_GROUPS[gk].forEach(function(t) {
+      var isChecked = selectedTipsters[t];
+      html += '<div class="tipster-dd-item' + (isChecked ? ' checked' : '') + '" onclick="toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
+      html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' onclick="event.stopPropagation();toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
+      html += escapeHtml(t) + '</div>';
     });
-    html += '</div>';
+    html += '<div class="tipster-dd-divider"></div>';
   }
+
+  var standAlone = getStandAloneTipsters();
+  if (standAlone.length) {
+    html += '<div style="padding:8px 14px 2px;font-size:10px;font-weight:700;color:#999;letter-spacing:0.6px;text-transform:uppercase">Stand Alone</div>';
+    standAlone.forEach(function(t) {
+      var isChecked = selectedTipsters[t];
+      html += '<div class="tipster-dd-item' + (isChecked ? ' checked' : '') + '" onclick="toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
+      html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' onclick="event.stopPropagation();toggleTipster(\'' + escapeHtml(t).replace(/'/g, "\\'") + '\')">';
+      html += escapeHtml(t) + '</div>';
+    });
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+function renderTipsterFilter() {
+  var html = '<div class="toolbar" style="margin-bottom:16px">';
+  html += renderGroupPills();
+  html += renderTipsterDropdown();
   html += '</div>';
   return html;
 }
@@ -1786,20 +1894,13 @@ function selectDate(d) {
 
 // ─── RENDER: EMAILS TAB ───
 function renderEmails() {
-  var authors = ["All"];
-  var seen = {};
-  var authorList = [];
-  var deduped2 = getDeduplicatedArticles();
-  deduped2.forEach(function(a) { var au = getAuthor(a); if (!seen[au]) { seen[au] = true; authorList.push(au); } });
-  authorList.sort(function(a, b) { return a.toLowerCase().localeCompare(b.toLowerCase()); });
-  authors = authors.concat(authorList);
-
+  initTipsters();
   var deduped = getDeduplicatedArticles();
   var filtered = deduped.filter(function(a) {
     var q = searchQuery.toLowerCase();
     var ms = !q || [a.originalSubject, a.from, a.originalBody].some(function(f) { return (f||"").toLowerCase().indexOf(q) !== -1; });
     if (!ms) return false;
-    if (filterAuthor !== "All" && getAuthor(a) !== filterAuthor) return false;
+    if (!isTipsterSelected(getAuthor(a))) return false;
     if (selectedDate !== "all" && a.tipDate !== selectedDate) return false;
     return true;
   }).sort(function(a, b) { return new Date(b.emailDate) - new Date(a.emailDate); });
@@ -1807,13 +1908,10 @@ function renderEmails() {
   var sel = selectedId ? ARTICLES.find(function(a) { return a.id === selectedId; }) : null;
   var view = sel ? (activeView[sel.id] || "original") : null;
 
-  // Toolbar
+  // Toolbar: search + group pills + tipster dropdown
   var tb = '<div class="search-wrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="searchInput" placeholder="search..." value="' + escapeHtml(searchQuery) + '"></div>';
-  tb += '<div class="filter-group" id="emailDDWrap">';
-  tb += '<button class="filter-dd-btn" onclick="toggleEmailDD(event)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>' + escapeHtml(filterAuthor === "All" ? "All Tipsters" : filterAuthor) + '</button>';
-  tb += '<div class="filter-dd-panel" id="emailDDPanel">';
-  authors.forEach(function(a) { tb += '<div class="filter-dd-item' + (filterAuthor === a ? ' active' : '') + '" onclick="setAuthor(\'' + escapeHtml(a) + '\')">' + escapeHtml(a === "All" ? "All Tipsters" : a) + '</div>'; });
-  tb += '</div></div>';
+  tb += renderGroupPills();
+  tb += renderTipsterDropdown();
 
   var html = '<div class="toolbar">' + tb + '</div>';
   html += '<div class="content' + (sel ? ' reader-open' : '') + '">';
