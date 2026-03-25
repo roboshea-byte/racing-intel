@@ -459,6 +459,24 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 const ARTICLES = [
 
   {
+    id: "19d2719d580996a5",
+    originalSubject: "David Jennings - 26th March",
+    from: "David Jennings (via Rob)",
+    author: "David Jennings",
+    emailDate: "2026-03-25T22:24:52Z",
+    tipDate: "2026-03-26",
+    processedAt: "2026-03-25T22:45:00Z",
+    originalBody: "David Jennings is mad keen on an improving chaser at Clonmel on Thursday\n\nLive To Laugh\n3.42 Clonmel\n2pts win\n\nPolepatrick\n4.12 Clonmel\n1pt win\n\nThe handicapper has not held back in shovelling 10lb on to Live To Laugh\'s handicap mark, but such was the ease with which he won at Thurles he might well be able to defy that hefty hike in the 2m7.5f novice handicap chase (3.42) at Clonmel.\n\nIt is not a bad race for the grade and Nettuno Italia is a fascinating contender on his chasing debut, while Brown Boots has been a model of consistency since the turn of the year.\n\nBut there was a real swagger about the way Live To Laugh got the job done 21 days ago. He looks just the type to leave his moderate hurdles form well behind over fences.\n\nLive To Laugh shaped with promise on his sole point outing for Thomas Byrne in a race where the now 117-rated High Tea was more than 15 lengths behind him.\n\nSince then he has been disappointing over hurdles and is 0-10 in that sphere.\n\nIt was no surprise to see Peter Fahey send him over fences in January and he caught my eye when a solid third at Cork on his chasing debut. He came down at the first next time at Thurles, when a horse jumped across him, but last time back at that venue he jumped for fun and could be called the winner some way from home.\n\nHe posted a Racing Post Rating of 109, and although a 10lb rise from 94 to 104 seems severe, it wouldn\'t surprise me if he was rated in the 120s by the end of the campaign. He has the size and scope to keep climbing the ladder over fences.\n\nEthan O\'Sullivan got a great tune out of him at Thurles and his 7lb claim will once again be a big asset here. He should be hard to beat.\n\nThe only other bet that appeals on the card is Polepatrick on his stable debut for Henry de Bromhead in the 2m maiden hurdle (4.12).\n\nWe have not seen him for 410 days, but there was enough promise in two of his three bumper runs for Dermot McLoughlin to make me think an average maiden hurdle like this would be within his grasp.\n\nHe was only a head behind the now 128-rated hurdler Frankie John when fifth in a hot Navan bumper the last time we saw him in February 2025.",
+    selections: [
+      { race: "Clonmel 3.42", horse: "Live To Laugh", odds: "TBC", stake: "2 points win", category: "", analysis: "Live To Laugh shaped with real authority when getting off the mark over fences at Thurles 21 days ago and it would be no surprise to see him defy a 10lb rise here. It is worth noting that he has always looked a chaser in the making, having shown promise on his sole point outing where the now 117-rated High Tea finished well behind. The form received a boost from his Cork chasing debut where he caught the eye in third. Ethan O\'Sullivan\'s 7lb claim is a significant asset and Peter Fahey\'s charge has the size and scope to keep climbing the ladder over fences. Don\'t say you weren\'t warned." },
+      { race: "Clonmel 4.12", horse: "Polepatrick", odds: "TBC", stake: "1 point win", category: "", analysis: "Polepatrick makes his stable debut for Henry de Bromhead after 410 days off the track and there is enough in his bumper form to suggest an average maiden hurdle like this would be well within his compass. It is worth noting that he was only a head behind the now 128-rated Frankie John when fifth in a hot Navan bumper on his last start. That form sets the standard in a race of this nature and the de Bromhead yard would not be sending him here without confidence that the ability remains intact. One to follow with interest." }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+
+
+  {
     id: "19d2702860ce7bd4",
     originalSubject: "Today's Qualifiers [ 26th March ]",
     from: "BetRate <admin@betrate.co.uk>",
@@ -1519,7 +1537,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-25T22:15:00Z";
+var lastSyncTime = "2026-03-25T22:45:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
