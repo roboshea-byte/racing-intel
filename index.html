@@ -49,6 +49,30 @@ nav{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:1
 .page-tab.hot.active .tab-count{background:rgba(255,255,255,0.25);color:#fff}
 .page-tab.antepost{border-color:#7b68ee;color:#5b4cc4}
 .page-tab.antepost.active{background:linear-gradient(135deg,#7b68ee,#5b4cc4);color:#fff;border-color:#5b4cc4}
+.ap-collation{max-width:900px;margin:0 auto;padding:20px 0}
+.ap-collation h2{font-family:'Inter',sans-serif;font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:4px}
+.ap-collation .ap-subtitle{font-size:12px;color:#888;margin-bottom:24px;font-family:'Inter',sans-serif}
+.ap-event{background:#fff;border:1px solid #e8e8f0;border-radius:12px;margin-bottom:18px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.ap-event-header{background:linear-gradient(135deg,#f8f7ff,#eee8ff);padding:14px 20px;border-bottom:1px solid #e8e8f0;display:flex;align-items:center;gap:10px}
+.ap-event-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7b68ee,#5b4cc4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0}
+.ap-event-name{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:#2d2b55}
+.ap-event-date{font-size:11px;color:#7b68ee;font-weight:600;font-family:'Inter',sans-serif}
+.ap-tip-row{display:flex;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0f5;transition:background .1s;gap:14px}
+.ap-tip-row:last-child{border-bottom:none}
+.ap-tip-row:hover{background:#faf9ff}
+.ap-horse{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#1a1a2e;min-width:180px}
+.ap-odds{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#5b4cc4;background:#f0edff;padding:3px 10px;border-radius:6px;white-space:nowrap}
+.ap-stake{font-size:12px;color:#666;font-family:'Inter',sans-serif;min-width:100px}
+.ap-tipster{font-size:11px;font-weight:600;color:#888;font-family:'Inter',sans-serif;margin-left:auto;white-space:nowrap}
+.ap-tipster a{color:#7b68ee;text-decoration:none;cursor:pointer}
+.ap-tipster a:hover{text-decoration:underline}
+.ap-notes{padding:10px 20px 14px;font-size:12px;color:#666;font-family:'Inter',sans-serif;line-height:1.5;background:#faf9ff;border-top:1px solid #f0f0f5}
+.ap-empty{text-align:center;padding:60px 20px;color:#999;font-family:'Inter',sans-serif}
+.ap-empty h3{font-size:16px;font-weight:700;color:#bbb;margin-bottom:8px}
+.ap-summary-bar{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.ap-stat{background:#fff;border:1px solid #e8e8f0;border-radius:10px;padding:12px 18px;min-width:120px;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+.ap-stat-num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#5b4cc4}
+.ap-stat-label{font-size:10px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;font-family:'Inter',sans-serif}
 .btn-mark-read{padding:7px 14px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;color:#888;cursor:pointer;border:1px solid #e0e0e0;background:#fff;border-radius:7px;transition:all .12s;margin-left:auto;white-space:nowrap}
 .btn-mark-read:hover{background:#f3f3f3;color:#555}
 
@@ -1879,74 +1903,134 @@ function renderHotList() {
   return html;
 }
 
-// ─── RENDER: ANTE-POST TAB ───
+// ─── RENDER: ANTE-POST TAB (Collation View) ───
 function renderAntepost() {
-  var apArticles = ARTICLES.filter(function(a) { return a.isAntepost; });
-  apArticles.sort(function(a, b) { return new Date(b.emailDate) - new Date(a.emailDate); });
+  // Collect all ante-post tips from ALL articles (not just isAntepost ones)
+  var apTips = [];
+  ARTICLES.forEach(function(a) {
+    var auth = getAuthor(a);
+    // Check antePost field
+    if (a.antePost && a.antePost.trim()) {
+      apTips.push({ text: a.antePost, author: auth, articleId: a.id, emailDate: a.emailDate, subject: a.originalSubject });
+    }
+    // Also check selections for ante-post races (containing "Ante-Post" in race field)
+    if (a.selections && a.selections.length) {
+      a.selections.forEach(function(s) {
+        if (s.race && s.race.toLowerCase().indexOf('ante-post') !== -1) {
+          apTips.push({ text: s.horse + ' at ' + s.odds + (s.stake ? ' (' + s.stake + ')' : '') + ' - ' + s.race, author: auth, articleId: a.id, emailDate: a.emailDate, subject: a.originalSubject, structured: { horse: s.horse, odds: s.odds, stake: s.stake, race: s.race, analysis: s.analysis } });
+        }
+      });
+    }
+  });
 
-  var sel = selectedId ? apArticles.find(function(a) { return a.id === selectedId; }) : null;
-  var view = sel ? (activeView[sel.id] || "rewrite") : null;
+  // Parse tips into structured entries and group by event
+  var events = {};
+  var eventOrder = [];
+  apTips.forEach(function(tip) {
+    // Try to parse structured tips from the text
+    var lines = tip.text.split('\n');
+    lines.forEach(function(line) {
+      line = line.trim();
+      if (!line) return;
+      var parsed = parseAntepostLine(line, tip);
+      if (parsed) {
+        var key = parsed.event.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (!events[key]) { events[key] = { name: parsed.event, tips: [] }; eventOrder.push(key); }
+        // Avoid duplicates (same horse + same author)
+        var isDupe = events[key].tips.some(function(t) { return t.horse === parsed.horse && t.author === parsed.author; });
+        if (!isDupe) events[key].tips.push(parsed);
+      }
+    });
+  });
 
-  var html = '<div class="content' + (sel ? ' reader-open' : '') + '">';
+  var html = '<div class="content"><div class="ap-collation">';
+  html += '<h2>Ante-Post Collation</h2>';
+  html += '<p class="ap-subtitle">All ante-post suggestions gathered from across every tipster email</p>';
 
-  if (!apArticles.length) {
-    html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '"><div class="empty"><h3>No ante-post bets yet</h3><p>Ante-post selections will appear here when added.</p></div></div>';
+  // Summary stats
+  var totalTips = 0;
+  eventOrder.forEach(function(k) { totalTips += events[k].tips.length; });
+  var totalEvents = eventOrder.length;
+  var totalTipsters = {};
+  eventOrder.forEach(function(k) { events[k].tips.forEach(function(t) { totalTipsters[t.author] = true; }); });
+
+  if (totalTips === 0) {
+    html += '<div class="ap-empty"><h3>No ante-post tips yet</h3><p>Ante-post suggestions will be collated here as tipsters mention them.</p></div>';
   } else {
-    html += '<div class="' + (sel ? 'cards-list' : 'cards-grid') + '">';
-    apArticles.forEach(function(a, i) {
-      var sc = a.selections ? a.selections.length : 0;
-      var auth = getAuthor(a);
-      html += '<div class="card' + (selectedId === a.id ? ' selected' : '') + '" style="animation-delay:' + (i * 0.03) + 's" onclick="selectCard(\'' + a.id + '\')">';
-      if (isNew(a.id)) html += '<span class="new-badge">New</span>';
-      html += '<div class="card-header"><span class="card-from">' + escapeHtml(auth) + '</span><span class="card-time">' + timeAgo(a.emailDate) + '</span></div>';
-      html += '<h3>' + escapeHtml(a.originalSubject) + '</h3>';
-      html += '<p class="card-excerpt">' + escapeHtml((a.originalBody || "").substring(0, sel ? 90 : 150)) + '...</p>';
-      html += '<div class="card-footer"><span class="card-sels">' + sc + ' sel' + (sc !== 1 ? 's' : '') + '</span></div>';
+    html += '<div class="ap-summary-bar">';
+    html += '<div class="ap-stat"><div class="ap-stat-num">' + totalTips + '</div><div class="ap-stat-label">Tips</div></div>';
+    html += '<div class="ap-stat"><div class="ap-stat-num">' + totalEvents + '</div><div class="ap-stat-label">Events</div></div>';
+    html += '<div class="ap-stat"><div class="ap-stat-num">' + Object.keys(totalTipsters).length + '</div><div class="ap-stat-label">Tipsters</div></div>';
+    html += '</div>';
+
+    // Render each event group
+    eventOrder.forEach(function(key) {
+      var ev = events[key];
+      html += '<div class="ap-event">';
+      html += '<div class="ap-event-header">';
+      html += '<div class="ap-event-icon">\u{1F3C7}</div>';
+      html += '<div><div class="ap-event-name">' + escapeHtml(ev.name) + '</div></div>';
+      html += '</div>';
+
+      ev.tips.forEach(function(t) {
+        html += '<div class="ap-tip-row">';
+        html += '<span class="ap-horse">' + escapeHtml(t.horse) + '</span>';
+        if (t.odds) html += '<span class="ap-odds">' + escapeHtml(t.odds) + '</span>';
+        if (t.stake) html += '<span class="ap-stake">' + escapeHtml(t.stake) + '</span>';
+        html += '<span class="ap-tipster"><a onclick="switchTab(\'emails\');setTimeout(function(){selectCard(\'' + t.articleId + '\')},100)">' + escapeHtml(t.author) + '</a></span>';
+        html += '</div>';
+        if (t.notes) {
+          html += '<div class="ap-notes">' + escapeHtml(t.notes) + '</div>';
+        }
+      });
+
       html += '</div>';
     });
-    html += '</div>';
   }
 
-  if (sel) {
-    var auth = getAuthor(sel);
-    html += '<div class="reader">';
-    html += '<div class="reader-header"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;padding-right:40px"><button onclick="selectCard(null)" style="background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0 0 10px;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>Back</button>';
-    html += '<div class="reader-meta"><span class="from">' + escapeHtml(auth) + '</span><span class="dot"></span><span class="date">' + formatDate(sel.emailDate) + '</span></div>';
-    html += '<h2>' + escapeHtml(sel.originalSubject) + '</h2>';
-    html += '</div><button class="reader-close" onclick="selectCard(null)">&#10005;</button></div></div>';
-
-    html += '<div class="view-tabs">';
-    html += '<button class="view-tab' + (view === "original" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'original\')">Original Email</button>';
-    html += '<button class="view-tab' + (view === "rewrite" ? ' active' : '') + '" onclick="setView(\'' + sel.id + '\',\'rewrite\')">Racing Intel Rewrite</button>';
-    html += '</div>';
-
-    if (view === "original") {
-      html += '<div class="copy-bar"><button class="btn-copy" onclick="event.stopPropagation();copyOriginal(\'' + sel.id + '\')">\u2398 copy</button></div>';
-      html += '<div class="email-body">';
-      (sel.originalBody || "").split("\n").forEach(function(line) { html += line.trim() ? '<p>' + escapeHtml(line) + '</p>' : '<p style="margin-bottom:8px">&nbsp;</p>'; });
-      html += '</div>';
-    } else {
-      html += '<div class="copy-bar"><button class="btn-copy" onclick="event.stopPropagation();copyRewrite(\'' + sel.id + '\')">\u2398 copy</button></div>';
-      html += '<div class="rewrite-body">';
-      if (sel.selections && sel.selections.length) {
-        sel.selections.forEach(function(s) {
-          html += '<div class="selection-block">';
-          html += '<div class="selection-header">' + escapeHtml(s.race) + ' ' + escapeHtml(s.horse) + ' - ' + escapeHtml(s.stake) + ' at ' + escapeHtml(s.odds);
-          if (s.category) html += ' (' + escapeHtml(s.category) + ')';
-          html += '</div>';
-          if (s.analysis) { html += '<div class="selection-analysis">' + escapeHtml(s.analysis) + '</div>'; }
-          else { html += '<div class="no-analysis">No analysis available for this selection</div>'; }
-          html += '</div>';
-        });
-      }
-      if (sel.antePost) { html += '<div class="selection-block"><div class="selection-header">Ante-Post Notes</div><div class="selection-analysis">' + escapeHtml(sel.antePost) + '</div></div>'; }
-      html += '</div>';
-    }
-    html += '</div>';
-  }
-
-  html += '</div>';
+  html += '</div></div>';
   return html;
+}
+
+// Parse an ante-post line into structured data
+function parseAntepostLine(line, tip) {
+  // Handle structured selection data passed through
+  if (tip.structured) {
+    var raceName = tip.structured.race.replace(/\s*\(Ante-Post\)\s*/i, '').trim();
+    return { event: raceName, horse: tip.structured.horse, odds: tip.structured.odds, stake: tip.structured.stake || '', author: tip.author, articleId: tip.articleId, notes: tip.structured.analysis || '' };
+  }
+
+  // Pattern: "DateInfo – Event – Horse Odds Stake" (Ben's format)
+  var benMatch = line.match(/^[\d]+(?:st|nd|rd|th)\s+\w+\s*[\u2013\-]\s*(.+?)\s*[\u2013\-]\s*(.+?)\s+([\d\/]+)\s+(.*)/i);
+  if (benMatch) {
+    return { event: benMatch[1].trim(), horse: benMatch[2].trim(), odds: benMatch[3].trim(), stake: benMatch[4].trim(), author: tip.author, articleId: tip.articleId, notes: '' };
+  }
+
+  // Pattern: "Horse to win/noted for Event at Odds" (Declan/Sporting Life format)
+  var toWinMatch = line.match(/^(.+?)\s+to\s+(?:win|be noted for)\s+(?:the\s+)?(.+?)\s+at\s+([\d\/]+(?:\s*\([^)]*\))?)/i);
+  if (toWinMatch) {
+    var notesText = '';
+    // Check if there's more text after the odds (extra notes)
+    var remainder = line.substring(line.indexOf(toWinMatch[3]) + toWinMatch[3].length).trim();
+    if (remainder && remainder.length > 3) {
+      notesText = remainder.replace(/^[.,]\s*/, '');
+    }
+    return { event: toWinMatch[2].trim(), horse: toWinMatch[1].trim(), odds: toWinMatch[3].trim(), stake: '', author: tip.author, articleId: tip.articleId, notes: notesText };
+  }
+
+  // Pattern: Just an event name (Harry Wilson / Pricewise style: "Event, Venue, Date")
+  var eventOnlyMatch = line.match(/^([A-Z][\w\s]+(?:,\s*[\w\s]+)+)$/);
+  if (eventOnlyMatch && tip.subject) {
+    // These are typically the event headers for dedicated ante-post articles; link to the full article
+    return { event: line.trim(), horse: 'See full article', odds: '', stake: '', author: tip.author, articleId: tip.articleId, notes: 'Full ante-post analysis in source email' };
+  }
+
+  // Fallback: treat as a general note for an "Other Ante-Post" bucket
+  if (line.length > 10) {
+    return { event: 'Other Ante-Post Notes', horse: line.substring(0, 50) + (line.length > 50 ? '...' : ''), odds: '', stake: '', author: tip.author, articleId: tip.articleId, notes: line.length > 50 ? line : '' };
+  }
+
+  return null;
 }
 
 // ─── RENDER: ADD DATA TAB ───
@@ -2240,8 +2324,12 @@ function updateTabCounts() {
   var hotTab = document.getElementById("tab-hotlist");
   if (hotTab) hotTab.innerHTML = '&#128293; Hot List' + (clashes.length > 0 ? '<span class="tab-count">' + clashes.length + '</span>' : '');
 
-  // Antepost count
-  var apCount = ARTICLES.filter(function(a) { return a.isAntepost; }).length;
+  // Antepost count — count all articles that have non-empty antePost OR ante-post selections
+  var apCount = ARTICLES.filter(function(a) {
+    if (a.antePost && a.antePost.trim()) return true;
+    if (a.selections) { for (var i = 0; i < a.selections.length; i++) { if (a.selections[i].race && a.selections[i].race.toLowerCase().indexOf('ante-post') !== -1) return true; } }
+    return false;
+  }).length;
   var apTab = document.getElementById("tab-antepost");
   if (apTab) apTab.innerHTML = 'Ante-Post' + (apCount > 0 ? '<span class="tab-count">' + apCount + '</span>' : '');
 
