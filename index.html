@@ -459,6 +459,24 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 const ARTICLES = [
 
   {
+    id: "19d2702860ce7bd4",
+    originalSubject: "Today's Qualifiers [ 26th March ]",
+    from: "BetRate <admin@betrate.co.uk>",
+    author: "BetRate",
+    emailDate: "2026-03-25T21:59:29Z",
+    tipDate: "2026-03-26",
+    processedAt: "2026-03-25T22:15:00Z",
+    originalBody: "Blue and Royals (6/1) landed us another winner today - what a brilliant month it has been again.\n\nToday's Qualifiers\n\nSouthwell 3.07 - Spirit Of Bowland (6/1) 3 places\nChepstow 4.20 - Laurier Des Obeaux (9/4)\nChelmsford 5.30 - Sargent Dennis (20/1) 3 places\n\n(Recommended stakes - win bet (below 6/1), e/w bet (6/1 or bigger)\n\nRemember, although only the selections are posted, there is a lot of work that goes on behind the scenes to build the bets and find genuine value, and it pays dividends long-term. Never judge on a small sample, judge the service over a decent period of time.\n\nBe lucky\nAlex\nBetrate",
+    selections: [
+      { race: "Southwell 3.07", horse: "Spirit Of Bowland", odds: "6/1", stake: "1 point e/w", category: "", analysis: "" },
+      { race: "Chepstow 4.20", horse: "Laurier Des Obeaux", odds: "9/4", stake: "1 point win", category: "", analysis: "" },
+      { race: "Chelmsford 5.30", horse: "Sargent Dennis", odds: "20/1", stake: "1 point e/w", category: "", analysis: "" }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+
+  {
     id: "19d26e35c21c3fe4",
     originalSubject: "Paul Kealy - 26th March",
     from: "Paul Kealy (via PPR)",
@@ -1501,7 +1519,7 @@ var selectedDate = (function() {
   var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
   return hasToday ? today : "all";
 })();
-var lastSyncTime = "2026-03-25T21:45:00Z";
+var lastSyncTime = "2026-03-25T22:15:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 
 function getAllTipsters() {
