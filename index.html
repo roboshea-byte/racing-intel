@@ -1602,18 +1602,64 @@ function initTipsters() {
   getAllTipsters().forEach(function(t) { selectedTipsters[t] = true; });
 }
 
+var tipsterDDDirty = false; // true when checkboxes changed while dropdown is open
+
 function toggleTipster(name) {
   initTipsters();
   selectedTipsters[name] = !selectedTipsters[name];
   activeGroupFilter = detectActiveGroup();
-  render();
+  if (tipsterDDOpen) {
+    tipsterDDDirty = true;
+    updateTipsterDDInPlace();
+  } else {
+    render();
+  }
 }
 
 function setAllTipsters(val) {
   initTipsters();
   getAllTipsters().forEach(function(t) { selectedTipsters[t] = val; });
   activeGroupFilter = val ? "all" : "none";
-  render();
+  if (tipsterDDOpen) {
+    tipsterDDDirty = true;
+    updateTipsterDDInPlace();
+  } else {
+    render();
+  }
+}
+
+// Update checkboxes, checked styles, and count badge without re-rendering
+function updateTipsterDDInPlace() {
+  var panel = document.getElementById('tipsterDDPanel');
+  if (!panel) return;
+  var items = panel.querySelectorAll('.tipster-dd-item');
+  items.forEach(function(item) {
+    var cb = item.querySelector('input[type=checkbox]');
+    if (!cb) return;
+    // Extract tipster name from the text node (after the checkbox)
+    var textContent = item.textContent.trim();
+    var isChecked = false;
+    getAllTipsters().forEach(function(t) {
+      if (textContent === t && selectedTipsters[t]) isChecked = true;
+    });
+    cb.checked = isChecked;
+    if (isChecked) { item.classList.add('checked'); } else { item.classList.remove('checked'); }
+  });
+  // Update the count badge
+  var tipsters = getAllTipsters();
+  var total = tipsters.length;
+  var checked = tipsters.filter(function(t) { return selectedTipsters[t]; });
+  var countLabel = checked.length === total ? 'All' : checked.length + '/' + total;
+  var badges = document.querySelectorAll('.tipster-dd-count');
+  badges.forEach(function(b) { b.textContent = countLabel; });
+  // Update group pill active states
+  var pills = document.querySelectorAll('.group-pill');
+  pills.forEach(function(p) {
+    var key = p.getAttribute('data-group');
+    if (key) {
+      if (key === activeGroupFilter) { p.classList.add('active'); } else { p.classList.remove('active'); }
+    }
+  });
 }
 
 function isTipsterSelected(name) {
@@ -1658,7 +1704,7 @@ function renderGroupPills() {
   var html = '';
   PILL_FILTERS.forEach(function(pf) {
     var safeKey = escapeHtml(pf.key).replace(/'/g, "\\'");
-    html += '<span class="group-pill' + (activeGroupFilter === pf.key ? ' active' : '') + '" onclick="selectFilterGroup(\'' + safeKey + '\')">' + escapeHtml(pf.label) + '</span>';
+    html += '<span class="group-pill' + (activeGroupFilter === pf.key ? ' active' : '') + '" data-group="' + escapeHtml(pf.key) + '" onclick="selectFilterGroup(\'' + safeKey + '\')">' + escapeHtml(pf.label) + '</span>';
   });
   return html;
 }
@@ -1722,18 +1768,29 @@ function toggleEmailDD(e) {
   if (panel) { panel.classList.toggle('show', emailDDOpen); }
   if (btn) { btn.classList.toggle('open', emailDDOpen); }
 }
+function closeTipsterDD() {
+  tipsterDDOpen = false;
+  var p = document.getElementById('tipsterDDPanel');
+  if (p) { p.classList.remove('show'); p.previousElementSibling.classList.remove('open'); }
+  if (tipsterDDDirty) { tipsterDDDirty = false; render(); }
+}
 function toggleTipsterDD(e) {
   e && e.stopPropagation();
-  tipsterDDOpen = !tipsterDDOpen;
-  var panel = document.getElementById('tipsterDDPanel');
-  var btn = panel ? panel.previousElementSibling : null;
-  if (panel) { panel.classList.toggle('show', tipsterDDOpen); }
-  if (btn) { btn.classList.toggle('open', tipsterDDOpen); }
+  if (tipsterDDOpen) {
+    closeTipsterDD();
+  } else {
+    tipsterDDOpen = true;
+    tipsterDDDirty = false;
+    var panel = document.getElementById('tipsterDDPanel');
+    var btn = panel ? panel.previousElementSibling : null;
+    if (panel) { panel.classList.add('show'); }
+    if (btn) { btn.classList.add('open'); }
+  }
 }
 document.addEventListener('click', function(e) {
   if (tipsterDDOpen) {
     var wrap = document.getElementById('tipsterDDWrap');
-    if (wrap && !wrap.contains(e.target)) { tipsterDDOpen = false; var p = document.getElementById('tipsterDDPanel'); if(p){p.classList.remove('show');p.previousElementSibling.classList.remove('open');} }
+    if (wrap && !wrap.contains(e.target)) { closeTipsterDD(); }
   }
   if (emailDDOpen) {
     var ew = document.getElementById('emailDDWrap');
