@@ -461,6 +461,7 @@ function getAuthor(article) {
 // To add a tipster: add them to AUTHOR_MAP above, then add to the relevant group(s) below
 const TIPSTER_GROUPS = {
   "TIR": ["Form Guru", "Zenith Betting", "GM", "BetHub", "Bet Sage", "Target Racing", "Apex Bet", "A-Star Tips", "Early Bird"],
+  "BetHub": ["BetHub", "Bet Sage"],
   "Racing Post": ["David Jennings", "Pricewise", "Harry Wilson", "Paul Kealy", "Joe Napier", "Robbie Wilders", "Rodway"]
 };
 
@@ -477,7 +478,7 @@ const PILL_FILTERS = [
   { label: "Premium", key: "Premium Tipsters", type: "meta" },
   { label: "Online", key: "Online Tipsters", type: "meta" },
   { label: "TIR", key: "TIR", type: "group" },
-  { label: "BetHub", key: "BetHub", type: "single" },
+  { label: "BetHub", key: "BetHub", type: "group" },
   { label: "Racing Post", key: "Racing Post", type: "group" }
 ];
 
