@@ -2019,7 +2019,7 @@ function parseAntepostLine(line, tip) {
   }
 
   // Pattern: Just an event name (Harry Wilson / Pricewise style: "Event, Venue, Date")
-  var eventOnlyMatch = line.match(/^([A-Z][\w\s]+(?:,\s*[\w\s]+)+)$/);
+  var eventOnlyMatch = line.match(/^(.+,\s*.+,\s*.+)$/);
   if (eventOnlyMatch && tip.subject) {
     // These are typically the event headers for dedicated ante-post articles; link to the full article
     return { event: line.trim(), horse: 'See full article', odds: '', stake: '', author: tip.author, articleId: tip.articleId, notes: 'Full ante-post analysis in source email' };
