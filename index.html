@@ -526,6 +526,30 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 const ARTICLES = [
 
   {
+    id: "19d271371e5c9efb",
+    originalSubject: "Early Bird - 26th March",
+    from: "BetHub <tips@bethub.pro>",
+    author: "Early Bird",
+    emailDate: "2026-03-25T22:17:57Z",
+    tipDate: "2026-03-26",
+    processedAt: "2026-03-26T10:26:00Z",
+    originalBody: "EARLY BIRD\n\nChelmsford 7.30 Clover Time - 3 point win at 5/2 (Bet365)\nClover Time could get a soft lead here around what is a front runners track, and if he does he could prove very difficult to peg back. The form received a boost from a freshening break since his last outing and the booking of Rab Havlin, who rides only this horse on the card, is a quietly significant move. Stall one is ideal for his racing style and this looks a solid opportunity.",
+    originalHtml: "<p>EARLY BIRD</p>\n<p>Chelmsford 7.30 Clover Time \u2013 3 point win at 5/2 (Bet365)<br />\nClover Time could get a soft lead here around what is a front runners track, and if he does he could prove very difficult to peg back. The form received a boost from a freshening break since his last outing and the booking of Rab Havlin, who rides only this horse on the card, is a quietly significant move. Stall one is ideal for his racing style and this looks a solid opportunity.</p>",
+    selections: [
+      {
+        race: "Chelmsford 7.30",
+        horse: "Clover Time",
+        odds: "5/2",
+        stake: "3 points win",
+        category: "",
+        analysis: "Clover Time looks primed for a big run at a venue that plays to his strengths as a front runner. It is worth noting that the freshening break since his last outing should have sharpened him up considerably and the booking of Rab Havlin, who partners only this horse on the evening card, is a quietly significant move that suggests connections mean business. The draw in stall one is ideal for his racing style, allowing him to bowl along on the rail without expending unnecessary energy in the early exchanges. If he can secure an uncontested lead the others may find him very difficult to peg back. Don't say you weren't warned."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+
+  {
     id: "19d298c45f810e6a",
     originalSubject: "From The Stables - 26/03/2026",
     from: "From The Stables",
@@ -1904,7 +1928,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-03-26T10:15:00Z";
+var lastSyncTime = "2026-03-26T10:26:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
