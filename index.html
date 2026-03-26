@@ -466,7 +466,7 @@ const TIPSTER_GROUPS = {
 };
 
 const META_GROUPS = {
-  "My Tipsters": ["Form Guru", "Zenith Betting", "GM", "BetHub", "Bet Sage", "Apex Bet", "A-Star Tips", "Early Bird", "BetRev", "BetRate", "IQ Racing"],
+  "My Tipsters": ["Form Guru", "Zenith Betting", "GM", "Target Racing", "Bet Sage", "Apex Bet", "A-Star Tips", "Early Bird", "BetRev", "BetRate", "IQ Racing"],
   "Premium Tipsters": ["Snowy", "From The Stables", "Declan Phelan", "Stephen Harris", "Ben", "Boom Doctor"],
   "Online Tipsters": ["Andrew Mount", "Matthew Sutcliffe", "Sporting Life", "EVR", "David Jennings", "Pricewise", "Harry Wilson", "Paul Kealy", "Joe Napier", "Robbie Wilders", "Rodway"]
 };
@@ -489,17 +489,26 @@ function getStandAloneTipsters() {
   return getAllTipsters().filter(function(t) { return !grouped[t]; });
 }
 
-// Colour palette for tipster pills — keyed by META_GROUPS name
+// Colour palette for tipster pills
 const GROUP_COLOURS = {
+  "TIR":              { bg: "#16a34a", text: "#fff" },
+  "BetHub":           { bg: "#7c3aed", text: "#fff" },
+  "Racing Post":      { bg: "#b45309", text: "#fff" },
   "My Tipsters":      { bg: "#16a34a", text: "#fff" },
   "Premium Tipsters": { bg: "#dc2626", text: "#fff" },
   "Online Tipsters":  { bg: "#2563eb", text: "#fff" }
 };
 const DEFAULT_COLOUR = { bg: "#6b7280", text: "#fff" }; // grey for ungrouped
 
+// Check TIPSTER_GROUPS first (TIR before BetHub so GM gets TIR green), then META_GROUPS
+var COLOUR_PRIORITY = ["TIR", "BetHub", "Racing Post"];
 function getTipsterColour(name) {
-  for (var g in META_GROUPS) {
-    if (META_GROUPS[g].indexOf(name) !== -1) return GROUP_COLOURS[g] || DEFAULT_COLOUR;
+  for (var i = 0; i < COLOUR_PRIORITY.length; i++) {
+    var g = COLOUR_PRIORITY[i];
+    if (TIPSTER_GROUPS[g] && TIPSTER_GROUPS[g].indexOf(name) !== -1) return GROUP_COLOURS[g] || DEFAULT_COLOUR;
+  }
+  for (var m in META_GROUPS) {
+    if (META_GROUPS[m].indexOf(name) !== -1) return GROUP_COLOURS[m] || DEFAULT_COLOUR;
   }
   return DEFAULT_COLOUR;
 }
@@ -767,7 +776,7 @@ Trainer J Morland: "Pantile's Gift makes his handicap debut first time out for t
     id: "19d29252cd5db1fc",
     originalSubject: "Target Racing - 26th March",
     from: "BetHub <tips@bethub.pro>",
-    author: "BetHub",
+    author: "Target Racing",
     emailDate: "2026-03-26T07:56:35Z",
     tipDate: "2026-03-26",
     processedAt: "2026-03-26T08:48:00Z",
