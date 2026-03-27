@@ -2091,11 +2091,11 @@ var activeTab = "emails";
 function getDefaultDate() {
   var today = new Date().toISOString().split("T")[0];
   var tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
-  var hasTomorrow = ARTICLES.some(function(a) { return a.tipDate === tomorrow; });
-  if (hasTomorrow) return tomorrow;
-  var hasToday = ARTICLES.some(function(a) { return a.tipDate === today; });
-  if (hasToday) return today;
   var dates = getTipDates();
+  var dateSet = {};
+  dates.forEach(function(d) { dateSet[d.date] = true; });
+  if (dateSet[tomorrow]) return tomorrow;
+  if (dateSet[today]) return today;
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
