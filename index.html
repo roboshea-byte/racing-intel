@@ -534,6 +534,38 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    id: "19d2eb724b87afc3",
+    originalSubject: "Stephen Harris - 27th March",
+    from: "Stephen Harris (via Rob)",
+    author: "Stephen Harris",
+    emailDate: "2026-03-27T09:54:05Z",
+    tipDate: "2026-03-27",
+    processedAt: "2026-03-27T10:15:00Z",
+    originalBody: "Wetherby 2.50 - Mixedwave (NAP)\n\nMixedwave has been knocking on the door and this looks a good opportunity to capitalise off a falling mark. He shaped well on a couple of occasions recently, particularly at Huntingdon last time when travelling strongly and just undone by a slight mistake at a crucial stage. The return to a flatter track on better ground should suit perfectly and this trip is ideal. Paul O'Brien is back on board and, with a more measured ride likely, everything looks in place for him to go very close.\n\nWetherby 3.20 - Bras Dor\n\nBras Dor remains unexposed over hurdles and looks the type to improve now stepping into handicap company off a workable mark. His earlier efforts suggested ability, notably when shaping well at Cheltenham and finishing second at Ludlow, travelling strongly on both occasions. His latest run can be excused on heavy ground where he failed to see it out. Back on better ground here, with conditions to suit and a strong travelling style, he looks capable of taking a big step forward and getting involved late.",
+    originalHtml: "",
+    selections: [
+      {
+        race: "Wetherby 2.50",
+        horse: "Mixedwave",
+        odds: "TBC",
+        stake: "1 point win",
+        category: "NAP",
+        analysis: "Mixedwave has been threatening to land a race for some time now and it is worth noting that a falling mark makes him increasingly dangerous. The form was there for all to see at Huntingdon last time when he travelled strongly before a slight mistake at a crucial stage cost him dearly. The return to a flatter track on better ground is a significant positive and Paul O'Brien resumes in the saddle. Everything points in his favour here and this trip looks ideal for a horse who has shown plenty of ability without getting his head in front. A bold showing can be expected. Don't say you weren't warned."
+      },
+      {
+        race: "Wetherby 3.20",
+        horse: "Bras Dor",
+        odds: "TBC",
+        stake: "1 point win",
+        category: "",
+        analysis: "Bras Dor remains unexposed over hurdles and the switch to handicap company off a workable opening mark could be the making of him. The form received a boost when you consider he shaped with distinct promise at Cheltenham and ran to a good level when second at Ludlow, travelling strongly on both occasions before his effort flattened. The latest run on heavy ground can be forgiven entirely as conditions were against him that day. Back on a sounder surface with the trip to suit, this is a horse whose strong travelling style suggests there is a big performance in him. One to follow closely."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+
+  {
     id: "19d2b4edbdc59d17",
     originalSubject: "New Horse Racing Tip",
     from: "Ben from The Racing Analyst <contact@theracinganalyst.com>",
@@ -2067,7 +2099,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-03-26T18:06:41Z";
+var lastSyncTime = "2026-03-27T10:15:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
