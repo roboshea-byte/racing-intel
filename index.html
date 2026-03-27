@@ -534,6 +534,62 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    id: "19d2ec1c95cff490",
+    originalSubject: "BetSeven - 27th March",
+    from: "BetSeven <info@betseven.co.uk>",
+    author: "BetSeven",
+    emailDate: "2026-03-27T10:05:44Z",
+    tipDate: "2026-03-27",
+    processedAt: "2026-03-27T10:18:52Z",
+    originalBody: "BETSEVEN\n\nWetherby 3.20 - Bras Dor - 2 point win at 3/1 (General)\n\nBras Dor remains unexposed over hurdles and looks the type to improve now stepping into handicap company off a workable mark. His earlier efforts suggested ability, notably when shaping well at Cheltenham and finishing second at Ludlow, travelling strongly on both occasions. His latest run can be excused on heavy ground where he failed to see it out. Back on better ground here, with conditions to suit and a strong travelling style, he looks capable of taking a big step forward and getting involved late.",
+    originalHtml: "",
+    selections: [
+      {
+        race: "Wetherby 3.20",
+        horse: "Bras Dor",
+        odds: "3/1",
+        stake: "2 point win",
+        category: "",
+        analysis: "Bras Dor remains relatively unexposed over hurdles and it is worth noting that the step into handicap company off this mark could be significant. The earlier efforts this term suggested considerable ability, shaping with promise at Cheltenham before finishing a solid second at Ludlow, travelling with real purpose on both occasions. The latest outing on heavy ground can be forgiven entirely as the conditions were firmly against him that day. A return to a sounder surface here with the strong travelling style he possesses makes this an ideal opportunity to take a meaningful step forward. Everything points towards a big run. Don't say you weren't warned."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+
+  {
+    id: "19d2ebf0af56f483",
+    originalSubject: "BetRev - Friday 27th March",
+    from: "BetRev <admin@bethub.pro>",
+    author: "BetRev",
+    emailDate: "2026-03-27T10:02:44Z",
+    tipDate: "2026-03-27",
+    processedAt: "2026-03-27T10:18:52Z",
+    originalBody: "Daily Digest - Friday 27th March 2026:\n\nGet Up Mush made a hash of the final fence yesterday after travelling very well into the race. That completely did for him and he had to settle for second.\n\nWetherby 2.50 - Handicap Chase (3m):\nMixedwave has been knocking on the door and this looks a good opportunity to cash in off a falling mark. He\'s shaped well on a couple of occasions recently, particularly at Huntingdon last time when he was travelling strongly before a slight mistake at a crucial stage did for his chances. He\'s a six-time chase winner over trips ranging from two miles seven to three miles and this distance is right in his wheelhouse. The return to a flatter track on better ground should suit him perfectly and Paul O\'Brien is back on board. He\'s too good for this lot on his day and the mark is finally starting to look workable.\n\nWetherby 3.20 - Handicap Hurdle:\nBras Dor has been on the radar for some time and this could be the day it all comes together. He\'s been screaming out for a step up in trip and a crack at handicaps, and now he gets both. His form this season reads better than it looks on paper despite racing over an inadequate two miles. He caught the eye at Cheltenham when travelling sweetly before fitness told late on, and two subsequent efforts yielded a second and third without being fully extended on either occasion. The extra five furlongs and better ground should be just the ticket. David Pipe has stuck a first-time tongue-tie on, an angle that has a 12% strike rate with level stakes profit from the yard, and Jack Tudor comes north for just this one ride.\n\nBet Summary:\nWins: Wetherby 3.20 - Bras Dor (3/1) 2 point win\nE/W: Wetherby 2.50 - Mixedwave e/w (6/1) 1.5 point e/w\n\nBe Lucky\nG.J.",
+    originalHtml: "",
+    selections: [
+      {
+        race: "Wetherby 3.20",
+        horse: "Bras Dor",
+        odds: "3/1",
+        stake: "2 point win",
+        category: "",
+        analysis: "Bras Dor has long looked a horse in need of a step up in trip and a crack at handicaps, and it is worth noting that he now gets both simultaneously. The form this season reads considerably better than the bare results suggest, with those efforts coming over an inadequate two miles. He caught the eye at Cheltenham when travelling sweetly before fitness told late on, and subsequent placed finishes came without being fully extended. The extra five furlongs and a sounder surface should unlock significant improvement. The application of a first-time tongue-tie from the David Pipe yard adds a further dimension. Don't say you weren't warned."
+      },
+      {
+        race: "Wetherby 2.50",
+        horse: "Mixedwave",
+        odds: "6/1",
+        stake: "1.5 point e/w",
+        category: "",
+        analysis: "Mixedwave has been knocking on the door for some time and there is good reason to believe the breakthrough is imminent off a declining mark. The form received a boost from his latest effort at Huntingdon where he was travelling powerfully before a slight error at a crucial stage denied him the reward his performance deserved. A six-time winner over fences at distances ranging from two miles seven to three miles, the trip here is firmly within his wheelhouse. The return to a flatter track on better ground with Paul O'Brien back on board adds further appeal. Don't say you weren't warned."
+      }
+    ],
+    doubles: "",
+    antePost: ""
+  },
+
+  {
     id: "19d2eb724b87afc3",
     originalSubject: "Stephen Harris - 27th March",
     from: "Stephen Harris (via Rob)",
@@ -2099,7 +2155,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-03-27T10:15:00Z";
+var lastSyncTime = "2026-03-27T10:18:52Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
