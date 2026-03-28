@@ -534,6 +534,29 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
 {
+  id: "19d348385c4a8e90",
+  originalSubject: "Form Guru - 28th March",
+  from: "The Inside Rail <info@theinsiderail.co.uk>",
+  author: "Form Guru",
+  emailDate: "2026-03-28T12:55:27Z",
+  tipDate: "2026-03-28",
+  processedAt: "2026-03-28T13:03:09Z",
+  originalBody: "Roberto Caro returned place money at Newcastle yesterday. Daylatedollarshort was successful at Wetherby.\n\nToday's Selections:\n\n2.25 - Doncaster:\nRainbow Nebula. 1.5 pts win. Available at 9/1. (Bet365, BOG)\nVincent Rocks. 1 pt e/w. Available at 14/1. (Bet365, Paddy Power - 1/5 odds first 6, BOG)\nNaples. 0.75 pts e/w. Available at 33/1. (Bet365 - 1/5 odds first 6, BOG)\n\n3.32 - Doncaster:\nRogue Diplomat. 1.75 pts win. Available at 9/1. (Unibet)\nGaleron. 1 pt e/w. Available at 12/1. (Paddy Power, Bet365, Boylesports - 1/5 odds first 6, BOG)\nGreek Order. 0.75 pts e/w. Available at 16/1. (Bet365 - 1/5 odds first 6, BOG)\n\n4.40 - Doncaster - Glint Of Light. 1 pt e/w. Available at 12/1. (Ladbrokes, Coral, Boylesports - 1/5 odds first 4, BOG)\n\n5.15 - Doncaster - Dancing Tiger. 1.75 pts win. Available at 15/2. (Generally available, BOG)",
+  originalHtml: "",
+  selections: [
+    { race: "Doncaster 2.25", horse: "Rainbow Nebula", odds: "9/1", stake: "1.5 points win", category: "", analysis: "" },
+    { race: "Doncaster 2.25", horse: "Vincent Rocks", odds: "14/1", stake: "1 point e/w (6 places)", category: "", analysis: "" },
+    { race: "Doncaster 2.25", horse: "Naples", odds: "33/1", stake: "0.75 points e/w (6 places)", category: "", analysis: "" },
+    { race: "Doncaster 3.32", horse: "Rogue Diplomat", odds: "9/1", stake: "1.75 points win", category: "", analysis: "" },
+    { race: "Doncaster 3.32", horse: "Galeron", odds: "12/1", stake: "1 point e/w (6 places)", category: "", analysis: "" },
+    { race: "Doncaster 3.32", horse: "Greek Order", odds: "16/1", stake: "0.75 points e/w (6 places)", category: "", analysis: "" },
+    { race: "Doncaster 4.40", horse: "Glint Of Light", odds: "12/1", stake: "1 point e/w (4 places)", category: "", analysis: "" },
+    { race: "Doncaster 5.15", horse: "Dancing Tiger", odds: "15/2", stake: "1.75 points win", category: "", analysis: "" }
+  ],
+  doubles: "",
+  antePost: ""
+},
+{
   id: "19d33ec037ec364c",
   originalSubject: "A-Star Tips - 28th March",
   from: "BetHub <tips@bethub.pro>",
@@ -3329,7 +3352,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-03-28T10:18:00Z";
+var lastSyncTime = "2026-03-28T13:03:09Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
