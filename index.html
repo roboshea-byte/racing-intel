@@ -534,6 +534,37 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
     {
+      id: "19d33ba3ab5dd5f0",
+      originalSubject: "BetSeven - 28th March",
+      from: "BetSeven <info@betseven.co.uk>",
+      author: "BetSeven",
+      emailDate: "2026-03-28T09:15:35Z",
+      tipDate: "2026-03-28",
+      processedAt: "2026-03-28T09:30:00Z",
+      originalBody: "BETSEVEN\n\nCurragh 1.55 - Stag Night - 1.5 point win at 11/2 (General)\nStag Night shaped with real encouragement when third on his reappearance a fortnight ago and that outing should have left him spot on for this assignment back down to the minimum trip on his preferred ground. It is worth noting that the handicapper has been generous throughout, dropping him 8lb during an enforced absence before a further 1lb concession after what was a perfectly respectable effort last time. He won cosily off a mark of 84 at Naas in October and everything points to him being ready to strike again from this sort of level. The return to five furlongs at the Curragh looks ideal.\n\nDoncaster 3.32 - Botanical - 0.75 point e/w at 12/1 (Bet365 - 6 places)\nBotanical is another who could be revitalised by a change of yard and looks interesting despite top weight. He shaped as though still capable of smart form last season without quite delivering, often competing in stronger races than this. This looks a more suitable starting point and his new connections are more than capable of improving him. The ground should be in his favour and, if returning to his best, he has the class to go close in a race where plenty arrive with questions to answer.\n\nChris Howard\nBetSeven",
+      originalHtml: "",
+      selections: [
+        {
+          race: "Curragh 1.55",
+          horse: "Stag Night",
+          odds: "11/2",
+          stake: "1.5 points win",
+          category: "",
+          analysis: "Stag Night shaped with genuine encouragement when filling the third spot on his reappearance a fortnight ago and that run ought to have left him spot on for this assignment back at the minimum trip on his favoured surface. It is worth noting that the handicapper has been generous throughout, easing him 8lb during an enforced absence before a further 1lb concession following a perfectly respectable effort last time. He won with something in hand off a mark of 84 at Naas in October and everything points to him being primed to strike again from this sort of level. The return to five furlongs at the Curragh looks ideal and he should not be underestimated."
+        },
+        {
+          race: "Doncaster 3.32",
+          horse: "Botanical",
+          odds: "12/1",
+          stake: "0.75 points e/w (6 places)",
+          category: "",
+          analysis: "Botanical is one who could be revitalised by a change of yard and looks an intriguing proposition despite the burden of top weight. He shaped as though still capable of smart form last season without quite delivering on the promise, often competing in stronger company than this. It is worth noting that this looks a more suitable starting point and his new connections have a fine record of improving sorts who arrive from elsewhere. The ground should be in his favour and if returning anywhere close to his best he possesses the class to go very close in a race where plenty of rivals arrive with questions to answer."
+        }
+      ],
+      doubles: "",
+      antePost: ""
+    },
+    {
       id: "19d31650f6c053e0",
       originalSubject: "Giglio - 28th March",
       from: "Giglio (via Rob)",
@@ -3109,7 +3140,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-03-27T22:38:10Z";
+var lastSyncTime = "2026-03-28T09:30:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
