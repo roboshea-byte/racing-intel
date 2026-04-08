@@ -534,6 +534,20 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
 {
+  id: "19d6f12a4cd83643",
+  originalSubject: "BetSeven - 9th April",
+  from: "BetSeven <info@betseven.co.uk>",
+  author: "BetSeven",
+  emailDate: "2026-04-08T21:49:45Z",
+  tipDate: "2026-04-09",
+  processedAt: "2026-04-08T22:04:12.000Z",
+  originalBody: "BETSEVEN\n\nAintree 1.45 - Selma De Vary - 3 point win at 5/2 (General)\nSelma De Vary shaped with considerable promise when running in the Triumph Hurdle at Cheltenham, where she was travelling better than anything approaching the last before being badly hampered by the Harry Skelton-ridden Maestro Conti. The stewards took a dim view and handed down a ban for careless riding. The form of that effort has already been franked and this filly possesses a devastating turn of foot that will be well suited to the speed-favouring Aintree layout. On the same terms as Cheltenham, she rates a confident selection.\n\nAintree 4.40 - Highland Legacy - 2 point win at 5/1 (Hills)\nHighland Legacy arrives here with this race clearly the long term target and his profile suggests he will be finishing strongly. He does reoppose Javert Allen on worse terms but has improved since that meeting and comes here with solid recent form. With a strong pace likely up front, the race set up could suit his running style perfectly. If things collapse late on, he looks the one most likely to capitalise.\n\nChris Howard\nBetSeven",
+  originalHtml: "",
+  selections: [{"race":"Aintree 1.45","horse":"Selma De Vary","odds":"5/2","stake":"3 points win","category":"","analysis":"Selma De Vary shaped with conspicuous promise in the Triumph Hurdle at Cheltenham, travelling with more authority than anything in the field approaching the final flight before being badly hampered by Maestro Conti, an incident which drew a ban for careless riding from the stewards. The form of that effort has already received a significant boost from subsequent performances. A filly blessed with a devastating turn of foot, the speed-favouring Aintree layout should play squarely to her strengths. On the same terms as she enjoyed at Cheltenham, this represents an excellent opportunity to make amends. Don't say you weren't warned."},{"race":"Aintree 4.40","horse":"Highland Legacy","odds":"5/1","stake":"2 points win","category":"","analysis":"Highland Legacy has had this race as the long-term target and everything in his recent profile suggests the preparation has been meticulous. He does reoppose Javert Allen on slightly inferior terms but has improved markedly since their last encounter and arrives in robust form. The expectation of a genuinely strong pace up front should suit his patient running style admirably. In the likely scenario of the front-runners folding on the run to the last, he possesses the finishing power to capitalise where others may falter. The market has been slow to recognise his claims."}],
+  doubles: "",
+  antePost: ""
+},
+{
   id: "19d6e5c652da0c05-sh",
   originalSubject: "Daily Racing Tips - Thursday 9th April 2026",
   from: "Stephen Harris (via Daily Racing Tips)",
@@ -3640,7 +3654,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-04-08T18:36:21Z";
+var lastSyncTime = "2026-04-08T22:04:25Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
