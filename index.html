@@ -534,6 +534,20 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    "id": "19f8032e28cf4a29",
+    "originalSubject": "New Horse Racing Tip",
+    "from": "The Racing Analyst <contact@theracinganalyst.com>",
+    "author": "Ben",
+    "emailDate": "2026-07-20T15:44:03Z",
+    "tipDate": "2026-07-20",
+    "processedAt": "2026-07-20T16:03:41Z",
+    "originalBody": "HELLO ANDY\nHere are today's selections.\n\n21ST JULY 2026\nPerfect start to the week.\n\nHale End won with ease to put us ahead for the day, with two horses still to run. Good Luck\n\nThere will be no tips tomorrow.\n\nAs I expected, last night proved that the prices will go quickly once sent. However, they didn't take long to drift back this morning with the latter two now the same price or bigger than advised.\n\nEarly days yet, but if you don't get on early, then it looks best to wait until you get Best Odds Guaranteed\n\nBen\n\nENJOY AND GOOD LUCK!\nBen at The Racing Analyst\n\nANTE POST ALREADY ADVISED\nThe bets below are our Ante-Post book, so far...",
+    "originalHtml": "<h1>Hello Andy</h1>\n<p>Here are today's selections.</p>\n<h2>21st July 2026</h2>\n<p>Perfect start to the week.</p>\n<p><strong>Hale End</strong> won with ease to put us ahead for the day, with two horses still to run. Good Luck</p>\n<p><strong>There will be no tips tomorrow.</strong></p>\n<p>As I expected, last night proved that the prices will go quickly once sent. However, they didn't take long to drift back this morning with the latter two now the same price or bigger than advised.</p>\n<p>Early days yet, but if you don't get on early, then it looks best to wait until you get Best Odds Guaranteed</p>\n<p>Ben</p>\n<h2>Enjoy and good luck!</h2>\n<p>Ben at The Racing Analyst</p>\n<h2>Ante Post Already Advised</h2>\n<p>The bets below are our Ante-Post book, so far...</p>",
+    "selections": [],
+    "doubles": "",
+    "antePost": ""
+  },
+  {
     "id": "19f7fa2fed5bbdea",
     "originalSubject": "Form Guru - 20th July",
     "from": "The Inside Rail <info@theinsiderail.co.uk>",
@@ -4698,7 +4712,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-07-20T13:18:02Z";
+var lastSyncTime = "2026-07-20T16:03:41Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
