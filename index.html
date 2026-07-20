@@ -533,6 +533,7 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
+  {"id": "19f8191187c64009", "originalSubject": "BetSeven - 21st July", "from": "BetSeven <info@betseven.co.uk>", "author": "BetSeven", "emailDate": "2026-07-20T22:06:37Z", "tipDate": "2026-07-21", "processedAt": "2026-07-20T22:17:00.000Z", "originalBody": "BETSEVEN\n\nHale End was a winner today.\n\nBallinrobe 6.09 - Ardeen Joy - 2 point win at 10/3 (Bet365)\n\nChris Howard\nBetSeven", "originalHtml": "<p><strong>BETSEVEN</strong></p><p><strong>Hale End</strong> was a winner today.</p><p>Ballinrobe 6.09 - Ardeen Joy - 2 point win at 10/3 (Bet365)</p><p>Chris Howard<br><strong>BetSeven</strong></p>", "selections": [{"race": "Ballinrobe 6.09", "horse": "Ardeen Joy", "odds": "10/3", "stake": "2 points win", "category": "", "analysis": "Ardeen Joy heads to Ballinrobe 6.09 with Chris Howard sanctioning a 2 point win stake at a robust 10/3 with Bet365. The BetSeven release lands hot on the heels of Hale End's success earlier in the day, and the follow-up confidence at that price implies genuine conviction from the yard. A 2 point win recommendation carries meaningful weight within the BetSeven staking framework, and Bet365 remaining generous at 10/3 while the wider market has tightened elsewhere reinforces the sense of a considered angle. The evening Ballinrobe cards routinely reward horses with proven course credentials, and short list material at the price."}], "doubles": "", "antePost": ""},
   {
     "id": "19f81894fbcc4d33",
     "originalSubject": "BetRev - Tuesday 21st July",
@@ -4781,7 +4782,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-07-20T22:00:00Z";
+var lastSyncTime = "2026-07-20T22:17:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
