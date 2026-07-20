@@ -534,6 +534,29 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
   {
+    "id": "19f80fbc6f1c9c30",
+    "originalSubject": "Zenith Betting - 21st July",
+    "from": "The Inside Rail <info@theinsiderail.co.uk>",
+    "author": "Form Guru",
+    "emailDate": "2026-07-20T19:23:31Z",
+    "tipDate": "2026-07-21",
+    "processedAt": "2026-07-20T19:33:20Z",
+    "originalBody": "ZENITH BETTING\n\nKing Sharja was a non-runner today.\n\nNottingham 4.15 - Beauty Generation - 3 point win at 5/3 (Bet365)\nBeauty Generation looked much better than the winning margin when getting off the mark for his current yard over this course last time. He endured plenty of traffic before producing a strong finishing burst once in the clear, suggesting the 3lb rise is lenient. The drop back to 1m1f should hold no fears, and with Jack Mitchell taking over in the saddle, he looks capable of following up in another modest Class 6 contest.\n\nRegards\nThe Inside Rail",
+    "originalHtml": "<p><strong>ZENITH BETTING</strong></p><p><strong>King Sharja</strong> was a non-runner today.</p><p><strong>Nottingham 4.15 - Beauty Generation - 3 point win at 5/3 (Bet365)</strong><br>Beauty Generation looked much better than the winning margin when getting off the mark for his current yard over this course last time. He endured plenty of traffic before producing a strong finishing burst once in the clear, suggesting the 3lb rise is lenient. The drop back to 1m1f should hold no fears, and with Jack Mitchell taking over in the saddle, he looks capable of following up in another modest Class 6 contest.</p><p>Regards<br><strong>The Inside Rail</strong></p>",
+    "selections": [
+      {
+        "race": "Nottingham 4.15",
+        "horse": "Beauty Generation",
+        "odds": "5/3",
+        "stake": "3 points win",
+        "category": "",
+        "analysis": "Beauty Generation returns to Nottingham on the back of an eyecatching Class 6 success at the same venue, when hitting the line hard after being denied a clear run for much of the closing stages. The winning margin flattered his rivals and one must acknowledge the 3lb rise looks distinctly lenient given the manner of that verdict. The drop back to 1m1f poses no obvious concern given his cruising speed, and the booking of Jack Mitchell is a further positive. Short list material at 5/3, with plenty in hand of this modest opposition."
+      }
+    ],
+    "doubles": "",
+    "antePost": ""
+  },
+  {
     "id": "19f8032e28cf4a29",
     "originalSubject": "New Horse Racing Tip",
     "from": "The Racing Analyst <contact@theracinganalyst.com>",
@@ -4712,7 +4735,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-07-20T16:03:41Z";
+var lastSyncTime = "2026-07-20T19:33:20Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
