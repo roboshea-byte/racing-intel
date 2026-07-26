@@ -534,6 +534,20 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
     {
+      id: "19f9f69b3a709414",
+      originalSubject: "New Horse Racing Tip",
+      from: "Ben at The Racing Analyst",
+      author: "Ben",
+      emailDate: "2026-07-26T17:12:09Z",
+      tipDate: "2026-07-27",
+      processedAt: "2026-07-26T20:23:50Z",
+      originalBody: "27th July 2026\n\nAs I said yesterday, there will be no tips Monday.\n\nThere's plenty of decent racing on, so I wouldn't blame anyone for getting involved, but as far as tips go, I'll leave that until Tuesday.\n\nWith Goodwood and Galway on this week, it will be full on and we will need a hell of a lot of luck.\n\nIt's always a week that, if you come out of it level, you've done incredibly well!\n\nGood luck with your bets\nBen\n\nAnte Post Already Advised\nThe bets below are our Ante-Post book, so far...\n(No new ante-post bets listed)",
+      originalHtml: "<h2>27th July 2026</h2>\n<p><strong>As I said yesterday, there will be no tips Monday.</strong></p>\n<p>There's plenty of decent racing on, so I wouldn't blame anyone for getting involved, but as far as tips go, I'll leave that until Tuesday.</p>\n<p>With Goodwood and Galway on this week, it will be full on and we will need a hell of a lot of luck.</p>\n<p><strong><em>It's always a week that, if you come out of it level, you've done incredibly well!</em></strong></p>\n<p>Good luck with your bets</p>\n<p>Ben</p>\n<h3>Ante Post Already Advised</h3>\n<p>The bets below are our Ante-Post book, so far...</p>\n<p>(No new ante-post bets listed)</p>",
+      selections: [],
+      doubles: "",
+      antePost: ""
+    },
+    {
       id: "19f9e3f317dc3dcf",
       originalSubject: "Johnny Dineen - Sunday 26th July",
       from: "Johnny Dineen (via Rob)",
@@ -4901,7 +4915,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-07-26T13:21:02Z";
+var lastSyncTime = "2026-07-26T20:23:50Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
