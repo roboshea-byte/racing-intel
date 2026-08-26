@@ -534,6 +534,29 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
       {
+        id: "1a03e480aa6d2676",
+        originalSubject: "Form Guru - 26th August",
+        from: "The Inside Rail <info@theinsiderail.co.uk>",
+        author: "Form Guru",
+        emailDate: "2026-08-26T13:35:03Z",
+        tipDate: "2026-08-26",
+        processedAt: "2026-08-26T14:00:00Z",
+        originalBody: "Today's Selection:\n\n4.15 - Catterick - Fidelus. 2.5 pts win. Available at 5/1. (Bet365, William Hill, Betfred, Paddy Power, BOG)\n\n4.52 - Catterick - Lanarra. 3 pts win. Available at 4/1. (Generally available, BOG)\n\n5.35 - Bellewstown:\nLiam Swagger. 2 pts win. Available at 6/1. (Bet365, BOG)\nSerienmond. 1.75 pts win. Available at 7/1. (Unibet)\n\n6.30 - Newbury:\nAcademia. 2.5 pts win. Available at 5/1. (William Hill, BOG)\nZatsgood. 2 pts win. Available at 6/1. (Generally available, BOG)\n\n8.21 - Kempton - Caviar Cowboy. 1.75 pts win. Available at 7/1. (Unibet)\n\n8.51 - Kempton - Lord Mayor. 1.5 pts win. Available at 17/2. (Generally available, BOG)",
+        originalHtml: "",
+        selections: [
+          { race: "Catterick 4.15", horse: "Fidelus", odds: "5/1", stake: "2.5 points win", category: "", analysis: "" },
+          { race: "Catterick 4.52", horse: "Lanarra", odds: "4/1", stake: "3 points win", category: "", analysis: "" },
+          { race: "Bellewstown 5.35", horse: "Liam Swagger", odds: "6/1", stake: "2 points win", category: "", analysis: "" },
+          { race: "Bellewstown 5.35", horse: "Serienmond", odds: "7/1", stake: "1.75 points win", category: "", analysis: "" },
+          { race: "Newbury 6.30", horse: "Academia", odds: "5/1", stake: "2.5 points win", category: "", analysis: "" },
+          { race: "Newbury 6.30", horse: "Zatsgood", odds: "6/1", stake: "2 points win", category: "", analysis: "" },
+          { race: "Kempton 8.21", horse: "Caviar Cowboy", odds: "7/1", stake: "1.75 points win", category: "", analysis: "" },
+          { race: "Kempton 8.51", horse: "Lord Mayor", odds: "17/2", stake: "1.5 points win", category: "", analysis: "" }
+        ],
+        doubles: "",
+        antePost: ""
+      },
+      {
         id: "1a03d8239c630f9a",
         originalSubject: "Zenith Betting - 26th August",
         from: "The Inside Rail <info@theinsiderail.co.uk>",
@@ -6213,7 +6236,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-26T10:00:00Z";
+var lastSyncTime = "2026-08-26T14:00:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
