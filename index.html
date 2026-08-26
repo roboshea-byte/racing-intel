@@ -534,6 +534,20 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
       {
+        id: "1a03ee43f9b1d9a3",
+        originalSubject: "New Horse Racing Tip",
+        from: "Ben at The Racing Analyst <contact@theracinganalyst.com>",
+        author: "Ben",
+        emailDate: "2026-08-26T16:25:37Z",
+        tipDate: "2026-08-26",
+        processedAt: "2026-08-26T16:30:00Z",
+        originalBody: "Hello Andy\nHere are today's selections.\n\n27th August 2026\n\nBrian Meehan was asked, on Sky Sports Racing, about River Card later, following the win of his 2yr old, and he suggested that the horse will very much need the run, as expected.\n\nHe may well win, but it sounded very much like a horse who was there to get race fit. Plenty of support for the other at Kempton.\n\nThere will be no tips Thursday. We sit around -20 for the month, not too bad and easily recoverable.\n\nGood luck tonight\n\nEnjoy and good luck!\nBen at The Racing Analyst\n\nAnte Post Already Advised\nThe bets below are our Ante-Post book, so far...",
+        originalHtml: "<h2>Hello Andy</h2><p>Here are today's selections.</p><h2>27th August 2026</h2><p>Brian Meehan was asked, on Sky Sports Racing, about <strong>River Card</strong> later, following the win of his 2yr old, and <strong><em>he suggested that the horse will very much need the run, as expected</em></strong>.</p><p>He may well win, but it sounded very much like a horse who was there to get race fit. Plenty of support for the other at Kempton.</p><p><strong>There will be no tips Thursday.</strong> We sit around -20 for the month, not too bad and easily recoverable.</p><p>Good luck tonight</p><h2>Enjoy and good luck!</h2><p>Ben at The Racing Analyst</p><h2>Ante Post Already Advised</h2><p>The bets below are our Ante-Post book, so far...</p>",
+        selections: [],
+        doubles: "",
+        antePost: "Commentary only. Ben is steering members away from River Card at Newbury after trainer Brian Meehan indicated on Sky Sports Racing that the horse will need the run, and instead points to plenty of support for the alternative at Kempton. No fresh named tip in this update, and Ben confirms there will be no tips on Thursday, with the service sitting around minus twenty points for the month."
+      },
+      {
         id: "1a03e480aa6d2676",
         originalSubject: "Form Guru - 26th August",
         from: "The Inside Rail <info@theinsiderail.co.uk>",
@@ -6236,7 +6250,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-26T14:00:00Z";
+var lastSyncTime = "2026-08-26T16:35:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
