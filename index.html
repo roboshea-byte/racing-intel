@@ -534,6 +534,29 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
       {
+        "id": "1a042925ce973ebd",
+        "originalSubject": "BetSeven - 28th August",
+        "from": "info@betseven.co.uk",
+        "author": "BetSeven",
+        "emailDate": "2026-08-27T09:34:42Z",
+        "tipDate": "2026-08-28",
+        "processedAt": "2026-08-28T00:00:00Z",
+        "originalBody": "BETSEVEN\n\nLiam Swagger was a non-runner yesterday.\n\nSouthwell 7.00 - Mr Noble - 3 point win at 2/1 (General)\n\nChris Howard\nBetSeven",
+        "originalHtml": "<p><strong>BETSEVEN</strong></p><p>Liam Swagger was a non-runner yesterday.</p><p>Southwell 7.00 - <strong>Mr Noble</strong> - 3 point win at 2/1 (General)</p><p>Chris Howard<br><strong>BetSeven</strong></p>",
+        "selections": [
+          {
+            "race": "Southwell 7.00",
+            "horse": "Mr Noble",
+            "odds": "2/1",
+            "stake": "3 points win",
+            "category": "",
+            "analysis": ""
+          }
+        ],
+        "doubles": "",
+        "antePost": ""
+      },
+      {
         "id": "1a0443a32a76a4b0",
         "originalSubject": "New Horse Racing Tip",
         "from": "contact@theracinganalyst.com",
@@ -6574,7 +6597,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-27T17:34:53Z";
+var lastSyncTime = "2026-08-28T00:00:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
