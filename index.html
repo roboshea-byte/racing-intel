@@ -534,6 +534,30 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
       {
+            "id": "1a047aedf9d5b82d",
+            "originalSubject": "BetSeven - 28th August",
+            "from": "BetSeven <info@betseven.co.uk>",
+            "author": "BetSeven",
+            "emailDate": "2026-08-28T09:23:56Z",
+            "tipDate": "2026-08-28",
+            "processedAt": "2026-08-28T09:30:00Z",
+            "originalBody": "BETSEVEN\n\nGoodwood 6.20 - Ruby's Profit - 3 point win at 15/8 (Bet365, Hills)\n\nChris Howard\nBetSeven",
+            "originalHtml": "<div><p><strong>BETSEVEN</strong></p><p><strong>Goodwood 6.20 - Ruby's Profit - 3 point win at 15/8 (Bet365, Hills)</strong></p><p>Chris Howard<br><strong>BetSeven</strong></p></div>",
+            "selections": [
+                  {
+                        "race": "Goodwood 6.20",
+                        "horse": "Ruby's Profit",
+                        "odds": "15/8",
+                        "stake": "3 points win",
+                        "category": "",
+                        "analysis": ""
+                  }
+            ],
+            "doubles": "",
+            "antePost": ""
+      },
+
+      {
               "id": "1a047a8218da4b0d",
               "originalSubject": "BetRev - 28th August",
               "from": "tips@betrev.co.uk",
@@ -6865,7 +6889,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-28T09:20:00Z";
+var lastSyncTime = "2026-08-28T09:30:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
