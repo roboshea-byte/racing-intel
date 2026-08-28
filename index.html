@@ -534,6 +534,30 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
       {
+              "id": "1a047a8218da4b0d",
+              "originalSubject": "BetRev - 28th August",
+              "from": "tips@betrev.co.uk",
+              "author": "BetRev",
+              "emailDate": "2026-08-28T09:16:34Z",
+              "tipDate": "2026-08-28",
+              "processedAt": "2026-08-28T09:20:00Z",
+              "originalBody": "Daily Digest - Thursday 27th August 2026:\n\nTown Queen faded quickly yesterday and connections could offer no explanation for the poor run.\n\nThirsk 4.38\nInvictus Gold steps up to seven furlongs for the first time and has repeatedly shaped as though it could really suit. His Epsom second behind Sondad is strong form, particularly as he conceded weight to a winner who has subsequently progressed significantly. Earlier in the campaign he also gave nearly a stone to Double Rush, who has climbed sharply through the ratings since. There has been some rain overnight and this morning and there is some more forecast before racing. They have been waiting for some ease underfoot and he should outrun his double-figure price.\n\nBet Summary:\nThirsk 4.38 - Invictus Gold - 0.75 point e/w (10/1) General - 4 places\n\nBe Lucky\nG.J.",
+              "originalHtml": "<div><p><strong>Daily Digest - Thursday 27th August 2026:</strong></p><p><strong>Town Queen</strong> faded quickly yesterday and connections could offer no explanation for the poor run.</p><p><strong>Thirsk 4.38</strong><br><strong>Invictus Gold</strong> steps up to seven furlongs for the first time and has repeatedly shaped as though it could really suit. His Epsom second behind Sondad is strong form, particularly as he conceded weight to a winner who has subsequently progressed significantly. Earlier in the campaign he also gave nearly a stone to Double Rush, who has climbed sharply through the ratings since. There has been some rain overnight and this morning and there is some more forecast before racing. They have been waiting for some ease underfoot and he should outrun his double-figure price.</p><p><strong>Bet Summary:</strong><br>Thirsk 4.38 - Invictus Gold - 0.75 point e/w (10/1) General - 4 places</p><p>Be Lucky<br>G.J.</p></div>",
+              "selections": [
+                      {
+                              "race": "Thirsk 4.38",
+                              "horse": "Invictus Gold",
+                              "odds": "10/1",
+                              "stake": "0.75 points e/w (4 places)",
+                              "category": "",
+                              "analysis": "Invictus Gold tackles seven furlongs for the first time and his recent profile has repeatedly hinted this stiffer test will unlock further improvement. His Epsom second behind Sondad reads as strong form given he conceded weight to a rival who has since progressed significantly through the handicap. Earlier in the campaign he also gave nearly a stone to Double Rush, who has climbed sharply since. The stable have been patiently waiting for some ease underfoot, and with rain having arrived overnight the ground should now match his requirements. A double-figure price looks generous."
+                      }
+              ],
+              "doubles": "",
+              "antePost": ""
+      },
+
+      {
         "id": "1a0478f8fc653c5d",
         "originalSubject": "Daily AI Analysis [ 28th August ]",
         "from": "info@iqracing.net",
@@ -6841,7 +6865,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-28T09:02:37Z";
+var lastSyncTime = "2026-08-28T09:20:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
