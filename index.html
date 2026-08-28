@@ -534,6 +534,38 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
       {
+        "id": "1a0478f8fc653c5d",
+        "originalSubject": "Daily AI Analysis [ 28th August ]",
+        "from": "info@iqracing.net",
+        "author": "IQ Racing",
+        "emailDate": "2026-08-28T08:49:44Z",
+        "tipDate": "2026-08-28",
+        "processedAt": "2026-08-28T09:02:37Z",
+        "originalBody": "Friday 28th August\n\nBetty Boop, Sandown, 2.25\nAdvised Odds: 5/1 (General)\nAdvised Bet: 2 point win\nPerformance Metrics: Betty Boop remains open to considerable improvement after confirming her debut promise with a strong 6f York novice victory. Her subsequent Newmarket fifth is forgivable after missing the break and failing to handle the track. Returning to a sharper trip with Oisin Murphy booked provides every chance of a significant rebound.\nTrack Characteristics: Her York success came over 6f on good to firm ground, but she showed enough natural speed to suggest this stiff 5f could prove ideal. Sandown's uphill finish places greater emphasis on stamina than many minimum-distance tracks, while the switch away from Newmarket's configuration should also help her considerably.\nRace Projection: A clean break is important after her Newmarket experience, but Betty Boop possesses the speed to secure a good early position under Oisin Murphy. The stiff finish should allow her 6f stamina to become influential late, and this race set up looks capable of unlocking further improvement. She rates a strong win selection.\n\nWoven, Thirsk, 4.00\nAdvised Odds: 12/1 (General, 5 places)\nAdvised Bet: 0.75 point each way\nPerformance Metrics: Woven is a five-time winner who remains competitive at ten, particularly when encountering his preferred conditions. He won from this handicap mark at Ayr last autumn and finished second of 21 at York earlier this season. Freshened up since a quieter Ayr effort, he returns from a potentially favourable rating.\nTrack Characteristics: Successful from 6f to 7f on ground ranging from good through to heavy, Woven is particularly effective when some ease combines with a strongly run sprint. Large-field handicaps suit his patient style, as demonstrated by his excellent York second, while any further easing in conditions would strengthen his prospects.\nRace Projection: Woven is likely to be held up before attempting to weave through the field late, making luck in running an obvious consideration among 20 runners. However, the abundance of potential pace should provide an excellent race set up. If the gaps appear, his proven finishing ability makes him a dangerous each-way contender.\n\nIQ Racing",
+        "originalHtml": "",
+        "selections": [
+                {
+                        "race": "Sandown 2.25",
+                        "horse": "Betty Boop",
+                        "odds": "5/1",
+                        "stake": "2 points win",
+                        "category": "",
+                        "analysis": "Betty Boop confirmed the promise of her debut with a strong 6f York novice victory earlier this campaign, and one must forgive her subsequent Newmarket fifth given she missed the break and failed to handle the track's configuration. The form received a boost when the winner of that York contest reappeared with credit. She drops back to a sharper 5f here, but Sandown's uphill finish places greater emphasis on stamina than many minimum-distance tracks, and her established 6f speed becomes a genuine weapon. Oisin Murphy takes over. Short list material at the price."
+                },
+                {
+                        "race": "Thirsk 4.00",
+                        "horse": "Woven",
+                        "odds": "12/1",
+                        "stake": "0.75 points e/w (5 places)",
+                        "category": "",
+                        "analysis": "Woven is a five-time winner who remains thoroughly competitive at the age of ten when the ground and race shape align in his favour. He landed a handicap off this same mark at Ayr last autumn and finished second of twenty-one at York earlier this season, form that reads strongly against today's rivals. Successful from six to seven furlongs on going ranging from good through to heavy, he is particularly effective when a truly-run sprint develops in a large field. Freshened since a quieter Ayr effort, he rates a fair each-way play."
+                }
+        ],
+        "doubles": "",
+        "antePost": ""
+      },
+
+      {
         "id": "1a0476dcf12142d7",
         "originalSubject": "Daily Dossier: Sandown 28 August 2026 - Runner Dossier",
         "from": "latestbetalerts@gmail.com",
@@ -6809,7 +6841,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-28T08:35:00Z";
+var lastSyncTime = "2026-08-28T09:02:37Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
