@@ -534,6 +534,37 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
 {
+      "id": "1a04d780a43db05e",
+      "originalSubject": "GM - 29th August",
+      "from": "The Inside Rail <info@theinsiderail.co.uk>",
+      "author": "Form Guru",
+      "emailDate": "2026-08-29T12:21:47Z",
+      "tipDate": "2026-08-29",
+      "processedAt": "2026-08-29T12:25:00Z",
+      "originalBody": "Tonight's Bets\n\nDunstall Park 6.20 Vahbelle 2 points win @ 7/4 Generally\nDunstall Park 7.38 Signet Nayla 2 points win @ 7/2 Ladbrokes & Coral",
+      "originalHtml": "<p><strong>Tonight's Bets</strong></p><p>Dunstall Park 6.20 Vahbelle 2 points win @ 7/4 Generally</p><p>Dunstall Park 7.38 Signet Nayla 2 points win @ 7/2 Ladbrokes &amp; Coral</p>",
+      "selections": [
+            {
+                  "race": "Dunstall Park 6.20",
+                  "horse": "Vahbelle",
+                  "odds": "7/4",
+                  "stake": "2 points win",
+                  "category": "",
+                  "analysis": ""
+            },
+            {
+                  "race": "Dunstall Park 7.38",
+                  "horse": "Signet Nayla",
+                  "odds": "7/2",
+                  "stake": "2 points win",
+                  "category": "",
+                  "analysis": ""
+            }
+      ],
+      "doubles": "",
+      "antePost": ""
+},
+{
       "id": "1a04cde0707c7d70",
       "originalSubject": "From The Stables - 29/08/2026",
       "from": "From The Stables <postmaster@mg.fromthestables.com>",
@@ -7348,7 +7379,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-29T09:40:00Z";
+var lastSyncTime = "2026-08-29T12:25:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
