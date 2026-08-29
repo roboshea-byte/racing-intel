@@ -534,6 +534,29 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
 {
+  "id": "1a04ca68734640eb",
+  "originalSubject": "Tom Segal - Saturday 29 August - Tom Segal with a 5-1 shot to back at Sandown",
+  "from": "latestbetalerts@gmail.com",
+  "author": "Pricewise",
+  "emailDate": "2026-08-29T08:32:57Z",
+  "tipDate": "2026-08-29",
+  "processedAt": "2026-08-29T09:07:00Z",
+  "originalBody": "Tom Segal with a 5-1 shot to back at Sandown\n\nGod Of War - 4.05 Sandown - 1pt win at 5-1\n\nGod Of War can race off a 4lb lower mark than when winning the Download The BetMGM App Handicap at Sandown (4.05) last year and is well worth backing at 5-1 to repeat that.\n\nHe was undone by the draw and the step up to a mile at Newmarket last time but he shaped well after a three-month absence and that should have put God Of War spot on for today.\n\nSource: Racing Post (Tom Segal / Pricewise Extra)",
+  "originalHtml": "",
+  "selections": [
+    {
+      "race": "Sandown 4.05",
+      "horse": "God Of War",
+      "odds": "5/1",
+      "stake": "1 point win",
+      "category": "",
+      "analysis": "God Of War returns to the Sandown handicap he won last term and does so from a mark 4lb lower, a concession that instantly frames him as the value play in the field. The Newmarket reappearance requires context. Drawn wide and asked for the first time to stretch to a mile after a three-month absence, he emerged with credit, the sort of quiet effort that seasoned punters treasure as a prep run. The stiff ten furlongs at Esher should bring the strong-galloping type back to his best, and one must acknowledge Tom Segal's reading of the form."
+    }
+  ],
+  "doubles": "",
+  "antePost": ""
+},
+{
   "id": "1a04c957bd18ed1b",
   "originalSubject": "Daily Dossier: Goodwood 29 August 2026 - Runner Dossier",
   "from": "latestbetalerts@gmail.com",
@@ -7285,7 +7308,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-08-29T08:30:00Z";
+var lastSyncTime = "2026-08-29T09:07:00Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
