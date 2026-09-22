@@ -533,6 +533,7 @@ function getUnreadCount() { return ARTICLES.filter(function(a) { return isNew(a.
 
 // ─── DATA (updated by scheduled task) ───
 const ARTICLES = [
+  {"id": "1a0c94b54f4fc291", "originalSubject": "Form Guru - 22nd September", "from": "The Inside Rail", "author": "Form Guru", "emailDate": "2026-09-22T13:25:52Z", "tipDate": "2026-09-22", "processedAt": "2026-09-22T13:27:24Z", "originalBody": "Perseus Way was successful at Hamilton yesterday.\n\nToday's Selections:\n\n4.25 - Beverley:\nCount Palatine. 1.5 pts e/w. Available at 9/1. (Paddy Power, BOG)\nThis Farhh. 0.75 pts e/w. Available at 16/1. (Skybet - 1/5 odds first 4)\n\n4.55 - Southwell:\nFirefall. 1 pt e/w. Available at 14/1. (Bet365 - 1/5 odds first 4, BOG)\nCarron. 0.75 pts e/w. Available at 40/1. (Bet365 - 1/5 odds first 4, BOG)\n\n5.00 - Mudamer. 1.5 pts win. Available at 17/2. (Bet365, BOG)\n\n5.30 - Southwell - Moving Shadow. 2.5 pts win. Available at 11/2. (Unibet, BOG)\n\n6.30 - Southwell - Merry. 2 pts win. Available at 13/2. (Generally available, BOG)", "originalHtml": "<p><strong>Perseus Way</strong> was successful at Hamilton yesterday.</p>\n<p><strong><u>Today's Selections:</u></strong></p>\n<p><strong>4.25 - Beverley:</strong><br>\n<strong>Count Palatine. 1.5 pts e/w. Available at 9/1. (Paddy Power, BOG)</strong><br>\n<strong>This Farhh. 0.75 pts e/w. Available at 16/1. (Skybet - 1/5 odds first 4)</strong></p>\n<p><strong>4.55 - Southwell:</strong><br>\n<strong>Firefall. 1 pt e/w. Available at 14/1. (Bet365 - 1/5 odds first 4, BOG)</strong><br>\n<strong>Carron. 0.75 pts e/w. Available at 40/1. (Bet365 - 1/5 odds first 4, BOG)</strong></p>\n<p><strong>5.00 - Mudamer. 1.5 pts win. Available at 17/2. (Bet365, BOG)</strong></p>\n<p><strong>5.30 - Southwell - Moving Shadow. 2.5 pts win. Available at 11/2. (Unibet, BOG)</strong></p>\n<p><strong>6.30 - Southwell - Merry. 2 pts win. Available at 13/2. (Generally available, BOG)</strong></p>", "selections": [{"race": "Beverley 4.25", "horse": "Count Palatine", "odds": "9/1", "stake": "1.5 pts e/w", "category": "", "analysis": ""}, {"race": "Beverley 4.25", "horse": "This Farhh", "odds": "16/1", "stake": "0.75 pts e/w (4 places)", "category": "", "analysis": ""}, {"race": "Southwell 4.55", "horse": "Firefall", "odds": "14/1", "stake": "1 pt e/w (4 places)", "category": "", "analysis": ""}, {"race": "Southwell 4.55", "horse": "Carron", "odds": "40/1", "stake": "0.75 pts e/w (4 places)", "category": "", "analysis": ""}, {"race": "Kempton 5.00", "horse": "Mudamer", "odds": "17/2", "stake": "1.5 pts win", "category": "", "analysis": ""}, {"race": "Southwell 5.30", "horse": "Moving Shadow", "odds": "11/2", "stake": "2.5 pts win", "category": "", "analysis": ""}, {"race": "Southwell 6.30", "horse": "Merry", "odds": "13/2", "stake": "2 pts win", "category": "", "analysis": ""}], "doubles": "", "antePost": ""},
   {
     "id": "1a0c83c75b72705b",
     "originalSubject": "Today's Qualifiers [ 22nd September ]",
@@ -9937,7 +9938,7 @@ function getDefaultDate() {
   return dates.length ? dates[0].date : "all";
 }
 var selectedDate = getDefaultDate();
-var lastSyncTime = "2026-09-22T09:45:00Z";
+var lastSyncTime = "2026-09-22T13:27:24Z";
 var selectedTipsters = null; // null = all selected (initialized on first render)
 var activeGroupFilter = "all"; // tracks which group pill is highlighted
 
